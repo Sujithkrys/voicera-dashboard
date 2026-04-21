@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voicera — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root {
+  --bg:    #0B0B18;
+  --bg2:   #10101E;
+  --bg3:   #17172A;
+  --bg4:   #1E1E32;
+  --bg5:   #252540;
+  --border:  rgba(255,255,255,0.055);
+  --border2: rgba(255,255,255,0.10);
+  --border3: rgba(255,255,255,0.16);
+  --text1: #EEEEFF;
+  --text2: #8888AA;
+  --text3: #50506A;
+  --purple:  #7C3AED;
+  --purpleL: #8B46FF;
+  --purple2: #A78BFA;
+  --purple3: #C4B5FD;
+  --purple-bg: rgba(124,58,237,0.13);
+  --purple-glow: rgba(124,58,237,0.35);
+  --green:  #34D399;
+  --green-bg: rgba(52,211,153,0.10);
+  --red:    #F87171;
+  --red-bg: rgba(248,113,113,0.10);
+  --amber:  #FBBF24;
+  --amber-bg: rgba(251,191,36,0.10);
+  --blue:   #60A5FA;
+  --blue-bg: rgba(96,165,250,0.10);
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text1);
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════ */
+.sidebar {
+  width: 210px;
+  min-width: 210px;
+  height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar{display:none;}
+
+.sb-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 16px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.sb-logo-icon {
+  width: 34px;height: 34px;
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  border-radius: 9px;
+  display: flex;align-items:center;justify-content:center;
+  font-size: 17px;flex-shrink:0;
+}
+.sb-logo-text { font-size: 14px; font-weight: 700; letter-spacing: -0.2px; }
+.sb-logo-beta {
+  font-size: 9px; font-weight: 700; background: var(--purple-bg);
+  color: var(--purple2); border: 1px solid rgba(124,58,237,0.3);
+  padding: 2px 6px; border-radius: 4px; margin-left: 2px;
+}
+.sb-logo-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+.sb-workspace {
+  display: flex;align-items:center;gap:9px;
+  padding: 10px 14px;margin: 10px 10px 4px;
+  background: var(--bg3);border: 1px solid var(--border);
+  border-radius: 10px;cursor:pointer;transition: all .18s;
+}
+.sb-workspace:hover{border-color:var(--border2);}
+.sb-ws-icon {
+  width: 26px;height:26px;border-radius:7px;
+  background: linear-gradient(135deg,#1D4ED8,#2563EB);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.sb-ws-name{font-size:12px;font-weight:600;flex:1;}
+.sb-ws-arrow{color:var(--text3);font-size:10px;}
+
+.sb-section {
+  padding: 6px 10px 2px;
+}
+.sb-section-label {
+  font-size: 10px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;
+  padding: 8px 6px 4px;
+}
+.sb-item {
+  display:flex;align-items:center;gap:9px;
+  padding: 7px 10px;border-radius:8px;
+  font-size:13px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .15s;position:relative;
+  user-select:none;
+}
+.sb-item:hover{background:var(--bg3);color:var(--text1);}
+.sb-item.active{background:var(--bg4);color:var(--text1);}
+.sb-item.active::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:3px;height:18px;background:var(--purple);border-radius:0 3px 3px 0;
+}
+.sb-item svg{width:15px;height:15px;flex-shrink:0;opacity:.8;}
+.sb-item.active svg{opacity:1;}
+.sb-badge {
+  margin-left:auto;font-size:10px;font-weight:700;
+  background:var(--red-bg);color:var(--red);
+  padding:2px 6px;border-radius:10px;
+}
+.sb-badge.green{background:var(--green-bg);color:var(--green);}
+
+.sb-divider{height:1px;background:var(--border);margin:8px 10px;}
+
+.sb-bottom {
+  margin-top:auto;padding:12px 12px 14px;
+  border-top:1px solid var(--border);
+}
+.sb-usage{margin-bottom:12px;}
+.sb-usage-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.sb-usage-label{font-size:11px;color:var(--text3);}
+.sb-usage-val{font-size:11px;font-weight:600;color:var(--text2);}
+.sb-bar{height:4px;background:var(--bg5);border-radius:4px;overflow:hidden;}
+.sb-bar-fill{height:100%;background:var(--purple);border-radius:4px;transition:width .5s;}
+.sb-bar-fill.low{background:var(--red);}
+.sb-upgrade {
+  width:100%;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:9px 14px;background:linear-gradient(90deg,#7C3AED,#6D28D9);
+  border:none;border-radius:9px;color:#fff;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.sb-upgrade:hover{box-shadow:0 4px 18px var(--purple-glow);transform:translateY(-1px);}
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════ */
+.main-wrap {
+  flex:1;display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+}
+
+/* HEADER */
+.topbar {
+  height:56px;min-height:56px;
+  display:flex;align-items:center;gap:14px;
+  padding:0 24px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+}
+.topbar-title{font-size:18px;font-weight:700;letter-spacing:-.3px;flex-shrink:0;}
+.topbar-search {
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:0 12px;height:34px;
+  width:260px;margin-left:auto;cursor:pointer;transition:border-color .2s;
+}
+.topbar-search:hover{border-color:var(--border2);}
+.topbar-search svg{width:14px;height:14px;color:var(--text3);}
+.topbar-search span{font-size:13px;color:var(--text3);flex:1;}
+.topbar-search kbd {
+  font-size:10px;color:var(--text3);
+  background:var(--bg5);border:1px solid var(--border2);
+  padding:2px 5px;border-radius:4px;font-family:inherit;
+}
+.topbar-icons{display:flex;align-items:center;gap:2px;}
+.topbar-icon {
+  width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);cursor:pointer;transition:all .15s;position:relative;
+}
+.topbar-icon:hover{background:var(--bg3);color:var(--text1);}
+.topbar-icon svg{width:17px;height:17px;}
+.notif-dot {
+  position:absolute;top:7px;right:7px;
+  width:6px;height:6px;background:var(--red);border-radius:50%;
+  border:1.5px solid var(--bg2);
+}
+.topbar-user {
+  display:flex;align-items:center;gap:9px;
+  padding:4px 10px 4px 4px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  cursor:pointer;transition:all .15s;
+}
+.topbar-user:hover{border-color:var(--border2);}
+.user-ava {
+  width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;
+}
+.user-name{font-size:13px;font-weight:600;}
+.user-role{font-size:10px;color:var(--text3);}
+
+/* CONTENT */
+.content {
+  flex:1;overflow-y:auto;padding:24px;
+  scrollbar-width:thin;scrollbar-color:var(--bg5) transparent;
+}
+.content::-webkit-scrollbar{width:5px;}
+.content::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:5px;}
+
+/* PAGE — hidden/shown */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════════ */
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:22px;
+}
+.page-title{font-size:22px;font-weight:700;letter-spacing:-.3px;}
+.page-sub{font-size:13px;color:var(--text2);margin-top:3px;}
+
+.btn {
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:8px;font-family:inherit;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;border:none;
+}
+.btn-purple{background:var(--purple);color:#fff;}
+.btn-purple:hover{background:var(--purpleL);box-shadow:0 4px 16px var(--purple-glow);}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-outline:hover{color:var(--text1);border-color:var(--border3);}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--text1);border-color:var(--border2);}
+.btn svg{width:14px;height:14px;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-red{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.btn-red:hover{background:var(--red);color:#fff;}
+
+.card {
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:14px;padding:18px;
+}
+.card-sm{padding:14px;}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.card-title{font-size:14px;font-weight:600;}
+.card-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+
+.badge {
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;
+  text-transform:uppercase;letter-spacing:.3px;
+}
+.badge-purple{background:var(--purple-bg);color:var(--purple2);border:1px solid rgba(124,58,237,0.2);}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid rgba(52,211,153,0.2);}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid rgba(248,113,113,0.2);}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(251,191,36,0.2);}
+.badge-blue{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(96,165,250,0.2);}
+.badge-gray{background:var(--bg5);color:var(--text2);border:1px solid var(--border);}
+.badge .dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* Tabs */
+.tabs {
+  display:flex;background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:3px;gap:2px;width:fit-content;
+  margin-bottom:22px;
+}
+.tab {
+  padding:6px 16px;border-radius:8px;font-size:13px;font-weight:500;
+  color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.tab:hover{color:var(--text1);}
+.tab.active{background:var(--bg5);color:var(--text1);font-weight:600;}
+
+/* Table */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th {
+  font-size:11px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.5px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  text-align:left;white-space:nowrap;
+}
+tbody td{
+  padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr{transition:background .12s;cursor:pointer;}
+tbody tr:hover{background:rgba(255,255,255,0.02);}
+
+/* Form */
+.form-group{margin-bottom:16px;}
+.form-label{
+  display:block;font-size:11px;font-weight:600;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;
+}
+.form-input, .form-select, .form-textarea {
+  width:100%;background:var(--bg4);border:1px solid var(--border);
+  color:var(--text1);font-family:inherit;font-size:13px;
+  padding:9px 12px;border-radius:9px;outline:none;
+  transition:border-color .2s,box-shadow .2s;appearance:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus {
+  border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.12);
+}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text3);}
+.form-select option{background:var(--bg3);color:var(--text1);}
+.form-textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-hint{font-size:11px;color:var(--text3);margin-top:5px;}
+
+/* Grid helpers */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;}
+
+/* Avatar */
+.av {
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex-shrink:0;
+}
+.av-sm{width:28px;height:28px;font-size:11px;}
+.av-md{width:36px;height:36px;font-size:14px;}
+.av-lg{width:48px;height:48px;font-size:18px;}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* ═══════════════════════════════════════════
+   PAGE 1 — OVERVIEW
+═══════════════════════════════════════════ */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi-card {
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:13px;padding:16px 18px;
+  transition:border-color .18s;
+}
+.kpi-card:hover{border-color:var(--border2);}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.kpi-icon {
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.kpi-change {
+  font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px;
+}
+.kpi-change.up{background:var(--green-bg);color:var(--green);}
+.kpi-change.down{background:var(--red-bg);color:var(--red);}
+.kpi-val{font-size:26px;font-weight:800;letter-spacing:-1px;margin-bottom:3px;}
+.kpi-label{font-size:12px;color:var(--text2);}
+
+.overview-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;}
+
+/* Sparkline chart */
+.chart-area{height:180px;position:relative;overflow:hidden;}
+.chart-area svg{width:100%;height:100%;}
+
+/* Issues pie */
+.issue-list{display:flex;flex-direction:column;gap:10px;}
+.issue-row{display:flex;align-items:center;gap:10px;}
+.issue-bar-bg{flex:1;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;}
+.issue-bar-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.issue-label{font-size:12px;color:var(--text2);width:120px;flex-shrink:0;}
+.issue-pct{font-size:12px;font-weight:600;width:32px;text-align:right;flex-shrink:0;}
+
+/* Recent calls */
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite;display:inline-block;}
+
+/* Active now banner */
+.active-banner {
+  background:var(--bg4);border:1px solid rgba(52,211,153,0.2);
+  border-radius:12px;padding:14px 18px;margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.active-banner-icon{font-size:20px;}
+.active-banner-num{font-size:22px;font-weight:800;color:var(--green);margin-right:4px;}
+
+/* ═══════════════════════════════════════════
+   PAGE 2 — CALL LOGS
+═══════════════════════════════════════════ */
+.filters-bar {
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;
+}
+.filter-search {
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:9px;padding:0 12px;height:36px;flex:1;min-width:200px;
+}
+.filter-search svg{width:14px;height:14px;color:var(--text3);flex-shrink:0;}
+.filter-search input{
+  background:transparent;border:none;outline:none;
+  font-family:inherit;font-size:13px;color:var(--text1);width:100%;
+}
+.filter-search input::placeholder{color:var(--text3);}
+.filter-select {
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);font-family:inherit;font-size:12px;
+  padding:0 28px 0 12px;height:36px;border-radius:9px;
+  outline:none;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2350506A'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  transition:border-color .15s;
+}
+.filter-select:hover{border-color:var(--border2);}
+.filter-select option{background:var(--bg2);}
+
+/* Audio player mini */
+.play-btn {
+  width:26px;height:26px;border-radius:50%;
+  background:var(--purple-bg);border:1px solid rgba(124,58,237,0.3);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;color:var(--purple2);
+}
+.play-btn:hover{background:var(--purple);color:#fff;}
+.play-btn svg{width:10px;height:10px;}
+
+/* Call detail panel */
+.detail-panel {
+  position:fixed;right:0;top:0;height:100vh;width:380px;
+  background:var(--bg2);border-left:1px solid var(--border);
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.34,1.3,.64,1);
+  z-index:100;display:flex;flex-direction:column;overflow:hidden;
+}
+.detail-panel.open{transform:translateX(0);}
+.detail-header{
+  padding:18px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.detail-body{flex:1;overflow-y:auto;padding:20px;}
+.detail-close {
+  width:28px;height:28px;border-radius:7px;
+  background:var(--bg4);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text2);font-size:14px;
+}
+.detail-close:hover{color:var(--text1);border-color:var(--border2);}
+.transcript-item{
+  display:flex;gap:10px;margin-bottom:14px;animation:fadeUp .3s ease;
+}
+.transcript-item .who{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:3px;
+}
+.transcript-item.agent .who{color:var(--purple2);}
+.transcript-item.user .who{color:var(--text3);}
+.transcript-item .msg{
+  font-size:12px;line-height:1.6;
+  background:var(--bg4);border-radius:8px;padding:8px 11px;
+  border:1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 3 — BOT CONFIG
+═══════════════════════════════════════════ */
+.config-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+.voice-opt {
+  background:var(--bg4);border:2px solid var(--border);
+  border-radius:11px;padding:13px;cursor:pointer;transition:all .18s;
+}
+.voice-opt:hover{border-color:var(--border2);}
+.voice-opt.selected{border-color:var(--purple);background:var(--purple-bg);}
+.voice-opt-name{font-size:13px;font-weight:600;margin-bottom:2px;}
+.voice-opt-lang{font-size:11px;color:var(--text2);}
+.voice-play{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg5);border:none;color:var(--text2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;margin-top:8px;transition:all .15s;font-size:12px;
+}
+.voice-play:hover{background:var(--purple);color:#fff;}
+
+.toggle-wrap{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);}
+.toggle-wrap:last-child{border-bottom:none;}
+.toggle-info{flex:1;}
+.toggle-label{font-size:13px;font-weight:500;}
+.toggle-desc{font-size:11px;color:var(--text3);margin-top:2px;}
+.toggle {
+  position:relative;width:38px;height:22px;flex-shrink:0;margin-left:14px;
+}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider {
+  position:absolute;inset:0;background:var(--bg5);
+  border-radius:22px;cursor:pointer;transition:all .2s;
+  border:1px solid var(--border);
+}
+.toggle-slider:before {
+  content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;background:var(--text3);border-radius:50%;transition:all .2s;
+}
+.toggle input:checked + .toggle-slider{background:var(--purple);border-color:transparent;}
+.toggle input:checked + .toggle-slider:before{transform:translate(16px,-50%);background:#fff;}
+
+/* ═══════════════════════════════════════════
+   PAGE 4 — WIDGET CUSTOMIZER
+═══════════════════════════════════════════ */
+.customizer-layout{display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start;}
+.widget-preview-wrap {
+  position:sticky;top:0;
+  background:var(--bg3);border:1px solid var(--border);border-radius:14px;
+  padding:24px;display:flex;flex-direction:column;align-items:center;
+}
+.preview-label{
+  font-size:11px;font-weight:600;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;
+  align-self:flex-start;
+}
+.widget-mockup {
+  width:340px;background:#13131F;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:18px;overflow:hidden;font-family:inherit;
+}
+.wm-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 15px;background:#1C1C2B;border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.wm-brand{display:flex;align-items:center;gap:9px;}
+.wm-icon{
+  width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.wm-name{font-size:13px;font-weight:600;color:#F0EEFF;}
+.wm-status{font-size:11px;color:#8E8EAE;display:flex;align-items:center;gap:4px;}
+.wm-x{color:#8E8EAE;font-size:14px;cursor:pointer;}
+.wm-body{padding:18px 15px;}
+.wm-heading{font-size:17px;font-weight:700;color:#F0EEFF;margin-bottom:5px;}
+.wm-sub{font-size:12px;color:#8E8EAE;margin-bottom:16px;}
+.wm-inp{
+  width:100%;background:#1C1C2B;border:1px solid rgba(255,255,255,0.07);
+  border-radius:9px;padding:8px 11px;color:#F0EEFF;font-size:12px;
+  margin-bottom:10px;font-family:inherit;outline:none;
+}
+.wm-btn{
+  width:100%;padding:11px;border:none;border-radius:10px;
+  color:#fff;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;
+}
+.wm-trigger{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:10px 18px;border-radius:100px;color:#fff;
+  font-size:13px;font-weight:600;margin-top:14px;border:none;cursor:pointer;
+  box-shadow:0 4px 18px rgba(124,58,237,0.4);font-family:inherit;
+}
+
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap;}
+.swatch{
+  width:28px;height:28px;border-radius:7px;cursor:pointer;
+  border:2px solid transparent;transition:all .15s;
+}
+.swatch.selected{border-color:#fff;transform:scale(1.1);}
+.embed-box{
+  background:var(--bg4);border:1px solid var(--border);border-radius:9px;
+  padding:12px 14px;font-size:12px;color:var(--purple2);font-family:monospace;
+  word-break:break-all;cursor:pointer;transition:border-color .15s;
+}
+.embed-box:hover{border-color:var(--border2);}
+
+/* ═══════════════════════════════════════════
+   PAGE 5 — TICKETS
+═══════════════════════════════════════════ */
+.ticket-card {
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  padding:15px 18px;margin-bottom:10px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:border-color .15s;
+}
+.ticket-card:hover{border-color:var(--border2);}
+.ticket-id{font-size:11px;font-weight:700;color:var(--purple2);font-family:monospace;width:90px;flex-shrink:0;}
+.ticket-info{flex:1;}
+.ticket-name{font-size:13px;font-weight:600;margin-bottom:2px;}
+.ticket-issue{font-size:12px;color:var(--text2);}
+.ticket-meta{display:flex;align-items:center;gap:8px;margin-top:5px;}
+.ticket-meta span{font-size:11px;color:var(--text3);}
+.ticket-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0;}
+
+.kanban-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.kanban-col{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:14px;}
+.kanban-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.kanban-title{font-size:13px;font-weight:600;}
+.kanban-count{
+  font-size:11px;font-weight:700;background:var(--bg5);
+  padding:2px 7px;border-radius:6px;color:var(--text2);
+}
+.kanban-item {
+  background:var(--bg4);border:1px solid var(--border);
+  border-radius:9px;padding:11px 13px;margin-bottom:8px;cursor:pointer;
+  transition:border-color .15s;
+}
+.kanban-item:hover{border-color:var(--border2);}
+.kanban-item-title{font-size:12px;font-weight:600;margin-bottom:4px;}
+.kanban-item-sub{font-size:11px;color:var(--text3);}
+.kanban-item-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:8px;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 6 — ANALYTICS
+═══════════════════════════════════════════ */
+.analytics-grid{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:16px;}
+.chart-container{height:220px;position:relative;}
+.chart-placeholder{
+  width:100%;height:100%;
+  display:flex;align-items:flex-end;gap:6px;padding:10px 0 0;
+}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.chart-bar{
+  width:100%;border-radius:5px 5px 0 0;transition:height .5s ease;
+  position:relative;cursor:pointer;
+}
+.chart-bar:hover{filter:brightness(1.2);}
+.chart-bar-label{font-size:10px;color:var(--text3);}
+
+.donut-wrap{position:relative;width:120px;height:120px;margin:0 auto;}
+.donut-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.donut-num{font-size:22px;font-weight:800;letter-spacing:-1px;}
+.donut-lbl{font-size:10px;color:var(--text3);}
+
+.stat-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.stat-row:last-child{border-bottom:none;}
+.stat-key{font-size:13px;color:var(--text2);}
+.stat-val{font-size:13px;font-weight:700;}
+
+/* Funnel */
+.funnel-bar{
+  height:38px;display:flex;align-items:center;padding:0 14px;
+  border-radius:8px;margin-bottom:8px;font-size:13px;font-weight:600;
+  transition:all .4s ease;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE 7 — SETTINGS
+═══════════════════════════════════════════ */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;gap:20px;}
+.settings-nav{display:flex;flex-direction:column;gap:2px;}
+.settings-nav-item{
+  padding:9px 13px;border-radius:8px;font-size:13px;font-weight:500;
+  color:var(--text2);cursor:pointer;transition:all .15s;
+}
+.settings-nav-item:hover{background:var(--bg3);color:var(--text1);}
+.settings-nav-item.active{background:var(--bg4);color:var(--text1);}
+
+.member-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.member-row:last-child{border-bottom:none;}
+.member-info{flex:1;}
+.member-name{font-size:13px;font-weight:600;}
+.member-email{font-size:12px;color:var(--text3);}
+
+.api-key-row{
+  display:flex;align-items:center;gap:10px;padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+.api-key-row:last-child{border-bottom:none;}
+.api-key-val{
+  flex:1;font-family:monospace;font-size:12px;color:var(--purple2);
+  background:var(--bg4);padding:7px 12px;border-radius:8px;
+  border:1px solid var(--border);
+}
+
+.billing-usage-bar{
+  height:8px;background:var(--bg5);border-radius:6px;overflow:hidden;margin:8px 0;
+}
+.billing-bar-fill{height:100%;border-radius:6px;}
+
+/* ═══════════════════════════════════════════
+   NOTIFICATIONS PANEL (slide-in)
+═══════════════════════════════════════════ */
+.notif-panel {
+  position:fixed;right:16px;top:64px;width:320px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:14px;box-shadow:0 16px 50px rgba(0,0,0,0.5);
+  z-index:200;opacity:0;transform:scale(.95) translateY(-10px);
+  pointer-events:none;transition:all .2s cubic-bezier(.34,1.3,.64,1);
+}
+.notif-panel.open{opacity:1;transform:none;pointer-events:all;}
+.notif-header{
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.notif-title{font-size:13px;font-weight:700;}
+.notif-clear{font-size:11px;color:var(--purple2);cursor:pointer;}
+.notif-item{
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  display:flex;gap:10px;cursor:pointer;transition:background .12s;
+}
+.notif-item:last-child{border-bottom:none;}
+.notif-item:hover{background:rgba(255,255,255,0.02);}
+.notif-ico{font-size:18px;flex-shrink:0;margin-top:1px;}
+.notif-text{font-size:12px;line-height:1.5;color:var(--text2);}
+.notif-text strong{color:var(--text1);}
+.notif-time{font-size:10px;color:var(--text3);margin-top:3px;}
+
+/* ═══════════════════════════════════════════
+   OVERLAY
+═══════════════════════════════════════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.5);
+  z-index:90;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.overlay.on{opacity:1;pointer-events:all;}
+
+/* ═══════════════════════════════════════════
+   EMPTY STATE
+═══════════════════════════════════════════ */
+.empty-state{
+  text-align:center;padding:48px 20px;
+}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+.empty-title{font-size:15px;font-weight:600;margin-bottom:6px;}
+.empty-sub{font-size:13px;color:var(--text2);}
+
+/* ═══════════════════════════════════════════
+   MISC
+═══════════════════════════════════════════ */
+.section-sep{height:16px;}
+.flex{display:flex;}
+.flex-col{display:flex;flex-direction:column;}
+.items-center{align-items:center;}
+.justify-between{justify-content:space-between;}
+.gap-2{gap:8px;}
+.gap-3{gap:12px;}
+.mt-4{margin-top:16px;}
+.mt-3{margin-top:12px;}
+.text-sm{font-size:12px;}
+.text-xs{font-size:11px;}
+.text-muted{color:var(--text2);}
+.font-bold{font-weight:700;}
+.font-medium{font-weight:500;}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<nav class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-icon">🎙️</div>
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="sb-logo-text">Voicera</span>
+        <span class="sb-logo-beta">BETA</span>
+      </div>
+      <div class="sb-logo-sub">AI Voice Support</div>
+    </div>
+  </div>
+
+  <div class="sb-workspace">
+    <div class="sb-ws-icon">A</div>
+    <div class="sb-ws-name">Acme Corp</div>
+    <div class="sb-ws-arrow">⌄</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Main</div>
+    <div class="sb-item active" onclick="nav('overview',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Overview
+    </div>
+    <div class="sb-item" onclick="nav('calllogs',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 012 5.18 2 2 0 013.93 3h3a2 2 0 012 1.72c.127.96.361 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+      Call Logs
+      <span class="sb-badge green">24</span>
+    </div>
+    <div class="sb-item" onclick="nav('tickets',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Tickets
+      <span class="sb-badge">7</span>
+    </div>
+    <div class="sb-item" onclick="nav('analytics',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Analytics
+    </div>
+  </div>
+
+  <div class="sb-divider"></div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Configuration</div>
+    <div class="sb-item" onclick="nav('botconfig',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M2 12h2M20 12h2"/></svg>
+      Bot Config
+    </div>
+    <div class="sb-item" onclick="nav('widget',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      Widget
+    </div>
+    <div class="sb-item" onclick="nav('settings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </div>
+  </div>
+
+  <div class="sb-divider"></div>
+  <div class="sb-section">
+    <div class="sb-item" onclick="">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Documentation
+    </div>
+    <div class="sb-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Support
+    </div>
+  </div>
+
+  <div class="sb-bottom">
+    <div class="sb-usage">
+      <div class="sb-usage-row">
+        <span class="sb-usage-label">🔊 Voice Minutes</span>
+        <span class="sb-usage-val">847 / 2,000</span>
+      </div>
+      <div class="sb-bar"><div class="sb-bar-fill" style="width:42%"></div></div>
+    </div>
+    <div class="sb-usage">
+      <div class="sb-usage-row">
+        <span class="sb-usage-label">🎫 Tickets</span>
+        <span class="sb-usage-val">23 / 500</span>
+      </div>
+      <div class="sb-bar"><div class="sb-bar-fill" style="width:5%"></div></div>
+    </div>
+    <button class="sb-upgrade">⚡ Upgrade to Pro</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div class="main-wrap">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-title" id="topbar-title">Overview</div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search calls, tickets…</span>
+      <kbd>⌘ K</kbd>
+    </div>
+    <div class="topbar-icons">
+      <div class="topbar-icon" title="Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </div>
+      <div class="topbar-icon" title="History">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+      </div>
+      <div class="topbar-icon" title="Notifications" onclick="toggleNotif()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+    </div>
+    <div class="topbar-user">
+      <div class="user-ava">A</div>
+      <div>
+        <div class="user-name">Alex Smith</div>
+        <div class="user-role">Admin</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ══════════════════════════════
+         PAGE: OVERVIEW
+    ══════════════════════════════ -->
+    <div id="page-overview" class="page active">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Overview</div>
+          <div class="page-sub">Welcome back, Alex — here's what's happening with Voicera today.</div>
+        </div>
+        <div class="flex gap-2">
+          <select class="filter-select" style="height:36px;padding:0 28px 0 12px;font-size:12px;">
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>This month</option>
+          </select>
+          <button class="btn btn-purple btn-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Bot
+          </button>
+        </div>
+      </div>
+
+      <!-- Active now banner -->
+      <div class="active-banner">
+        <div class="active-banner-icon">📞</div>
+        <div>
+          <span class="active-banner-num">3</span>
+          <span style="font-size:13px;font-weight:600;">active calls right now</span>
+        </div>
+        <div class="live-dot" style="margin-left:4px;"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="nav('calllogs',document.querySelector('.sb-item:nth-child(2)'))">View Live →</button>
+      </div>
+
+      <!-- KPI cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div class="kpi-icon" style="background:var(--blue-bg);">📞</div>
+            <div class="kpi-change up">+12%</div>
+          </div>
+          <div class="kpi-val">1,284</div>
+          <div class="kpi-label">Total Calls This Week</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div class="kpi-icon" style="background:var(--green-bg);">✅</div>
+            <div class="kpi-change up">+4.2%</div>
+          </div>
+          <div class="kpi-val">78%</div>
+          <div class="kpi-label">Resolution Rate</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div class="kpi-icon" style="background:var(--amber-bg);">⏱️</div>
+            <div class="kpi-change down">-8s</div>
+          </div>
+          <div class="kpi-val">2m 34s</div>
+          <div class="kpi-label">Avg Call Duration</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div class="kpi-icon" style="background:var(--red-bg);">🔺</div>
+            <div class="kpi-change down">+2</div>
+          </div>
+          <div class="kpi-val">22%</div>
+          <div class="kpi-label">Escalation Rate</div>
+        </div>
+      </div>
+
+      <!-- Chart + Issues -->
+      <div class="overview-grid">
+        <!-- Call volume chart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Call Volume</div>
+              <div class="card-sub">Daily call counts over the past 7 days</div>
+            </div>
+            <div class="flex gap-2">
+              <span class="badge badge-green"><span class="dot"></span>Live</span>
+            </div>
+          </div>
+          <div class="chart-area">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Grid lines -->
+              <line x1="0" y1="30" x2="500" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="0" y1="70" x2="500" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="0" y1="110" x2="500" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <!-- Area fill -->
+              <path d="M0,100 C40,100 60,50 90,60 C120,70 140,30 180,40 C220,50 240,80 280,45 C320,10 340,60 380,30 C420,0 460,50 500,35 L500,150 L0,150 Z" fill="url(#areaGrad)"/>
+              <!-- Line -->
+              <path d="M0,100 C40,100 60,50 90,60 C120,70 140,30 180,40 C220,50 240,80 280,45 C320,10 340,60 380,30 C420,0 460,50 500,35" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Dots -->
+              <circle cx="90" cy="60" r="4" fill="#7C3AED" stroke="#A78BFA" stroke-width="2"/>
+              <circle cx="180" cy="40" r="4" fill="#7C3AED" stroke="#A78BFA" stroke-width="2"/>
+              <circle cx="280" cy="45" r="4" fill="#7C3AED" stroke="#A78BFA" stroke-width="2"/>
+              <circle cx="380" cy="30" r="4" fill="#7C3AED" stroke="#A78BFA" stroke-width="2"/>
+              <circle cx="500" cy="35" r="4" fill="#7C3AED" stroke="#A78BFA" stroke-width="2"/>
+              <!-- X labels -->
+              <text x="0" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Mon</text>
+              <text x="83" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Tue</text>
+              <text x="173" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Wed</text>
+              <text x="265" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Thu</text>
+              <text x="363" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Fri</text>
+              <text x="468" y="148" fill="#50506A" font-size="11" font-family="Plus Jakarta Sans">Sat</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Top issues -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Top Issues</div>
+              <div class="card-sub">This week's breakdown</div>
+            </div>
+          </div>
+          <div class="issue-list">
+            <div class="issue-row">
+              <div class="issue-label">Technical Issue</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:72%;background:#7C3AED;"></div></div>
+              <div class="issue-pct" style="color:#A78BFA">72%</div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-label">Billing</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:51%;background:#60A5FA;"></div></div>
+              <div class="issue-pct" style="color:#60A5FA">51%</div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-label">Account Access</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:38%;background:#34D399;"></div></div>
+              <div class="issue-pct" style="color:#34D399">38%</div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-label">Feature Help</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:24%;background:#FBBF24;"></div></div>
+              <div class="issue-pct" style="color:#FBBF24">24%</div>
+            </div>
+            <div class="issue-row">
+              <div class="issue-label">Other</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:15%;background:#F87171;"></div></div>
+              <div class="issue-pct" style="color:#F87171">15%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent calls -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Recent Calls</div>
+            <div class="card-sub">Last 5 conversations</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="nav('calllogs',document.querySelectorAll('.sb-item')[1])">View all →</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Caller</th>
+                <th>Issue</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="openDetail('Priya Sharma','Technical Issue','3m 12s','Resolved','2m ago')">
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div class="av av-sm" style="background:linear-gradient(135deg,#6D28D9,#7C3AED);color:#fff;">P</div>
+                    <div><div style="font-size:13px;font-weight:600;">Priya Sharma</div><div class="text-xs text-muted">priya@example.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-blue">Technical Issue</span></td>
+                <td class="text-muted text-sm">3m 12s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td class="text-xs text-muted">2m ago</td>
+                <td><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></td>
+              </tr>
+              <tr onclick="openDetail('Marco Diaz','Billing','1m 48s','Escalated','15m ago')">
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div class="av av-sm" style="background:linear-gradient(135deg,#1D4ED8,#2563EB);color:#fff;">M</div>
+                    <div><div style="font-size:13px;font-weight:600;">Marco Diaz</div><div class="text-xs text-muted">marco@example.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-amber">Billing</span></td>
+                <td class="text-muted text-sm">1m 48s</td>
+                <td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td>
+                <td class="text-xs text-muted">15m ago</td>
+                <td><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></td>
+              </tr>
+              <tr onclick="openDetail('Sofia Kim','Account Access','2m 05s','Resolved','1h ago')">
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div class="av av-sm" style="background:linear-gradient(135deg,#047857,#059669);color:#fff;">S</div>
+                    <div><div style="font-size:13px;font-weight:600;">Sofia Kim</div><div class="text-xs text-muted">sofia@example.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-purple">Account Access</span></td>
+                <td class="text-muted text-sm">2m 05s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td class="text-xs text-muted">1h ago</td>
+                <td><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div class="av av-sm" style="background:linear-gradient(135deg,#B45309,#D97706);color:#fff;">R</div>
+                    <div><div style="font-size:13px;font-weight:600;">Ravi Patel</div><div class="text-xs text-muted">ravi@example.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-gray">Feature Help</span></td>
+                <td class="text-muted text-sm">4m 22s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td class="text-xs text-muted">2h ago</td>
+                <td><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="flex items-center gap-2">
+                    <div class="av av-sm" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">L</div>
+                    <div><div style="font-size:13px;font-weight:600;">Laura Chen</div><div class="text-xs text-muted">laura@example.com</div></div>
+                  </div>
+                </td>
+                <td><span class="badge badge-blue">Technical Issue</span></td>
+                <td class="text-muted text-sm">0m 55s</td>
+                <td><span class="badge badge-amber"><span class="dot"></span>In Progress</span></td>
+                <td class="text-xs text-muted">3h ago</td>
+                <td><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: CALL LOGS
+    ══════════════════════════════ -->
+    <div id="page-calllogs" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Call Logs</div>
+          <div class="page-sub">All customer conversations — click any row to view transcript</div>
+        </div>
+        <button class="btn btn-ghost btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+      </div>
+
+      <div class="filters-bar">
+        <div class="filter-search" style="max-width:280px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search by name or email…">
+        </div>
+        <select class="filter-select">
+          <option>All Statuses</option>
+          <option>Resolved</option>
+          <option>Escalated</option>
+          <option>In Progress</option>
+        </select>
+        <select class="filter-select">
+          <option>All Issues</option>
+          <option>Billing</option>
+          <option>Technical Issue</option>
+          <option>Account Access</option>
+          <option>Feature Help</option>
+        </select>
+        <select class="filter-select">
+          <option>Last 7 Days</option>
+          <option>Last 30 Days</option>
+          <option>Custom Range</option>
+        </select>
+      </div>
+
+      <div class="card" style="padding:0;">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Caller</th>
+                <th>Issue Type</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Ticket</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr onclick="openDetail('Priya Sharma','Technical Issue','3m 12s','Resolved','Apr 21, 10:32 AM')">
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#6D28D9,#7C3AED);color:#fff;">P</div><div><div style="font-size:13px;font-weight:600;">Priya Sharma</div><div class="text-xs text-muted">priya@example.com</div></div></div></td>
+                <td><span class="badge badge-blue">Technical Issue</span></td>
+                <td class="text-sm text-muted">3m 12s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-A8F2X</td>
+                <td class="text-xs text-muted">Apr 21, 10:32 AM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr onclick="openDetail('Marco Diaz','Billing','1m 48s','Escalated','Apr 21, 9:18 AM')">
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#1D4ED8,#2563EB);color:#fff;">M</div><div><div style="font-size:13px;font-weight:600;">Marco Diaz</div><div class="text-xs text-muted">marco@example.com</div></div></div></td>
+                <td><span class="badge badge-amber">Billing</span></td>
+                <td class="text-sm text-muted">1m 48s</td>
+                <td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-B3K9P</td>
+                <td class="text-xs text-muted">Apr 21, 9:18 AM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr onclick="openDetail('Sofia Kim','Account Access','2m 05s','Resolved','Apr 21, 8:45 AM')">
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#047857,#059669);color:#fff;">S</div><div><div style="font-size:13px;font-weight:600;">Sofia Kim</div><div class="text-xs text-muted">sofia@example.com</div></div></div></td>
+                <td><span class="badge badge-purple">Account Access</span></td>
+                <td class="text-sm text-muted">2m 05s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-C7M1L</td>
+                <td class="text-xs text-muted">Apr 21, 8:45 AM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#B45309,#D97706);color:#fff;">R</div><div><div style="font-size:13px;font-weight:600;">Ravi Patel</div><div class="text-xs text-muted">ravi@example.com</div></div></div></td>
+                <td><span class="badge badge-gray">Feature Help</span></td>
+                <td class="text-sm text-muted">4m 22s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-D4Q8R</td>
+                <td class="text-xs text-muted">Apr 20, 6:14 PM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">L</div><div><div style="font-size:13px;font-weight:600;">Laura Chen</div><div class="text-xs text-muted">laura@example.com</div></div></div></td>
+                <td><span class="badge badge-blue">Technical Issue</span></td>
+                <td class="text-sm text-muted">0m 55s</td>
+                <td><span class="badge badge-amber"><span class="dot"></span>In Progress</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-E2N5T</td>
+                <td class="text-xs text-muted">Apr 20, 3:30 PM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#9D174D,#DB2777);color:#fff;">J</div><div><div style="font-size:13px;font-weight:600;">James Wilson</div><div class="text-xs text-muted">james@example.com</div></div></div></td>
+                <td><span class="badge badge-amber">Billing</span></td>
+                <td class="text-sm text-muted">2m 2m 41s</td>
+                <td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-F6W3Z</td>
+                <td class="text-xs text-muted">Apr 20, 11:07 AM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+              <tr>
+                <td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#065F46,#059669);color:#fff;">N</div><div><div style="font-size:13px;font-weight:600;">Nina Okafor</div><div class="text-xs text-muted">nina@example.com</div></div></div></td>
+                <td><span class="badge badge-purple">Account Access</span></td>
+                <td class="text-sm text-muted">1m 18s</td>
+                <td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td>
+                <td style="font-family:monospace;font-size:11px;color:var(--purple2);">TKT-G9H7V</td>
+                <td class="text-xs text-muted">Apr 19, 4:55 PM</td>
+                <td><div class="flex gap-2"><div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: BOT CONFIG
+    ══════════════════════════════ -->
+    <div id="page-botconfig" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Bot Configuration</div>
+          <div class="page-sub">Customize your AI voice agent's personality, voice, and behavior</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-outline btn-sm">Preview Bot</button>
+          <button class="btn btn-purple btn-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      <div class="config-layout">
+        <!-- Left column -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Bot Identity</div>
+                <div class="card-sub">Basic info for your AI agent</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bot Name</label>
+              <input class="form-input" value="Aria — AI Support Agent">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Greeting Message</label>
+              <input class="form-input" value="Hi! I'm Aria, your AI support agent. How can I help you today?">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">System Prompt</label>
+              <textarea class="form-textarea" style="min-height:150px;">You are a friendly, efficient AI customer support agent for Acme Corp.
+
+Instructions:
+- Greet the customer warmly by their first name
+- Acknowledge their issue immediately and empathetically
+- Ask 1 clarifying question if needed, then try to resolve
+- If you cannot resolve, say you'll connect them to a human specialist
+- Keep ALL responses to 1–2 sentences max — this is a voice call
+- Be warm, empathetic, and professional at all times</textarea>
+              <div class="form-hint">This is the instruction set your AI agent follows on every call.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Behavior Settings</div>
+                <div class="card-sub">Control how your bot handles edge cases</div>
+              </div>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info">
+                <div class="toggle-label">Auto-escalate on frustration</div>
+                <div class="toggle-desc">Transfer to human when negative sentiment is detected</div>
+              </div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info">
+                <div class="toggle-label">Record all calls</div>
+                <div class="toggle-desc">Save transcripts and audio for every conversation</div>
+              </div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info">
+                <div class="toggle-label">CSAT survey after call</div>
+                <div class="toggle-desc">Ask customers to rate their experience (1–5 stars)</div>
+              </div>
+              <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info">
+                <div class="toggle-label">Email follow-up</div>
+                <div class="toggle-desc">Send a summary email to the customer after the call</div>
+              </div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Voice Model</div>
+                <div class="card-sub">Choose the AI voice for your agent</div>
+              </div>
+            </div>
+            <div class="voice-grid">
+              <div class="voice-opt selected">
+                <div class="voice-opt-name">Aura-2 Thalia</div>
+                <div class="voice-opt-lang">English (US) · Female</div>
+                <button class="voice-play">▶</button>
+              </div>
+              <div class="voice-opt">
+                <div class="voice-opt-name">Aura-2 Orion</div>
+                <div class="voice-opt-lang">English (US) · Male</div>
+                <button class="voice-play">▶</button>
+              </div>
+              <div class="voice-opt">
+                <div class="voice-opt-name">Aura-2 Luna</div>
+                <div class="voice-opt-lang">English (UK) · Female</div>
+                <button class="voice-play">▶</button>
+              </div>
+              <div class="voice-opt">
+                <div class="voice-opt-name">Aura-2 Arcas</div>
+                <div class="voice-opt-lang">English (AU) · Male</div>
+                <button class="voice-play">▶</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Language Model</div>
+                <div class="card-sub">The AI brain powering responses</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Think Model</label>
+              <select class="form-select">
+                <option selected>GPT-4o mini (Recommended)</option>
+                <option>GPT-4o</option>
+                <option>Claude 3.5 Haiku</option>
+                <option>Llama 3.3 70B</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">STT Model</label>
+              <select class="form-select">
+                <option selected>Nova-3 (Recommended)</option>
+                <option>Nova-2</option>
+                <option>Enhanced</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Escalation Rules</div>
+                <div class="card-sub">When to transfer to a human agent</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max call duration before escalation</label>
+              <select class="form-select">
+                <option>5 minutes</option>
+                <option selected>10 minutes</option>
+                <option>15 minutes</option>
+                <option>Never</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Escalation keywords</label>
+              <input class="form-input" value="speak to human, manager, cancel, lawsuit, refund">
+              <div class="form-hint">Comma-separated phrases that trigger immediate escalation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: WIDGET
+    ══════════════════════════════ -->
+    <div id="page-widget" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Widget Customizer</div>
+          <div class="page-sub">Customize the support widget that goes on your website</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-outline btn-sm">Reset Defaults</button>
+          <button class="btn btn-purple btn-sm">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>
+            Save & Publish
+          </button>
+        </div>
+      </div>
+
+      <div class="customizer-layout">
+        <!-- Left: Settings -->
+        <div>
+          <div class="card" style="margin-bottom:14px;">
+            <div class="card-header"><div class="card-title">Branding</div></div>
+            <div class="form-group">
+              <label class="form-label">Bot Display Name</label>
+              <input class="form-input" id="wm-name-input" value="AI Support" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trigger Button Text</label>
+              <input class="form-input" id="wm-trigger-input" value="Talk to Support" oninput="updatePreview()">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Accent Color</label>
+              <div class="color-swatches" id="color-swatches">
+                <div class="swatch selected" style="background:#7C3AED;" data-color="#7C3AED" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#2563EB;" data-color="#2563EB" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#059669;" data-color="#059669" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#DC2626;" data-color="#DC2626" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#D97706;" data-color="#D97706" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#DB2777;" data-color="#DB2777" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#0891B2;" data-color="#0891B2" onclick="setColor(this)"></div>
+                <div class="swatch" style="background:#4F46E5;" data-color="#4F46E5" onclick="setColor(this)"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:14px;">
+            <div class="card-header"><div class="card-title">Form Fields</div></div>
+            <div class="toggle-wrap">
+              <div class="toggle-info"><div class="toggle-label">Show Name field</div></div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info"><div class="toggle-label">Show Email field</div></div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info"><div class="toggle-label">Show Issue Type</div></div>
+              <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+            </div>
+            <div class="toggle-wrap">
+              <div class="toggle-info"><div class="toggle-label">Show Description</div></div>
+              <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">Embed Code</div></div>
+            <div class="text-sm text-muted" style="margin-bottom:10px;">Copy and paste this snippet into your website's &lt;/body&gt; tag:</div>
+            <div class="embed-box" onclick="copyEmbed()" title="Click to copy">
+              &lt;script src="https://cdn.voicera.ai/widget.js"<br>
+              &nbsp;&nbsp;data-key="vra_live_k9f2x8p1q3m7n"<br>
+              &nbsp;&nbsp;data-color="#7C3AED"&gt;<br>
+              &lt;/script&gt;
+            </div>
+            <div class="text-xs text-muted" style="margin-top:8px;">Click to copy · <span style="color:var(--purple2);cursor:pointer;">View documentation →</span></div>
+          </div>
+        </div>
+
+        <!-- Right: Live preview -->
+        <div class="widget-preview-wrap">
+          <div class="preview-label">Live Preview</div>
+          <div class="widget-mockup">
+            <div class="wm-header">
+              <div class="wm-brand">
+                <div class="wm-icon" id="prev-icon" style="background:rgba(124,58,237,0.2);">🤖</div>
+                <div>
+                  <div class="wm-name" id="prev-name">AI Support</div>
+                  <div class="wm-status"><span style="width:6px;height:6px;background:#34D399;border-radius:50%;display:inline-block;"></span> Online · Responds instantly</div>
+                </div>
+              </div>
+              <div class="wm-x">✕</div>
+            </div>
+            <div class="wm-body">
+              <div class="wm-heading">How can we help? 👋</div>
+              <div class="wm-sub">Fill in a few details and we'll connect you right away.</div>
+              <input class="wm-inp" placeholder="Your name">
+              <input class="wm-inp" placeholder="you@example.com">
+              <input class="wm-inp" placeholder="Select issue type…">
+              <button class="wm-btn" id="prev-btn" style="background:#7C3AED;">🎙️ Start Voice Call</button>
+            </div>
+          </div>
+          <button class="wm-trigger" id="prev-trigger" style="background:#7C3AED;margin-top:16px;">
+            🎧 <span id="prev-trigger-txt">Talk to Support</span> <span style="width:7px;height:7px;background:#34D399;border-radius:50%;"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: TICKETS
+    ══════════════════════════════ -->
+    <div id="page-tickets" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Tickets</div>
+          <div class="page-sub">Support tickets generated from voice conversations</div>
+        </div>
+        <div class="flex gap-2">
+          <div id="ticket-view-toggle" class="tabs" style="margin-bottom:0;">
+            <div class="tab active" onclick="setTicketView('list',this)">List</div>
+            <div class="tab" onclick="setTicketView('kanban',this)">Kanban</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="setTab(this,'ticket-tabs')">All <span style="font-size:10px;background:var(--bg5);padding:1px 6px;border-radius:5px;margin-left:4px;">23</span></div>
+        <div class="tab" onclick="setTab(this,'ticket-tabs')">Open <span style="font-size:10px;background:var(--red-bg);color:var(--red);padding:1px 6px;border-radius:5px;margin-left:4px;">7</span></div>
+        <div class="tab" onclick="setTab(this,'ticket-tabs')">In Progress <span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:1px 6px;border-radius:5px;margin-left:4px;">5</span></div>
+        <div class="tab" onclick="setTab(this,'ticket-tabs')">Resolved <span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:5px;margin-left:4px;">11</span></div>
+      </div>
+
+      <!-- List View -->
+      <div id="ticket-list-view">
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-A8F2X</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Priya Sharma — Login issue after password reset</div>
+            <div class="ticket-issue">Technical Issue</div>
+            <div class="ticket-meta">
+              <span class="badge badge-green badge-sm">Resolved</span>
+              <span>· Apr 21 · 3m 12s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#6D28D9,#7C3AED);color:#fff;">P</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-B3K9P</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Marco Diaz — Double charge on invoice #4821</div>
+            <div class="ticket-issue">Billing & Payments</div>
+            <div class="ticket-meta">
+              <span class="badge badge-red">Escalated</span>
+              <span>· Apr 21 · 1m 48s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#1D4ED8,#2563EB);color:#fff;">M</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-C7M1L</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Sofia Kim — 2FA not working, locked out</div>
+            <div class="ticket-issue">Account & Access</div>
+            <div class="ticket-meta">
+              <span class="badge badge-green">Resolved</span>
+              <span>· Apr 21 · 2m 05s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#047857,#059669);color:#fff;">S</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-D4Q8R</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Ravi Patel — How to set up webhook integrations</div>
+            <div class="ticket-issue">Feature Help</div>
+            <div class="ticket-meta">
+              <span class="badge badge-green">Resolved</span>
+              <span>· Apr 20 · 4m 22s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#B45309,#D97706);color:#fff;">R</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-E2N5T</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Laura Chen — API rate limit errors in production</div>
+            <div class="ticket-issue">Technical Issue</div>
+            <div class="ticket-meta">
+              <span class="badge badge-amber">In Progress</span>
+              <span>· Apr 20 · 0m 55s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">L</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-F6W3Z</div>
+          <div class="ticket-info">
+            <div class="ticket-name">James Wilson — Subscription renewal failed</div>
+            <div class="ticket-issue">Billing & Payments</div>
+            <div class="ticket-meta">
+              <span class="badge badge-green">Resolved</span>
+              <span>· Apr 20 · 2m 41s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#9D174D,#DB2777);color:#fff;">J</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+        <div class="ticket-card">
+          <div class="ticket-id">TKT-G9H7V</div>
+          <div class="ticket-info">
+            <div class="ticket-name">Nina Okafor — Account suspended without warning</div>
+            <div class="ticket-issue">Account & Access</div>
+            <div class="ticket-meta">
+              <span class="badge badge-red">Escalated</span>
+              <span>· Apr 19 · 1m 18s call</span>
+            </div>
+          </div>
+          <div class="ticket-actions">
+            <div class="av av-sm" style="background:linear-gradient(135deg,#065F46,#059669);color:#fff;">N</div>
+            <button class="btn btn-ghost btn-sm">View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kanban View (hidden by default) -->
+      <div id="ticket-kanban-view" style="display:none;">
+        <div class="kanban-grid">
+          <div class="kanban-col">
+            <div class="kanban-head">
+              <div class="kanban-title">🔴 Open</div>
+              <div class="kanban-count">7</div>
+            </div>
+            <div class="kanban-item"><div class="kanban-item-title">Login after password reset</div><div class="kanban-item-sub">Priya Sharma · Technical</div><div class="kanban-item-footer"><span class="badge badge-blue" style="font-size:9px;">Technical</span><span class="text-xs text-muted">Apr 21</span></div></div>
+            <div class="kanban-item"><div class="kanban-item-title">Double charge invoice #4821</div><div class="kanban-item-sub">Marco Diaz · Billing</div><div class="kanban-item-footer"><span class="badge badge-amber" style="font-size:9px;">Billing</span><span class="text-xs text-muted">Apr 21</span></div></div>
+            <div class="kanban-item"><div class="kanban-item-title">Account suspended notice</div><div class="kanban-item-sub">Nina Okafor · Access</div><div class="kanban-item-footer"><span class="badge badge-purple" style="font-size:9px;">Access</span><span class="text-xs text-muted">Apr 19</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-head">
+              <div class="kanban-title">🟡 In Progress</div>
+              <div class="kanban-count">5</div>
+            </div>
+            <div class="kanban-item"><div class="kanban-item-title">API rate limit errors</div><div class="kanban-item-sub">Laura Chen · Technical</div><div class="kanban-item-footer"><span class="badge badge-blue" style="font-size:9px;">Technical</span><span class="text-xs text-muted">Apr 20</span></div></div>
+            <div class="kanban-item"><div class="kanban-item-title">Webhook setup help</div><div class="kanban-item-sub">Ravi Patel · Feature</div><div class="kanban-item-footer"><span class="badge badge-gray" style="font-size:9px;">Feature</span><span class="text-xs text-muted">Apr 20</span></div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-head">
+              <div class="kanban-title">🟢 Resolved</div>
+              <div class="kanban-count">11</div>
+            </div>
+            <div class="kanban-item"><div class="kanban-item-title">2FA not working, locked out</div><div class="kanban-item-sub">Sofia Kim · Access</div><div class="kanban-item-footer"><span class="badge badge-green" style="font-size:9px;">Resolved</span><span class="text-xs text-muted">Apr 21</span></div></div>
+            <div class="kanban-item"><div class="kanban-item-title">Subscription renewal failed</div><div class="kanban-item-sub">James Wilson · Billing</div><div class="kanban-item-footer"><span class="badge badge-green" style="font-size:9px;">Resolved</span><span class="text-xs text-muted">Apr 20</span></div></div>
+            <div class="kanban-item"><div class="kanban-item-title">Export data not working</div><div class="kanban-item-sub">Amir Hassan · Technical</div><div class="kanban-item-footer"><span class="badge badge-green" style="font-size:9px;">Resolved</span><span class="text-xs text-muted">Apr 19</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: ANALYTICS
+    ══════════════════════════════ -->
+    <div id="page-analytics" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Analytics</div>
+          <div class="page-sub">Deep insights into your support performance</div>
+        </div>
+        <select class="filter-select" style="height:36px;">
+          <option>Last 30 Days</option>
+          <option>Last 7 Days</option>
+          <option>This Quarter</option>
+        </select>
+      </div>
+
+      <!-- Top KPIs -->
+      <div class="grid-4" style="margin-bottom:18px;">
+        <div class="card card-sm" style="text-align:center;">
+          <div style="font-size:28px;font-weight:800;color:var(--purple2);margin-bottom:4px;">4,821</div>
+          <div class="text-sm text-muted">Total Calls</div>
+          <div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 18% vs last month</div>
+        </div>
+        <div class="card card-sm" style="text-align:center;">
+          <div style="font-size:28px;font-weight:800;color:var(--green);margin-bottom:4px;">76%</div>
+          <div class="text-sm text-muted">Avg Resolution Rate</div>
+          <div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 4% vs last month</div>
+        </div>
+        <div class="card card-sm" style="text-align:center;">
+          <div style="font-size:28px;font-weight:800;color:var(--amber);margin-bottom:4px;">2m 18s</div>
+          <div class="text-sm text-muted">Avg Handle Time</div>
+          <div style="font-size:11px;color:var(--green);margin-top:4px;">↓ 22s faster</div>
+        </div>
+        <div class="card card-sm" style="text-align:center;">
+          <div style="font-size:28px;font-weight:800;color:var(--red);margin-bottom:4px;">19%</div>
+          <div class="text-sm text-muted">Escalation Rate</div>
+          <div style="font-size:11px;color:var(--red);margin-top:4px;">↑ 2% vs last month</div>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <!-- Bar chart - calls per day -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Daily Call Volume</div><div class="card-sub">Last 14 days</div></div>
+          </div>
+          <div class="chart-container">
+            <div class="chart-placeholder" id="bar-chart">
+            </div>
+          </div>
+        </div>
+
+        <!-- Resolution donut -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Resolution Breakdown</div><div class="card-sub">This month</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:20px;padding-top:8px;">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 120 120" style="transform:rotate(-90deg);">
+                <circle cx="60" cy="60" r="46" fill="none" stroke="var(--bg5)" stroke-width="14"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="#7C3AED" stroke-width="14" stroke-dasharray="218 71" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="46" fill="none" stroke="#F87171" stroke-width="14" stroke-dasharray="57 232" stroke-dashoffset="-218" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-num">76%</div>
+                <div class="donut-lbl">Resolved</div>
+              </div>
+            </div>
+            <div style="flex:1;">
+              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#7C3AED;border-radius:2px;display:inline-block;"></span>Resolved</div><div class="stat-val" style="color:var(--purple2);">76%</div></div>
+              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#F87171;border-radius:2px;display:inline-block;"></span>Escalated</div><div class="stat-val" style="color:var(--red);">19%</div></div>
+              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#FBBF24;border-radius:2px;display:inline-block;"></span>In Progress</div><div class="stat-val" style="color:var(--amber);">5%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row -->
+      <div class="grid-2">
+        <!-- Issue breakdown -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Issue Category Breakdown</div><div class="card-sub">By volume this month</div></div>
+          </div>
+          <div>
+            <div class="stat-row"><div class="stat-key">Technical Issue</div><div class="flex items-center gap-3"><div style="width:100px;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;"><div style="width:72%;height:100%;background:#7C3AED;border-radius:3px;"></div></div><div class="stat-val" style="color:var(--purple2);">1,472</div></div></div>
+            <div class="stat-row"><div class="stat-key">Billing & Payments</div><div class="flex items-center gap-3"><div style="width:100px;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;"><div style="width:51%;height:100%;background:#60A5FA;border-radius:3px;"></div></div><div class="stat-val" style="color:#60A5FA;">1,041</div></div></div>
+            <div class="stat-row"><div class="stat-key">Account & Access</div><div class="flex items-center gap-3"><div style="width:100px;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;"><div style="width:38%;height:100%;background:#34D399;border-radius:3px;"></div></div><div class="stat-val" style="color:#34D399;">776</div></div></div>
+            <div class="stat-row"><div class="stat-key">Feature Help</div><div class="flex items-center gap-3"><div style="width:100px;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;"><div style="width:24%;height:100%;background:#FBBF24;border-radius:3px;"></div></div><div class="stat-val" style="color:#FBBF24;">490</div></div></div>
+            <div class="stat-row"><div class="stat-key">Other</div><div class="flex items-center gap-3"><div style="width:100px;height:5px;background:var(--bg5);border-radius:3px;overflow:hidden;"><div style="width:15%;height:100%;background:#F87171;border-radius:3px;"></div></div><div class="stat-val" style="color:#F87171;">306</div></div></div>
+          </div>
+        </div>
+
+        <!-- Call funnel -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Support Funnel</div><div class="card-sub">From call start to resolution</div></div>
+          </div>
+          <div style="padding-top:8px;">
+            <div class="funnel-bar" style="background:rgba(124,58,237,0.2);width:100%;">
+              <span style="color:var(--purple2);font-size:12px;">Total Calls Started</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--text2);">4,821</span>
+            </div>
+            <div class="funnel-bar" style="background:rgba(96,165,250,0.15);width:88%;">
+              <span style="color:#60A5FA;font-size:12px;">Intake Completed</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--text2);">4,242</span>
+            </div>
+            <div class="funnel-bar" style="background:rgba(52,211,153,0.15);width:76%;">
+              <span style="color:#34D399;font-size:12px;">Bot Resolved</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--text2);">3,664</span>
+            </div>
+            <div class="funnel-bar" style="background:rgba(251,191,36,0.12);width:24%;">
+              <span style="color:#FBBF24;font-size:12px;">Escalated to Human</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--text2);">916</span>
+            </div>
+            <div class="funnel-bar" style="background:rgba(248,113,113,0.12);width:8%;">
+              <span style="color:#F87171;font-size:12px;">Dropped</span>
+              <span style="margin-left:auto;font-size:12px;color:var(--text2);">241</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE: SETTINGS
+    ══════════════════════════════ -->
+    <div id="page-settings" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Settings</div>
+          <div class="page-sub">Manage your account, team, and integrations</div>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+        <!-- Settings nav -->
+        <div class="settings-nav">
+          <div class="settings-nav-item active" onclick="showSettingsSection('profile',this)">Profile</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('team',this)">Team Members</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('apikeys',this)">API Keys</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('billing',this)">Billing</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('integrations',this)">Integrations</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('notifications',this)">Notifications</div>
+        </div>
+
+        <!-- Settings content -->
+        <div id="settings-content">
+
+          <!-- PROFILE -->
+          <div id="sec-profile" class="settings-section">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Profile Information</div></div>
+              <div class="form-row" style="margin-bottom:14px;">
+                <div class="form-group" style="margin-bottom:0;"><label class="form-label">First Name</label><input class="form-input" value="Alex"></div>
+                <div class="form-group" style="margin-bottom:0;"><label class="form-label">Last Name</label><input class="form-input" value="Smith"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="alex@acmecorp.com"></div>
+              <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" value="Acme Corp"></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Website</label><input class="form-input" value="https://acmecorp.com"></div>
+            </div>
+            <div style="margin-top:14px;"><button class="btn btn-purple">Save Changes</button></div>
+          </div>
+
+          <!-- TEAM -->
+          <div id="sec-team" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header">
+                <div><div class="card-title">Team Members</div><div class="card-sub">3 of 5 seats used</div></div>
+                <button class="btn btn-purple btn-sm">+ Invite Member</button>
+              </div>
+              <div class="member-row">
+                <div class="av av-md" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">A</div>
+                <div class="member-info"><div class="member-name">Alex Smith</div><div class="member-email">alex@acmecorp.com</div></div>
+                <span class="badge badge-purple">Admin</span>
+              </div>
+              <div class="member-row">
+                <div class="av av-md" style="background:linear-gradient(135deg,#1D4ED8,#2563EB);color:#fff;">J</div>
+                <div class="member-info"><div class="member-name">Jamie Torres</div><div class="member-email">jamie@acmecorp.com</div></div>
+                <span class="badge badge-blue">Agent</span>
+                <button class="btn btn-ghost btn-sm" style="margin-left:10px;">Remove</button>
+              </div>
+              <div class="member-row">
+                <div class="av av-md" style="background:linear-gradient(135deg,#047857,#059669);color:#fff;">S</div>
+                <div class="member-info"><div class="member-name">Sam Rivera</div><div class="member-email">sam@acmecorp.com</div></div>
+                <span class="badge badge-gray">Viewer</span>
+                <button class="btn btn-ghost btn-sm" style="margin-left:10px;">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- API KEYS -->
+          <div id="sec-apikeys" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header">
+                <div><div class="card-title">API Keys</div><div class="card-sub">Manage your Deepgram and Voicera credentials</div></div>
+                <button class="btn btn-purple btn-sm">+ Add Key</button>
+              </div>
+              <div class="api-key-row">
+                <div style="flex:1;"><div style="font-size:13px;font-weight:600;margin-bottom:2px;">Deepgram API Key</div><div class="text-xs text-muted">Used for speech-to-text and voice agent</div></div>
+                <div class="api-key-val">0c1d65f2•••••••••••••••••a04ab0dd2e</div>
+                <button class="btn btn-ghost btn-sm">Edit</button>
+              </div>
+              <div class="api-key-row">
+                <div style="flex:1;"><div style="font-size:13px;font-weight:600;margin-bottom:2px;">Voicera Widget Key</div><div class="text-xs text-muted">Public key embedded in your widget</div></div>
+                <div class="api-key-val">vra_live_k9f2•••••••••••q3m7n</div>
+                <button class="btn btn-ghost btn-sm">Rotate</button>
+              </div>
+              <div class="api-key-row">
+                <div style="flex:1;"><div style="font-size:13px;font-weight:600;margin-bottom:2px;">Webhook Secret</div><div class="text-xs text-muted">Used to verify webhook payloads</div></div>
+                <div class="api-key-val">whsec_••••••••••••••••••••••••</div>
+                <button class="btn btn-ghost btn-sm">Show</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BILLING -->
+          <div id="sec-billing" class="settings-section" style="display:none;">
+            <div class="card" style="margin-bottom:14px;">
+              <div class="card-header">
+                <div><div class="card-title">Current Plan</div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;padding:14px;background:var(--purple-bg);border:1px solid rgba(124,58,237,0.2);border-radius:11px;">
+                <div style="font-size:28px;">⚡</div>
+                <div style="flex:1;"><div style="font-size:16px;font-weight:700;">Starter Plan</div><div class="text-sm text-muted">$49/month · Renews May 21, 2026</div></div>
+                <button class="btn btn-purple btn-sm">Upgrade to Pro</button>
+              </div>
+              <div style="margin-top:18px;">
+                <div style="font-size:13px;font-weight:600;margin-bottom:12px;">Usage This Month</div>
+                <div class="form-group">
+                  <div class="flex justify-between text-sm" style="margin-bottom:5px;"><span class="text-muted">Voice Minutes</span><span>847 / 2,000</span></div>
+                  <div class="billing-usage-bar"><div class="billing-bar-fill" style="width:42%;background:var(--purple);"></div></div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <div class="flex justify-between text-sm" style="margin-bottom:5px;"><span class="text-muted">Tickets</span><span>23 / 500</span></div>
+                  <div class="billing-usage-bar"><div class="billing-bar-fill" style="width:5%;background:var(--green);"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Payment Method</div></div>
+              <div class="flex items-center gap-12" style="gap:12px;">
+                <div style="font-size:24px;">💳</div>
+                <div><div style="font-size:13px;font-weight:600;">Visa ending in 4242</div><div class="text-xs text-muted">Expires 08/2028</div></div>
+                <button class="btn btn-ghost btn-sm" style="margin-left:auto;">Update</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- INTEGRATIONS -->
+          <div id="sec-integrations" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Connected Integrations</div></div>
+              <div class="member-row">
+                <div style="font-size:24px;width:40px;text-align:center;">💬</div>
+                <div class="member-info"><div class="member-name">Slack</div><div class="member-email">Get notified on escalations and new tickets</div></div>
+                <span class="badge badge-green">Connected</span>
+                <button class="btn btn-ghost btn-sm" style="margin-left:10px;">Configure</button>
+              </div>
+              <div class="member-row">
+                <div style="font-size:24px;width:40px;text-align:center;">📊</div>
+                <div class="member-info"><div class="member-name">Google Sheets</div><div class="member-email">Auto-export call logs and tickets</div></div>
+                <span class="badge badge-gray">Disconnected</span>
+                <button class="btn btn-purple btn-sm" style="margin-left:10px;">Connect</button>
+              </div>
+              <div class="member-row">
+                <div style="font-size:24px;width:40px;text-align:center;">🔗</div>
+                <div class="member-info"><div class="member-name">Zapier Webhook</div><div class="member-email">Send events to any Zapier workflow</div></div>
+                <span class="badge badge-gray">Disconnected</span>
+                <button class="btn btn-purple btn-sm" style="margin-left:10px;">Connect</button>
+              </div>
+              <div class="member-row">
+                <div style="font-size:24px;width:40px;text-align:center;">🧡</div>
+                <div class="member-info"><div class="member-name">HubSpot CRM</div><div class="member-email">Sync contacts and create CRM tickets</div></div>
+                <span class="badge badge-gray">Disconnected</span>
+                <button class="btn btn-purple btn-sm" style="margin-left:10px;">Connect</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTIFICATIONS -->
+          <div id="sec-notifications" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Notification Preferences</div></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">New ticket created</div><div class="toggle-desc">Email me when a new support ticket is generated</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Call escalated to human</div><div class="toggle-desc">Alert when AI transfers to human agent</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Daily summary email</div><div class="toggle-desc">Receive daily digest of calls and resolutions</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Usage threshold alerts</div><div class="toggle-desc">Warn me when nearing plan limits (80%)</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main-wrap -->
+
+<!-- ═══════════════ NOTIFICATIONS PANEL ═══════════════ -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-header">
+    <div class="notif-title">Notifications</div>
+    <div class="notif-clear">Mark all read</div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-ico">📞</div>
+    <div><div class="notif-text"><strong>Marco Diaz</strong> — Billing call escalated to human agent</div><div class="notif-time">15 minutes ago</div></div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-ico">🎫</div>
+    <div><div class="notif-text">New ticket <strong>TKT-B3K9P</strong> created from voice call</div><div class="notif-time">18 minutes ago</div></div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-ico">✅</div>
+    <div><div class="notif-text"><strong>Priya Sharma's</strong> issue resolved successfully by AI</div><div class="notif-time">1 hour ago</div></div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-ico">⚡</div>
+    <div><div class="notif-text">You've used <strong>42%</strong> of your voice minutes this month</div><div class="notif-time">2 hours ago</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ CALL DETAIL PANEL ═══════════════ -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <div>
+      <div style="font-size:15px;font-weight:700;" id="dp-name">Call Details</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:2px;" id="dp-meta">—</div>
+    </div>
+    <div class="detail-close" onclick="closeDetail()">✕</div>
+  </div>
+  <div class="detail-body">
+    <!-- Info rows -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;" id="dp-info-grid">
+      <div class="card card-sm"><div class="text-xs text-muted" style="margin-bottom:4px;">Duration</div><div style="font-size:14px;font-weight:700;" id="dp-duration">—</div></div>
+      <div class="card card-sm"><div class="text-xs text-muted" style="margin-bottom:4px;">Status</div><div id="dp-status">—</div></div>
+      <div class="card card-sm"><div class="text-xs text-muted" style="margin-bottom:4px;">Issue</div><div style="font-size:13px;font-weight:600;" id="dp-issue">—</div></div>
+      <div class="card card-sm"><div class="text-xs text-muted" style="margin-bottom:4px;">Date</div><div style="font-size:12px;font-weight:500;color:var(--text2);" id="dp-date">—</div></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Transcript</div>
+    <div id="dp-transcript">
+      <div class="transcript-item agent">
+        <div><div class="who">🤖 Agent</div><div class="msg">Hi! I'm Aria, your AI support agent. How can I help you today?</div></div>
+      </div>
+      <div class="transcript-item user">
+        <div><div class="who">👤 Customer</div><div class="msg">Hi, I'm having trouble logging in after I reset my password yesterday.</div></div>
+      </div>
+      <div class="transcript-item agent">
+        <div><div class="who">🤖 Agent</div><div class="msg">I understand — that can be frustrating. Can you tell me which email address you used?</div></div>
+      </div>
+      <div class="transcript-item user">
+        <div><div class="who">👤 Customer</div><div class="msg">It's priya@example.com. I keep getting an invalid credentials error.</div></div>
+      </div>
+      <div class="transcript-item agent">
+        <div><div class="who">🤖 Agent</div><div class="msg">Got it! Please check your spam folder for the reset email, and try the link within 24 hours. That should resolve it!</div></div>
+      </div>
+      <div class="transcript-item user">
+        <div><div class="who">👤 Customer</div><div class="msg">Oh! Found it in spam. Trying now… it worked! Thank you so much!</div></div>
+      </div>
+      <div class="transcript-item agent">
+        <div><div class="who">🤖 Agent</div><div class="msg">Wonderful! Glad I could help. Your ticket has been marked resolved. Have a great day!</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDetail()"></div>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+// ── Navigation ──────────────────────────────
+const titles = {
+  overview:'Overview',calllogs:'Call Logs',tickets:'Tickets',
+  analytics:'Analytics',botconfig:'Bot Config',widget:'Widget Customizer',settings:'Settings'
+};
+
+function nav(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent = titles[page] || page;
+}
+
+// ── Settings sections ────────────────────────
+function showSettingsSection(sec, el) {
+  document.querySelectorAll('.settings-section').forEach(s => s.style.display='none');
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('sec-'+sec).style.display='block';
+  el.classList.add('active');
+}
+
+// ── Ticket view toggle ────────────────────────
+function setTicketView(view, el) {
+  document.querySelectorAll('#ticket-view-toggle .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ticket-list-view').style.display = view==='list'?'block':'none';
+  document.getElementById('ticket-kanban-view').style.display = view==='kanban'?'block':'none';
+}
+
+function setTab(el, group) {
+  el.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Notifications ────────────────────────────
+function toggleNotif() {
+  document.getElementById('notif-panel').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const np = document.getElementById('notif-panel');
+  if(!e.target.closest('#notif-panel') && !e.target.closest('.topbar-icon[title="Notifications"]')) {
+    np.classList.remove('open');
+  }
+});
+
+// ── Call detail panel ────────────────────────
+function openDetail(name, issue, dur, status, date) {
+  document.getElementById('dp-name').textContent = name;
+  document.getElementById('dp-meta').textContent = issue + ' · ' + date;
+  document.getElementById('dp-duration').textContent = dur;
+  document.getElementById('dp-issue').textContent = issue;
+  document.getElementById('dp-date').textContent = date;
+
+  const statusBadges = {
+    'Resolved':'<span class="badge badge-green"><span class="dot"></span>Resolved</span>',
+    'Escalated':'<span class="badge badge-red"><span class="dot"></span>Escalated</span>',
+    'In Progress':'<span class="badge badge-amber"><span class="dot"></span>In Progress</span>',
+  };
+  document.getElementById('dp-status').innerHTML = statusBadges[status] || status;
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('on');
+}
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('on');
+}
+
+// ── Widget preview ────────────────────────────
+let accentColor = '#7C3AED';
+function updatePreview() {
+  const name = document.getElementById('wm-name-input').value || 'AI Support';
+  const trigger = document.getElementById('wm-trigger-input').value || 'Talk to Support';
+  document.getElementById('prev-name').textContent = name;
+  document.getElementById('prev-trigger-txt').textContent = trigger;
+}
+function setColor(el) {
+  document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  accentColor = el.dataset.color;
+  document.getElementById('prev-btn').style.background = accentColor;
+  document.getElementById('prev-trigger').style.background = accentColor;
+  document.getElementById('prev-icon').style.background = accentColor+'30';
+}
+function copyEmbed() {
+  navigator.clipboard.writeText('<script src="https://cdn.voicera.ai/widget.js" data-key="vra_live_k9f2x8p1q3m7n" data-color="'+accentColor+'"><\/script>').then(()=>{
+    const el = document.querySelector('.embed-box');
+    el.style.borderColor='var(--green)';el.style.color='var(--green)';
+    setTimeout(()=>{el.style.borderColor='';el.style.color='';},1500);
+  });
+}
+
+// ── Bar chart (Analytics) ────────────────────
+const chartData = [142,98,187,204,156,231,178,143,219,267,189,241,198,312];
+const chartDays = ['8','9','10','11','12','13','14','15','16','17','18','19','20','21'];
+const maxVal = Math.max(...chartData);
+const container = document.getElementById('bar-chart');
+if(container) {
+  chartData.forEach((val,i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-bar-wrap';
+    const pct = (val/maxVal)*100;
+    const isRecent = i >= 12;
+    wrap.innerHTML = `
+      <div class="chart-bar" style="height:${pct}%;background:${isRecent?'#7C3AED':'rgba(124,58,237,0.35)'};min-height:6px;" title="${val} calls"></div>
+      <div class="chart-bar-label">Apr ${chartDays[i]}</div>
+    `;
+    container.appendChild(wrap);
+  });
+}
+
+// ── Animate bars on load ─────────────────────
+setTimeout(() => {
+  document.querySelectorAll('.issue-bar-fill,.billing-bar-fill').forEach(el => {
+    const w = el.style.width; el.style.width='0'; 
+    requestAnimationFrame(() => { setTimeout(() => el.style.width = w, 50); });
+  });
+}, 200);
+</script>
+</body>
+</html>
