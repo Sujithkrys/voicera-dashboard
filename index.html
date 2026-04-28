@@ -55,7 +55,7 @@ body {
 }
 .sidebar::after{content:'';position:absolute;right:0;top:0;bottom:0;width:1px;background:var(--ghost);}
 .sidebar::-webkit-scrollbar{display:none;}
-.sb-logo{display:flex;align-items:center;gap:11px;padding:20px 18px 16px;}
+.sb-logo{display:flex;align-items:center;gap:11px;padding:20px 18px 12px;margin-bottom:2px;}
 .sb-logo-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .sb-logo-text{font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;color:var(--on-surface);letter-spacing:-0.3px;}
 .sb-logo-beta{font-family:'Inter',sans-serif;font-size:9px;font-weight:600;background:var(--primary-glow-sm);color:var(--primary);padding:2px 6px;border-radius:6px;margin-left:3px;}
@@ -65,7 +65,7 @@ body {
 .sb-ws-icon{width:28px;height:28px;border-radius:9px;background:linear-gradient(135deg,#1D4ED8,#3B82F6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
 .sb-ws-name{font-size:12px;font-weight:600;flex:1;color:var(--on-surface);}
 .sb-ws-arrow{color:var(--on-surface-low);font-size:10px;}
-.sb-section-label{font-size:9px;font-weight:700;color:var(--on-surface-low);text-transform:uppercase;letter-spacing:.9px;padding:14px 18px 5px;}
+.sb-section-label{font-size:9px;font-weight:700;color:var(--on-surface-low);text-transform:uppercase;letter-spacing:.9px;padding:12px 18px 6px;}
 .sb-item{display:flex;align-items:center;gap:10px;padding:8px 14px 8px 18px;font-size:13px;font-weight:500;color:var(--on-surface-med);cursor:pointer;transition:all .15s;position:relative;user-select:none;margin:1px 6px;border-radius:12px;}
 .sb-item:hover{background:var(--surface-hi);color:var(--on-surface);}
 .sb-item.active{background:var(--primary-glow-sm);color:var(--primary);}
@@ -74,7 +74,7 @@ body {
 .sb-item.active svg{opacity:1;}
 .sb-badge{margin-left:auto;font-size:10px;font-weight:700;background:var(--red-bg);color:var(--red);padding:2px 7px;border-radius:8px;}
 .sb-badge.green{background:var(--tertiary-dim);color:var(--tertiary);}
-.sb-divider{height:1px;background:var(--ghost-med);margin:8px 18px;}
+.sb-divider{height:1px;background:var(--ghost-med);margin:10px 18px;}
 .sb-bottom{margin-top:auto;padding:14px 14px 18px;}
 .sb-usage{margin-bottom:13px;}
 .sb-usage-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
@@ -82,6 +82,12 @@ body {
 .sb-usage-val{font-size:10px;font-weight:600;color:var(--on-surface-med);}
 .sb-bar{height:3px;background:var(--surface-highest);border-radius:4px;overflow:hidden;}
 .sb-bar-fill{height:100%;background:var(--grad-cta);border-radius:4px;transition:width .5s;}
+.sb-credits-card { background:rgba(255,255,255,0.03); border:1px solid var(--ghost-med); border-radius:14px; padding:12px; margin-bottom:16px; }
+.sb-credits-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.sb-credits-label { font-size:10px; font-weight:700; color:var(--on-surface-low); text-transform:uppercase; letter-spacing:0.5px; }
+.sb-credits-val { font-size:11px; font-weight:700; color:var(--primary); }
+.sb-credits-bar { height:6px; background:var(--surface-lo); border-radius:10px; overflow:hidden; position:relative; }
+.sb-credits-fill { height:100%; background:var(--grad-cta); border-radius:10px; width:65%; box-shadow:0 0 10px var(--primary-glow); }
 .sb-upgrade{width:100%;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;background:var(--grad-cta);border:none;border-radius:12px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px var(--primary-glow);}
 .sb-upgrade:hover{box-shadow:0 6px 28px var(--primary-glow);transform:translateY(-1px);}
 .main-wrap{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
@@ -103,13 +109,14 @@ body {
 .user-ava{width:28px;height:28px;border-radius:9px;background:var(--grad-cta);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;font-family:'Manrope';}
 .user-name{font-size:12px;font-weight:600;color:var(--on-surface);}
 .user-role{font-size:10px;color:var(--on-surface-low);}
-.content{flex:1;display:flex;flex-direction:column;overflow-y:auto;padding:28px;background:var(--bg);scrollbar-width:thin;scrollbar-color:var(--surface-highest) transparent;}
+.content{flex:1;display:flex;flex-direction:column;overflow-y:auto;padding:22px 28px;background:var(--bg);scrollbar-width:thin;scrollbar-color:var(--surface-highest) transparent;}
 .content::-webkit-scrollbar{width:4px;}
 .content::-webkit-scrollbar-thumb{background:var(--surface-highest);border-radius:4px;}
-.page{display:none;}
-.page.active{display:flex;flex-direction:column;flex:1;}
+.page{display:none;flex-direction:column;min-height:0;flex-shrink:0;}
+.page.active{display:flex;}
+#page-overview{height: calc(100vh - 102px); overflow: hidden; flex: 1;}
 
-.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px;}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-shrink:0;}
 .page-title{font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px;color:var(--on-surface);}
 .page-sub{font-size:13px;color:var(--on-surface-med);margin-top:4px;font-family:'Inter';}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:12px;font-family:'Inter';font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
@@ -194,13 +201,13 @@ tbody tr[onclick]{cursor:pointer;}
 .font-bold{font-weight:700;}
 .truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .section-sep{height:18px;}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
-.kpi-card{background:var(--surface);border-radius:1.5rem;padding:22px 24px 24px;transition:background .2s;position:relative;overflow:hidden;}
-.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad-cta);opacity:0;transition:opacity .2s;border-radius:1.5rem 1.5rem 0 0;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;flex-shrink:0;}
+.kpi-card{background:var(--surface);border-radius:1.25rem;padding:18px 22px;transition:background .2s;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad-cta);opacity:0;transition:opacity .2s;border-radius:1.25rem 1.25rem 0 0;}
 .kpi-card:hover::before{opacity:1;}
 .kpi-card:hover{background:var(--surface-hi);}
-.kpi-cat{font-family:'Inter';font-size:9px;font-weight:700;color:var(--on-surface-low);text-transform:uppercase;letter-spacing:.9px;margin-bottom:12px;}
-.kpi-val{font-family:'Manrope',sans-serif;font-size:38px;font-weight:800;letter-spacing:-1.5px;line-height:1;color:var(--on-surface);margin-bottom:10px;}
+.kpi-cat{font-family:'Inter';font-size:9px;font-weight:700;color:var(--on-surface-low);text-transform:uppercase;letter-spacing:.9px;margin-bottom:10px;}
+.kpi-val{font-family:'Manrope',sans-serif;font-size:32px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--on-surface);margin-bottom:6px;}
 .kpi-val.red{color:var(--red);}
 .kpi-trend{font-family:'Inter';font-size:12px;}
 .kpi-trend.up{color:var(--tertiary);}
@@ -208,10 +215,10 @@ tbody tr[onclick]{cursor:pointer;}
 .kpi-trend.down{color:var(--red);}
 .active-banner{background:var(--surface-hi);border-radius:1.5rem;padding:16px 22px;margin-bottom:22px;display:flex;align-items:center;gap:14px;}
 .active-banner-num{font-family:'Manrope';font-size:24px;font-weight:800;color:var(--tertiary);margin-right:4px;text-shadow:0 0 12px rgba(196,255,205,0.4);}
-.overview-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:0;flex:1;}
-.overview-grid .card{display:flex;flex-direction:column;}
-.chart-area{flex:1;min-height:180px;position:relative;overflow:hidden;}
-.issue-list{display:flex;flex-direction:column;gap:14px;flex:1;justify-content:center;}
+.overview-grid{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:0;flex:1;min-height:0;}
+.overview-grid .card{display:flex;flex-direction:column;min-height: 0;}
+.chart-area{flex:1;position:relative;overflow:hidden;min-height: 0;}
+.issue-list{display:flex;flex-direction:column;gap:14px;flex:1;padding-bottom:10px;}
 .issue-row{display:flex;align-items:center;gap:12px;}
 .issue-label{font-size:12px;color:var(--on-surface-med);width:120px;flex-shrink:0;}
 .issue-bar-bg{flex:1;height:4px;background:var(--surface-highest);border-radius:4px;overflow:hidden;}
@@ -225,7 +232,12 @@ tbody tr[onclick]{cursor:pointer;}
 .filter-select{background:var(--surface-hi);color:var(--on-surface-med);font-family:'Inter';font-size:12px;padding:0 28px 0 14px;height:38px;border-radius:12px;outline:none;cursor:pointer;appearance:none;border:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23455080'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
 .filter-select option{background:var(--surface);}
 .play-btn{width:28px;height:28px;border-radius:50%;background:var(--primary-glow-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;color:var(--primary);border:none;}
-.play-btn:hover{background:var(--primary-dim);color:#fff;}
+.play-btn:hover{background:var(--primary);color:#fff;transform:scale(1.05);}
+.chart-point{cursor:pointer;transition:all .2s;outline:none;}
+.chart-point:hover{r:6;fill:var(--primary);stroke:#fff;stroke-width:2;}
+.chart-tooltip{position:fixed;pointer-events:none;background:rgba(10,10,15,0.98);border:1px solid var(--ghost-med);padding:8px 12px;border-radius:10px;z-index:1000;display:none;backdrop-filter:blur(15px);box-shadow:0 10px 40px rgba(0,0,0,0.6);}
+.tooltip-title{font-size:10px;color:var(--on-surface-low);text-transform:uppercase;margin-bottom:2px;letter-spacing:0.05em;}
+.tooltip-val{font-family:'Manrope';font-size:14px;font-weight:800;color:var(--on-surface);}
 .play-btn svg{width:10px;height:10px;}
 .detail-panel{position:fixed;right:0;top:0;height:100vh;width:390px;background:var(--surface-bright-blur);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);transform:translateX(100%);transition:transform .3s cubic-bezier(.34,1.1,.64,1);z-index:100;display:flex;flex-direction:column;overflow:hidden;}
 .detail-panel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--ghost);}
@@ -369,7 +381,47 @@ tbody tr[onclick]{cursor:pointer;}
 .day-col{display:flex;flex-direction:column;gap:8px;align-items:center;}
 .time-inputs{display:flex;flex-direction:column;gap:4px;}
 .time-inputs input{padding:6px 8px;font-size:11px;height:auto;}
-</style>
+      .spinner {
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+      .toast-container {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: none;
+      }
+      .toast {
+        background: rgba(15, 25, 48, 0.95);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--ghost);
+        color: var(--on-surface);
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: toastIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), toastOut 0.3s 2.7s forwards;
+      }
+      @keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      @keyframes toastOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-20px); opacity: 0; } }
+      .toast-icon { width: 16px; height: 16px; color: var(--tertiary); }
+    </style>
 </head>
 <body>
 <nav class="sidebar">
@@ -388,11 +440,6 @@ tbody tr[onclick]{cursor:pointer;}
       </div>
       <div class="sb-logo-sub">AI Customer Support</div>
     </div>
-  </div>
-  <div class="sb-workspace">
-    <div class="sb-ws-icon">A</div>
-    <div class="sb-ws-name">Acme Corp</div>
-    <div class="sb-ws-arrow"></div>
   </div>
   <div class="sb-section-label">Main</div>
   <div class="sb-item active" onclick="nav('overview',this)">
@@ -427,36 +474,23 @@ tbody tr[onclick]{cursor:pointer;}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     Team
   </div>
-  <div class="sb-item" onclick="nav('widget',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-    Widget
-  </div>
   <div class="sb-item" onclick="nav('settings',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     Settings
   </div>
-  <div class="sb-divider"></div>
-  <div class="sb-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    Documentation
-  </div>
-  <div class="sb-item">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-    Support
-  </div>
   <div class="sb-bottom">
-    <div class="sb-usage">
-      <div class="sb-usage-row"><span class="sb-usage-label">Voice Minutes</span><span class="sb-usage-val">847 / 2,000</span></div>
-      <div class="sb-bar"><div class="sb-bar-fill" style="width:42%"></div></div>
-    </div>
-    <div class="sb-usage">
-      <div class="sb-usage-row"><span class="sb-usage-label">Tickets</span><span class="sb-usage-val">23 / 500</span></div>
-      <div class="sb-bar"><div class="sb-bar-fill" style="width:5%"></div></div>
+    <div class="sb-credits-card">
+      <div class="sb-credits-head">
+        <span class="sb-credits-label">Credits</span>
+        <span class="sb-credits-val">1,240 / 2,000</span>
+      </div>
+      <div class="sb-credits-bar">
+        <div class="sb-credits-fill" style="width: 62%;"></div>
+      </div>
     </div>
     <button class="sb-upgrade">Upgrade to Pro</button>
   </div>
-</nav>
-<div class="main-wrap">
+</nav><div class="main-wrap">
 
   <div class="content">
     <div id="page-overview" class="page active">
@@ -466,12 +500,7 @@ tbody tr[onclick]{cursor:pointer;}
           <select class="filter-select"><option>Last 7 days</option><option>Last 30 days</option><option>This month</option></select>
         </div>
       </div>
-      <div class="active-banner">
-        <div style="font-size:20px;"></div>
-        <div><span class="active-banner-num">3</span><span style="font-size:13px;font-weight:600;">active calls right now</span></div>
-        <div class="live-indicator" style="margin-left:6px;"><div class="dot"></div><div class="ring"></div></div>
-        <button class="btn btn-ghost btn-sm" style="margin-left:auto;" onclick="nav('calllogs',document.querySelectorAll('.sb-item')[1])">View Live</button>
-      </div>
+
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-cat">Call Minutes</div><div class="kpi-val">4,821</div><div class="kpi-trend up">12% vs last mo</div></div>
         <div class="kpi-card"><div class="kpi-cat">Resolutions</div><div class="kpi-val">92%</div><div class="kpi-trend up">4% optimized</div></div>
@@ -489,41 +518,115 @@ tbody tr[onclick]{cursor:pointer;}
               <span class="badge badge-green"><span class="dot"></span>Live</span>
             </div>
           </div>
-          <div class="chart-area">
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.3"/>
-                  <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <line x1="0" y1="30" x2="500" y2="30" stroke="var(--ghost-med)" stroke-width="1"/>
-              <line x1="0" y1="70" x2="500" y2="70" stroke="var(--ghost-med)" stroke-width="1"/>
-              <line x1="0" y1="110" x2="500" y2="110" stroke="var(--ghost-med)" stroke-width="1"/>
-              <path d="M0,100 C40,100 60,50 90,60 C120,70 140,30 180,40 C220,50 240,80 280,45 C320,10 340,60 380,30 C420,0 460,50 500,35 L500,150 L0,150 Z" fill="url(#areaGrad)"/>
-              <path d="M0,100 C40,100 60,50 90,60 C120,70 140,30 180,40 C220,50 240,80 280,45 C320,10 340,60 380,30 C420,0 460,50 500,35" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="90" cy="60" r="4" fill="var(--primary-dim)" stroke="var(--primary)" stroke-width="2"/>
-              <circle cx="180" cy="40" r="4" fill="var(--primary-dim)" stroke="var(--primary)" stroke-width="2"/>
-              <circle cx="280" cy="45" r="4" fill="var(--primary-dim)" stroke="var(--primary)" stroke-width="2"/>
-              <circle cx="380" cy="30" r="4" fill="var(--primary-dim)" stroke="var(--primary)" stroke-width="2"/>
-              <circle cx="500" cy="35" r="4" fill="var(--primary-dim)" stroke="var(--primary)" stroke-width="2"/>
-              <text x="0" y="148" fill="var(--on-surface-low)" font-size="11">Mon</text>
-              <text x="83" y="148" fill="var(--on-surface-low)" font-size="11">Tue</text>
-              <text x="173" y="148" fill="var(--on-surface-low)" font-size="11">Wed</text>
-              <text x="265" y="148" fill="var(--on-surface-low)" font-size="11">Thu</text>
-              <text x="363" y="148" fill="var(--on-surface-low)" font-size="11">Fri</text>
-              <text x="468" y="148" fill="var(--on-surface-low)" font-size="11">Sat</text>
-            </svg>
+          <div class="chart-area" style="display: flex; flex-direction: column;">
+            <div style="display: flex; gap: 30px; margin-bottom: 24px; background: var(--surface-hi); padding: 12px 20px; border-radius: 16px; border: 1px solid var(--ghost-med);">
+              <div><div class="text-xs text-muted" style="margin-bottom: 2px;">Peak Traffic</div><div style="font-family: 'Manrope'; font-size: 16px; font-weight: 800; color: var(--primary);">14:32 <span style="font-size: 11px; font-weight: 500; color: var(--on-surface-low);">PM</span></div></div>
+              <div style="width: 1px; background: var(--ghost-med); height: 24px; align-self: center;"></div>
+              <div><div class="text-xs text-muted" style="margin-bottom: 2px;">Avg Handle Time</div><div style="font-family: 'Manrope'; font-size: 16px; font-weight: 800; color: var(--tertiary);">2m 45s</div></div>
+              <div style="width: 1px; background: var(--ghost-med); height: 24px; align-self: center;"></div>
+              <div><div class="text-xs text-muted" style="margin-bottom: 2px;">Resolution</div><div style="font-family: 'Manrope'; font-size: 16px; font-weight: 800; color: var(--blue);">94.2%</div></div>
+            </div>
+            <div style="flex: 1; position: relative; margin-top: 10px;">
+              <svg viewBox="0 0 500 160" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                <defs>
+                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.15"/>
+                    <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- Grid -->
+                <g stroke="var(--ghost-med)" stroke-width="0.5">
+                  <line x1="0" y1="40" x2="500" y2="40"/>
+                  <line x1="0" y1="80" x2="500" y2="80"/>
+                  <line x1="0" y1="120" x2="500" y2="120"/>
+                  <line x1="110" y1="0" x2="110" y2="160" stroke-opacity="0.3"/>
+                  <line x1="210" y1="0" x2="210" y2="160" stroke-opacity="0.3"/>
+                  <line x1="320" y1="0" x2="320" y2="160" stroke-opacity="0.3"/>
+                  <line x1="430" y1="0" x2="430" y2="160" stroke-opacity="0.3"/>
+                </g>
+                <!-- Area -->
+                <path d="M0,110 C50,110 80,60 110,70 C140,80 170,40 210,50 C250,60 280,100 320,55 C360,10 390,70 430,40 C470,10 490,60 500,45 L500,160 L0,160 Z" fill="url(#areaGrad)"/>
+                <!-- Main Line -->
+                <path d="M0,110 C50,110 80,60 110,70 C140,80 170,40 210,50 C250,60 280,100 320,55 C360,10 390,70 430,40 C470,10 490,60 500,45" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>
+                
+                <!-- Interaction Points -->
+                <circle cx="110" cy="70" r="3.5" fill="var(--surface-lo)" stroke="var(--primary)" stroke-width="2" class="chart-point" data-val="842 calls" data-day="Tuesday"></circle>
+                <circle cx="210" cy="50" r="3.5" fill="var(--surface-lo)" stroke="var(--primary)" stroke-width="2" class="chart-point" data-val="1,120 calls" data-day="Wednesday"></circle>
+                <circle cx="320" cy="55" r="3.5" fill="var(--surface-lo)" stroke="var(--primary)" stroke-width="2" class="chart-point" data-val="940 calls" data-day="Thursday"></circle>
+                <circle cx="430" cy="40" r="3.5" fill="var(--surface-lo)" stroke="var(--primary)" stroke-width="2" class="chart-point" data-val="1,280 calls" data-day="Friday"></circle>
+                <circle cx="500" cy="45" r="3.5" fill="var(--surface-lo)" stroke="var(--primary)" stroke-width="2" class="chart-point" data-val="1,150 calls" data-day="Saturday"></circle>
+
+                <text x="0" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">MON</text>
+                <text x="100" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">TUE</text>
+                <text x="200" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">WED</text>
+                <text x="300" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">THU</text>
+                <text x="400" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">FRI</text>
+                <text x="480" y="158" fill="var(--on-surface-med)" font-size="9" font-family="Manrope" font-weight="700" style="letter-spacing: 0.1em;">SAT</text>
+              </svg>
+            </div>
           </div>
         </div>
         <div class="card">
           <div class="card-header"><div><div class="card-title">Top Issues</div><div class="card-sub">This week's breakdown</div></div></div>
-          <div class="issue-list">
-            <div class="issue-row"><div class="issue-label">Technical Issue</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width:72%;background:#8a4cfc;"></div></div><div class="issue-pct" style="color:#bd9dff">72%</div></div>
-            <div class="issue-row"><div class="issue-label">Billing</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width:51%;background:#7eb8ff;"></div></div><div class="issue-pct" style="color:#7eb8ff">51%</div></div>
-            <div class="issue-row"><div class="issue-label">Account Access</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width:38%;background:#c4ffcd;"></div></div><div class="issue-pct" style="color:#c4ffcd">38%</div></div>
-            <div class="issue-row"><div class="issue-label">Feature Help</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width:24%;background:#ffd280;"></div></div><div class="issue-pct" style="color:#ffd280">24%</div></div>
-            <div class="issue-row"><div class="issue-label">Other</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width:15%;background:#ff6e84;"></div></div><div class="issue-pct" style="color:#ff6e84">15%</div></div>
+          
+          <!-- Quick Stat Visualization -->
+          <div style="display: flex; align-items: center; justify-content: center; padding: 10px 0 24px; margin-bottom: 12px; border-bottom: 1px solid var(--ghost-med);">
+            <div class="donut-wrap" style="width: 110px; height: 110px; cursor: pointer;" class="chart-point" data-val="2,482 calls" data-day="Total Automated">
+              <svg viewBox="0 0 36 36" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--surface-highest)" stroke-width="3"></circle>
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#8a4cfc" stroke-width="3" stroke-dasharray="72 28" stroke-dashoffset="0" class="chart-point" data-val="1,787 calls" data-day="Technical"></circle>
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#7eb8ff" stroke-width="3" stroke-dasharray="15 85" stroke-dashoffset="-72" class="chart-point" data-val="372 calls" data-day="Billing"></circle>
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#c4ffcd" stroke-width="3" stroke-dasharray="8 92" stroke-dashoffset="-87" class="chart-point" data-val="198 calls" data-day="Access"></circle>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-num" style="font-size: 20px;">84%</div>
+                <div class="donut-lbl" style="font-size: 9px;">Automated</div>
+              </div>
+            </div>
+            <div style="margin-left: 20px;">
+               <div style="margin-bottom: 8px;"><span style="width: 8px; height: 8px; background: #8a4cfc; display: inline-block; border-radius: 2px; margin-right: 6px;"></span><span class="text-xs text-muted">Technical</span></div>
+               <div style="margin-bottom: 8px;"><span style="width: 8px; height: 8px; background: #7eb8ff; display: inline-block; border-radius: 2px; margin-right: 6px;"></span><span class="text-xs text-muted">Billing</span></div>
+               <div><span style="width: 8px; height: 8px; background: #c4ffcd; display: inline-block; border-radius: 2px; margin-right: 6px;"></span><span class="text-xs text-muted">Access</span></div>
+            </div>
+          </div>
+
+          <div class="issue-list" style="gap: 14px;">
+            <div class="issue-row chart-point" data-val="72% Volume" data-day="Technical">
+              <div class="issue-label" style="width: 100px;">Technical</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:72%;background:#8a4cfc;"></div></div>
+              <div class="issue-pct" style="color:#bd9dff">72% <span style="font-size:10px;">↑</span></div>
+            </div>
+            <div class="issue-row chart-point" data-val="51% Volume" data-day="Billing">
+              <div class="issue-label" style="width: 100px;">Billing</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:51%;background:#7eb8ff;"></div></div>
+              <div class="issue-pct" style="color:#7eb8ff">51% <span style="font-size:10px;">↓</span></div>
+            </div>
+            <div class="issue-row chart-point" data-val="38% Volume" data-day="Access">
+              <div class="issue-label" style="width: 100px;">Access</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:38%;background:#c4ffcd;"></div></div>
+              <div class="issue-pct" style="color:#c4ffcd">38% <span style="font-size:10px;">↑</span></div>
+            </div>
+            <div class="issue-row chart-point" data-val="24% Volume" data-day="Feature Help">
+              <div class="issue-label" style="width: 100px;">Feature Help</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:24%;background:#ffd280;"></div></div>
+              <div class="issue-pct" style="color:#ffd280">24% <span style="font-size:10px;">↑</span></div>
+            </div>
+            <div class="issue-row chart-point" data-val="15% Volume" data-day="Other">
+              <div class="issue-label" style="width: 100px;">Other</div>
+              <div class="issue-bar-bg"><div class="issue-bar-fill" style="width:15%;background:#ff6e84;"></div></div>
+              <div class="issue-pct" style="color:#ff6e84">15% <span style="font-size:10px;">→</span></div>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--ghost-med); display: flex; flex-direction: column; gap: 8px;">
+             <div class="flex justify-between items-center">
+               <span class="text-xs text-muted">Primary Driver</span>
+               <span class="text-xs font-bold" style="color: var(--primary);">API Timeout</span>
+             </div>
+             <div class="flex justify-between items-center">
+               <span class="text-xs text-muted">Weekly Trend</span>
+               <span class="text-xs font-bold" style="color: var(--tertiary);">+12% Resolved</span>
+             </div>
           </div>
         </div>
       </div>
@@ -533,10 +636,10 @@ tbody tr[onclick]{cursor:pointer;}
     <div id="page-calllogs" class="page">
       <div class="page-header">
         <div><div class="page-title">Call Logs</div><div class="page-sub">All customer conversations — click any row to view transcript</div></div>
-        <button class="btn btn-ghost btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportLogs()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</button>
       </div>
       <div class="filters-bar">
-        <div class="filter-search" style="max-width:280px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search by name or emailâ€¦"></div>
+        <div class="filter-search" style="max-width:280px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Search by name or email..."></div>
         <select class="filter-select"><option>All Channels</option><option>Voice</option><option>Chat</option></select>
         <select class="filter-select"><option>All Statuses</option><option>Resolved</option><option>Escalated</option><option>In Progress</option></select>
         <select class="filter-select"><option>All Issues</option><option>Billing</option><option>Technical Issue</option><option>Account Access</option><option>Feature Help</option></select>
@@ -550,10 +653,10 @@ tbody tr[onclick]{cursor:pointer;}
               <tr onclick="openDetail('Priya Sharma','Technical Issue','3m 12s','Resolved','Apr 21, 10:32 AM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#6D28D9,#7C3AED);color:#fff;">P</div><div><div style="font-size:13px;font-weight:600;">Priya Sharma</div><div class="text-xs text-muted">priya@example.com</div></div></div></td><td><span class="badge badge-blue">Technical Issue</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">3m 12s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-A8F2X</td><td class="text-xs text-muted">Apr 21, 10:32 AM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
               <tr onclick="openDetail('Marco Diaz','Billing','1m 48s','Escalated','Apr 21, 9:18 AM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#1D4ED8,#2563EB);color:#fff;">M</div><div><div style="font-size:13px;font-weight:600;">Marco Diaz</div><div class="text-xs text-muted">marco@example.com</div></div></div></td><td><span class="badge badge-amber">Billing</span></td><td><span class="badge badge-blue">&#128172; Chat</span></td><td class="text-sm text-muted">1m 48s</td><td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-B3K9P</td><td class="text-xs text-muted">Apr 21, 9:18 AM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
               <tr onclick="openDetail('Sofia Kim','Account Access','2m 05s','Resolved','Apr 21, 8:45 AM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#047857,#059669);color:#fff;">S</div><div><div style="font-size:13px;font-weight:600;">Sofia Kim</div><div class="text-xs text-muted">sofia@example.com</div></div></div></td><td><span class="badge badge-purple">Account Access</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">2m 05s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-C7M1L</td><td class="text-xs text-muted">Apr 21, 8:45 AM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
-              <tr><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#B45309,#D97706);color:#fff;">R</div><div><div style="font-size:13px;font-weight:600;">Ravi Patel</div><div class="text-xs text-muted">ravi@example.com</div></div></div></td><td><span class="badge badge-gray">Feature Help</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">4m 22s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-D4Q8R</td><td class="text-xs text-muted">Apr 20, 6:14 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
-              <tr><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">L</div><div><div style="font-size:13px;font-weight:600;">Laura Chen</div><div class="text-xs text-muted">laura@example.com</div></div></div></td><td><span class="badge badge-blue">Technical Issue</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">0m 55s</td><td><span class="badge badge-amber"><span class="dot"></span>In Progress</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-E2N5T</td><td class="text-xs text-muted">Apr 20, 3:30 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
-              <tr><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#9D174D,#DB2777);color:#fff;">J</div><div><div style="font-size:13px;font-weight:600;">James Wilson</div><div class="text-xs text-muted">james@example.com</div></div></div></td><td><span class="badge badge-amber">Billing</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">2m 41s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-F6W3Z</td><td class="text-xs text-muted">Apr 20, 11:07 AM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
-              <tr><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#065F46,#059669);color:#fff;">N</div><div><div style="font-size:13px;font-weight:600;">Nina Okafor</div><div class="text-xs text-muted">nina@example.com</div></div></div></td><td><span class="badge badge-purple">Account Access</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">1m 18s</td><td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-G9H7V</td><td class="text-xs text-muted">Apr 19, 4:55 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
+              <tr onclick="openDetail('Ravi Patel','Feature Help','4m 22s','Resolved','Apr 20, 6:14 PM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#B45309,#D97706);color:#fff;">R</div><div><div style="font-size:13px;font-weight:600;">Ravi Patel</div><div class="text-xs text-muted">ravi@example.com</div></div></div></td><td><span class="badge badge-gray">Feature Help</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">4m 22s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-D4Q8R</td><td class="text-xs text-muted">Apr 20, 6:14 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
+              <tr onclick="openDetail('Laura Chen','Technical Issue','0m 55s','In Progress','Apr 20, 3:30 PM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff;">L</div><div><div style="font-size:13px;font-weight:600;">Laura Chen</div><div class="text-xs text-muted">laura@example.com</div></div></div></td><td><span class="badge badge-blue">Technical Issue</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">0m 55s</td><td><span class="badge badge-amber"><span class="dot"></span>In Progress</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-E2N5T</td><td class="text-xs text-muted">Apr 20, 3:30 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
+              <tr onclick="openDetail('James Wilson','Billing','2m 41s','Resolved','Apr 20, 11:07 AM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#9D174D,#DB2777);color:#fff;">J</div><div><div style="font-size:13px;font-weight:600;">James Wilson</div><div class="text-xs text-muted">james@example.com</div></div></div></td><td><span class="badge badge-amber">Billing</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">2m 41s</td><td><span class="badge badge-green"><span class="dot"></span>Resolved</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-F6W3Z</td><td class="text-xs text-muted">Apr 20, 11:07 AM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
+              <tr onclick="openDetail('Nina Okafor','Account Access','1m 18s','Escalated','Apr 19, 4:55 PM')"><td><div class="flex items-center gap-2"><div class="av av-sm" style="background:linear-gradient(135deg,#065F46,#059669);color:#fff;">N</div><div><div style="font-size:13px;font-weight:600;">Nina Okafor</div><div class="text-xs text-muted">nina@example.com</div></div></div></td><td><span class="badge badge-purple">Account Access</span></td><td><span class="badge badge-purple">&#127897;&#65039; Voice</span></td><td class="text-sm text-muted">1m 18s</td><td><span class="badge badge-red"><span class="dot"></span>Escalated</span></td><td style="font-family:monospace;font-size:11px;color:var(--primary);">TKT-G9H7V</td><td class="text-xs text-muted">Apr 19, 4:55 PM</td><td><button class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></td></tr>
             </tbody>
           </table>
         </div>
@@ -564,7 +667,7 @@ tbody tr[onclick]{cursor:pointer;}
     <div id="page-knowledgebase" class="page">
       <div class="page-header">
         <div><div class="page-title">Knowledge Base</div><div class="page-sub">Manage the documents and context your AI uses to answer questions</div></div>
-        <button class="btn btn-primary btn-sm">+ Add Knowledge</button>
+        <button class="btn btn-primary btn-sm" onclick="addKnowledge()">+ Add Knowledge</button>
       </div>
       
       <div class="card" style="margin-bottom:20px;background:var(--primary-glow-sm);border:1px solid var(--primary-dim);display:flex;align-items:center;justify-content:space-between;">
@@ -750,7 +853,7 @@ tbody tr[onclick]{cursor:pointer;}
     <div id="page-team" class="page">
       <div class="page-header">
         <div><div class="page-title">Team</div><div class="page-sub">Manage your support specialists, routing rules, and availability</div></div>
-        <button class="btn btn-primary btn-sm">+ Invite Member</button>
+        <button class="btn btn-primary btn-sm" onclick="inviteMember()">+ Invite Member</button>
       </div>
 
       <div class="tabs" style="margin-bottom:24px;">
@@ -975,131 +1078,200 @@ tbody tr[onclick]{cursor:pointer;}
       <div class="page-header">
         <div><div class="page-title">Bot Configuration</div><div class="page-sub">Customize your AI voice agent's personality, voice, and behavior</div></div>
         <div class="flex gap-2">
-          <button class="btn btn-secondary btn-sm">Preview Bot</button>
-          <button class="btn btn-primary btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>Save Changes</button>
+          <button class="btn btn-secondary btn-sm" onclick="handleBotPreview(this)">Preview Bot</button>
+          <button class="btn btn-primary btn-sm" onclick="handleSave(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>Save Changes</button>
         </div>
       </div>
-      <div class="config-layout">
-        <div>
-          <div class="card" style="margin-bottom:18px;">
-            <div class="card-header"><div><div class="card-title">Bot Identity</div><div class="card-sub">Basic info for your AI agent</div></div></div>
-            <div class="form-group"><label class="form-label">Bot Name</label><input class="form-input" value="Aria — AI Support Agent"></div>
-            <div class="form-group"><label class="form-label">Primary Language</label><select class="form-select"><option selected>English</option><option>Hindi</option><option>Tamil</option><option>Telugu</option></select></div>
-            <div class="form-group"><label class="form-label">Greeting Message</label><input class="form-input" value="Hi! I'm Aria, your AI support agent. How can I help you today?"></div>
-            <div class="form-group" style="margin-bottom:0;"><label class="form-label">System Prompt</label><textarea class="form-textarea" style="min-height:150px;">You are a friendly, efficient AI customer support agent for Acme Corp.
+      <div class="tabs" style="margin-bottom: 24px;">
+        <div class="tab active" onclick="setBotConfigTab('general', this)">General</div>
+        <div class="tab" onclick="setBotConfigTab('voice', this)">Voice</div>
+        <div class="tab" onclick="setBotConfigTab('chat', this)">Chat</div>
+      </div>
+
+      <div id="botconfig-general" class="botconfig-tab-content">
+        <div class="config-layout">
+          <div>
+            <div class="card" style="margin-bottom: 18px;">
+              <div class="card-header"><div><div class="card-title">Bot Identity</div><div class="card-sub">Core personality and identity settings</div></div></div>
+              <div class="form-group"><label class="form-label">Bot Name</label><input class="form-input" value="Aria — AI Support Agent"></div>
+              <div class="form-group"><label class="form-label">Default Greeting</label><input class="form-input" value="Hi {first_name}, I am Aria. How can I help you today?"><div class="form-hint">Use {first_name} to personalise. This greeting is used for both voice and chat unless overridden in each channel tab.</div></div>
+              <div class="form-group"><label class="form-label">System Prompt</label><textarea class="form-textarea" style="min-height:160px;">You are a friendly, efficient AI customer support agent for Acme Corp.
 
 Instructions:
 - Greet the customer warmly by their first name
 - Acknowledge their issue immediately and empathetically
 - Ask 1 clarifying question if needed, then try to resolve
 - If you cannot resolve, say you'll connect them to a human specialist
-- Keep ALL responses to 1â€“2 sentences max — this is a voice call
+- Keep ALL responses to 1–2 sentences max — this is a voice call
 - Be warm, empathetic, and professional at all times</textarea></div>
-            <div class="form-group" style="margin-top:16px;margin-bottom:0;"><label class="form-label">Blacklisted Topics</label><input class="form-input" value="politics, religion, competitors"><div class="form-hint">The bot will refuse to discuss these topics and pivot back to support.</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div><div class="card-title">Behavior Settings</div><div class="card-sub">Control how your bot handles edge cases</div></div></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Auto-escalate on frustration</div><div class="toggle-desc">Transfer to human when negative sentiment is detected</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Record all calls</div><div class="toggle-desc">Save transcripts and audio for every conversation</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">CSAT survey after call</div><div class="toggle-desc">Ask customers to rate their experience (1â€“5 stars)</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Email follow-up</div><div class="toggle-desc">Send a summary email to the customer after the call</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-          </div>
-        </div>
-        <div>
-          <div class="card" style="margin-bottom:18px;">
-            <div class="card-header"><div><div class="card-title">Voice Model</div><div class="card-sub">Choose the AI voice for your agent</div></div></div>
-            <div class="voice-grid">
-              <div class="voice-opt selected"><div class="voice-opt-name">Ananya</div><div class="voice-opt-lang">English/Hindi · Female</div><button class="voice-play">Play</button></div>
-              <div class="voice-opt"><div class="voice-opt-name">Meera</div><div class="voice-opt-lang">English/Tamil · Female</div><button class="voice-play">Play</button></div>
-              <div class="voice-opt"><div class="voice-opt-name">Arvind</div><div class="voice-opt-lang">English/Hindi · Male</div><button class="voice-play">Play</button></div>
-              <div class="voice-opt"><div class="voice-opt-name">Arjun</div><div class="voice-opt-lang">English/Telugu · Male</div><button class="voice-play">Play</button></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Blacklisted Topics</label><input class="form-input" placeholder="competitor names, internal pricing, pending litigation"><div class="form-hint">Bot will never discuss these topics regardless of what the customer asks</div></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Capabilities</div><div class="card-sub">What the bot is authorized to do</div></div></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Answer from knowledge base</div><div class="toggle-desc">Use uploaded documents to answer customer questions</div></div><span class="badge badge-gray">Always on</span></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Look up customer account data</div><div class="toggle-desc">Access CRM data to provide personalized support</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Raise support tickets</div><div class="toggle-desc">Create tickets in the dashboard for human follow-up</div></div><span class="badge badge-gray">Always on</span></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Issue refunds</div><div class="toggle-desc">Process simple refund requests automatically</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Change account details</div><div class="toggle-desc">Allow bot to update customer email, phone, etc.</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap" style="border-bottom:none;"><div class="toggle-info"><div class="toggle-label">Make outbound calls</div><div class="toggle-desc">Allow bot to initiate calls for follow-ups</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
             </div>
           </div>
-          <div class="card" style="margin-bottom:18px;">
-            <div class="card-header"><div><div class="card-title">Language Model</div><div class="card-sub">The AI brain powering responses</div></div></div>
-            <div class="form-group"><label class="form-label">Think Model</label><select class="form-select"><option selected>Claude Sonnet 4</option><option>Claude 3.5 Haiku</option></select></div>
-            <div class="form-group" style="margin-bottom:0;"><label class="form-label">Voice & Speech Model</label><select class="form-select"><option selected>Saarika v2.5</option><option>Saaras v3</option></select></div>
+          <div>
+            <div class="card" style="margin-bottom: 18px;">
+              <div class="card-header"><div><div class="card-title">Escalation Rules</div><div class="card-sub">Define when the bot should transfer to a human</div></div></div>
+              <div class="form-group"><label class="form-label">Escalation keywords</label><input class="form-input" value="speak to human, manager, cancel, lawsuit, refund"><div class="form-hint">Comma-separated. Any of these phrases trigger immediate escalation.</div></div>
+              <div class="form-group"><label class="form-label">Max clarifying questions</label><select class="form-select"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select><div class="form-hint">Bot asks this many questions before escalating if unresolved</div></div>
+              <div class="form-group"><label class="form-label">What the bot says when escalating</label><textarea class="form-textarea" style="min-height:80px;">I am going to connect you with a specialist who can help further. You will receive an email shortly with next steps.</textarea></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Max escalation wait</label><select class="form-select"><option selected>Offer next available slot</option><option>Within 2 hours</option><option>Within 24 hours</option><option>No limit</option></select></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Issue Routing</div></div></div>
+              <div class="card-sub" style="margin-bottom: 14px;">Define which issue type gets routed to which department. The bot uses this to assign escalations to the right specialist.</div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Issue Type</th><th>Department</th><th style="text-align:right;">Action</th></tr></thead>
+                  <tbody>
+                    <tr><td>Billing</td><td>Billing Team</td><td style="text-align:right;"><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+                    <tr><td>Technical Issue</td><td>Technical Team</td><td style="text-align:right;"><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+                    <tr><td>Account Access</td><td>Account Team</td><td style="text-align:right;"><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+                    <tr><td>Feature Help</td><td>Product Team</td><td style="text-align:right;"><button class="btn btn-ghost btn-sm">Edit</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="btn btn-secondary btn-sm" style="margin-top: 16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add Routing Rule</button>
+            </div>
           </div>
-          <div class="card">
-            <div class="card-header"><div><div class="card-title">Escalation Rules</div></div></div>
-            <div class="form-group"><label class="form-label">Max call duration before escalation</label><select class="form-select"><option>5 minutes</option><option selected>10 minutes</option><option>15 minutes</option><option>Never</option></select></div>
-            <div class="form-group" style="margin-bottom:0;"><label class="form-label">Escalation keywords</label><input class="form-input" value="speak to human, manager, cancel, lawsuit, refund"><div class="form-hint">Comma-separated phrases that trigger immediate escalation</div></div>
+        </div>
+      </div>
+
+      <div id="botconfig-voice" class="botconfig-tab-content" style="display:none;">
+        <div class="config-layout">
+          <div>
+            <div class="card" style="margin-bottom:18px;">
+              <div class="card-header"><div><div class="card-title">Voice Identity</div><div class="card-sub">Customize the spoken personality</div></div></div>
+              <div class="form-group"><label class="form-label">Voice Greeting Override</label><input class="form-input" placeholder="Leave blank to use the default greeting from General tab"><div class="form-hint">This greeting is spoken aloud so keep it short and natural. 1 sentence maximum.</div></div>
+              <div class="form-group"><label class="form-label">Language</label><select class="form-select"><option selected>English (en-IN)</option><option>Hindi (hi-IN)</option><option>Telugu (te-IN)</option><option>Tamil (ta-IN)</option><option>Kannada (kn-IN)</option><option>Bengali (bn-IN)</option><option>Marathi (mr-IN)</option></select><div class="form-hint">Sarvam AI supports all major Indian languages and English. Auto-detection handles code-mixed speech.</div></div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">Speech Pace</label>
+                <div class="flex items-center gap-3">
+                  <input type="range" min="0.5" max="2" step="0.1" value="1.0" oninput="updateSpeechPace(this.value)" style="flex:1; height:4px; background:var(--surface-highest); border-radius:4px; appearance:none; outline:none; cursor:pointer;">
+                  <span id="pace-label" style="font-size:12px; font-weight:600; color:var(--primary); width:100px;">1.0x — Normal</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Call Behavior</div><div class="card-sub">Fine-tune the voice interaction flow</div></div></div>
+              <div class="form-group"><label class="form-label">Max call duration</label><select class="form-select"><option>2 minutes</option><option>5 minutes</option><option selected>10 minutes</option><option>15 minutes</option><option>No limit</option></select><div class="form-hint">Call is automatically escalated if it exceeds this duration</div></div>
+              <div class="form-group"><label class="form-label">Silence timeout</label><select class="form-select"><option>5 seconds</option><option selected>10 seconds</option><option>15 seconds</option><option>30 seconds</option></select><div class="form-hint">Bot prompts the customer if no speech is detected for this long</div></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">On silence prompt</label><input class="form-input" value="Are you still there? Take your time."><div class="form-hint">What the bot says after detecting silence</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:18px;">
+              <div class="card-header"><div><div class="card-title">Voice Model</div><div class="card-sub">Powered by Sarvam AI Bulbul v3</div></div></div>
+              <div class="voice-grid">
+                <div class="voice-opt selected" onclick="selectVoice(this)"><div class="voice-opt-name">Ananya</div><div class="voice-opt-lang">Hindi + English · Female</div><button class="voice-play">Play</button></div>
+                <div class="voice-opt" onclick="selectVoice(this)"><div class="voice-opt-name">Meera</div><div class="voice-opt-lang">Tamil + English · Female</div><button class="voice-play">Play</button></div>
+                <div class="voice-opt" onclick="selectVoice(this)"><div class="voice-opt-name">Arvind</div><div class="voice-opt-lang">Hindi + English · Male</div><button class="voice-play">Play</button></div>
+                <div class="voice-opt" onclick="selectVoice(this)"><div class="voice-opt-name">Arjun</div><div class="voice-opt-lang">Telugu + English · Male</div><button class="voice-play">Play</button></div>
+              </div>
+              <div style="margin-top:12px; color:var(--on-surface-low); font-size:11px;">30+ voices available. Visit dashboard.sarvam.ai to explore all options.</div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">STT Model</div><div class="card-sub">The model that transcribes customer speech during calls.</div></div></div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label">Speech Recognition</label>
+                <select class="form-select">
+                  <option selected>Saarika v2.5 — Recommended</option>
+                  <option>Saaras v3 — Multilingual + Translation</option>
+                </select>
+                <div class="form-hint">Saaras v3 automatically detects and handles code-mixed speech like Hinglish and Tanglish.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="botconfig-chat" class="botconfig-tab-content" style="display:none;">
+        <div class="config-layout">
+          <div>
+            <div class="card" style="margin-bottom:18px;">
+              <div class="card-header"><div><div class="card-title">Chat Identity</div><div class="card-sub">Customize the text-based personality</div></div></div>
+              <div class="form-group"><label class="form-label">Chat Greeting Override</label><textarea class="form-textarea" style="min-height:80px;" placeholder="Leave blank to use the default greeting from General tab"></textarea><div class="form-hint">Chat greeting can be slightly longer than voice since the customer is reading it.</div></div>
+              <div class="form-group"><label class="form-label">Response Length</label><select class="form-select"><option>Concise — 1 to 2 sentences</option><option selected>Balanced — short paragraph</option><option>Detailed — full explanation</option></select><div class="form-hint">Voice is always concise regardless of this setting. This only applies to chat responses.</div></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Response Format</label><select class="form-select"><option>Plain text only</option><option selected>Allow bullet points</option><option>Allow bullet points and bold</option></select><div class="form-hint">Structured formatting helps customers scan long answers in chat</div></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Chat Behavior</div><div class="card-sub">Fine-tune the chat interaction flow</div></div></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show typing indicator</div><div class="toggle-desc">Show animated dots while the bot is generating a response</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Allow file attachments</div><div class="toggle-desc">Customer can send screenshots or documents in the chat window</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Allow emoji in responses</div><div class="toggle-desc">Bot can use emoji to make chat responses feel more conversational</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Auto-scroll to latest message</div><div class="toggle-desc">Chat window scrolls down automatically when a new message arrives</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap" style="border-bottom:none;"><div class="toggle-info"><div class="toggle-label">Show sources used</div><div class="toggle-desc">Show the customer which knowledge base documents were used to answer</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+            </div>
+          </div>
+          <div>
+            <div class="card" style="margin-bottom:18px;">
+              <div class="card-header"><div><div class="card-title">Chat Availability</div></div></div>
+              <div class="card-sub" style="margin-bottom: 14px;">Control when the chat channel is available to customers.</div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Enable chat channel</div><div class="toggle-desc">Turn this off to temporarily disable chat without changing widget settings</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap" style="border-bottom:none;"><div class="toggle-info"><div class="toggle-label">Business hours only</div><div class="toggle-desc">Only show the chat widget during your defined business hours</div></div><label class="toggle"><input type="checkbox" onchange="toggleBusinessHours(this)"><div class="toggle-slider"></div></label></div>
+              
+              <div id="business-hours-block" style="display:none; background:var(--surface-hi); border-radius:14px; padding:16px; margin-top:12px;">
+                <div class="form-group"><label class="form-label">Timezone</label><select class="form-select"><option selected>Asia/Kolkata (IST)</option><option>Asia/Dubai (GST)</option><option>Europe/London (GMT)</option><option>America/New_York (EST)</option></select></div>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <!-- Mon-Fri -->
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Mon</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox" checked><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Tue</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox" checked><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Wed</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox" checked><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Thu</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox" checked><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Fri</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox" checked><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <!-- Sat-Sun -->
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Sat</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox"><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                  <div style="display:grid; grid-template-columns: 60px 50px 1fr 1fr; gap:10px; align-items:center;">
+                    <div style="font-size:12px; font-weight:600;">Sun</div><label class="toggle" style="width:34px; height:18px;"><input type="checkbox"><div class="toggle-slider" style="border-radius:18px;"></div></label>
+                    <input class="form-input" value="9:00 AM" style="padding:6px 10px; font-size:11px;">
+                    <input class="form-input" value="6:00 PM" style="padding:6px 10px; font-size:11px;">
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top:16px; margin-bottom:0;"><label class="form-label">Outside hours message</label><input class="form-input" value="We are currently offline. Leave your details and we will get back to you."><div class="form-hint">Shown to customers who try to chat outside business hours</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Offline Fallback</div></div></div>
+              <div class="card-sub" style="margin-bottom: 14px;">What happens when chat is unavailable or outside business hours.</div>
+              <div class="form-group"><label class="form-label">Fallback type</label><select class="form-select"><option>Show offline message only</option><option selected>Collect email and notify team</option><option>Redirect to knowledge base</option><option>Hide widget completely</option></select></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Fallback message</label><textarea class="form-textarea" style="min-height:70px;">We are not available right now. Leave your email and we will reach out within 24 hours.</textarea><div class="form-hint">Shown when chat is offline</div></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- -- WIDGET -- -->
-    <div id="page-widget" class="page">
-      <div class="page-header">
-        <div><div class="page-title">Widget Customizer</div><div class="page-sub">Customize the support widget that goes on your website</div></div>
-        <div class="flex gap-2"><button class="btn btn-secondary btn-sm">Reset Defaults</button><button class="btn btn-primary btn-sm">Save & Publish</button></div>
-      </div>
-      <div class="customizer-layout">
-        <div>
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-header"><div class="card-title">Branding</div></div>
-            <div class="form-group"><label class="form-label">Bot Display Name</label><input class="form-input" id="wm-name-input" value="AI Support" oninput="updatePreview()"></div>
-            <div class="form-group"><label class="form-label">Trigger Button Text</label><input class="form-input" id="wm-trigger-input" value="Talk to Support" oninput="updatePreview()"></div>
-            <div class="form-group" style="margin-bottom:0;"><label class="form-label">Accent Color</label>
-              <div class="color-swatches" id="color-swatches">
-                <div class="swatch selected" style="background:#8a4cfc;" data-color="#8a4cfc" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#2563EB;" data-color="#2563EB" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#059669;" data-color="#059669" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#DC2626;" data-color="#DC2626" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#D97706;" data-color="#D97706" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#DB2777;" data-color="#DB2777" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#0891B2;" data-color="#0891B2" onclick="setColor(this)"></div>
-                <div class="swatch" style="background:#bd9dff;" data-color="#bd9dff" onclick="setColor(this)"></div>
-              </div>
-            </div>
-          </div>
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-header"><div class="card-title">Channels & Fields</div></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Enable Voice Channel</div><div class="toggle-desc">Allow customers to start an AI voice call</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Enable Chat Channel</div><div class="toggle-desc">Allow customers to text chat with the AI</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div style="height:1px;background:var(--ghost-med);margin:12px 0;"></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Name field</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Email field</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Issue Type</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
-            <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Description</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Embed Code</div></div>
-            <div class="text-sm text-muted" style="margin-bottom:10px;">Copy and paste into your website's &lt;/body&gt; tag:</div>
-            <div class="embed-box" onclick="copyEmbed()">&lt;script src="https://cdn.Voxio.ai/widget.js"<br>&nbsp;&nbsp;data-key="vra_live_k9f2x8p1q3m7n"<br>&nbsp;&nbsp;data-color="#8a4cfc"&gt;<br>&lt;/script&gt;</div>
-            <div class="text-xs text-muted" style="margin-top:8px;">Click to copy · <span style="color:var(--primary);cursor:pointer;">View docs</span></div>
-          </div>
-        </div>
-        <div class="widget-preview-wrap">
-          <div class="preview-label">Live Preview</div>
-          <div class="widget-mockup">
-            <div class="wm-header">
-              <div class="wm-brand">
-                <div class="wm-icon" id="prev-icon" style="background:rgba(138,76,252,0.2);"></div>
-                <div><div class="wm-name" id="prev-name">AI Support</div><div class="wm-status"><span style="width:6px;height:6px;background:#c4ffcd;border-radius:50%;display:inline-block;"></span> Online · Responds instantly</div></div>
-              </div>
-              <div class="wm-x">X</div>
-            </div>
-            <div class="wm-body">
-              <div class="wm-heading">How can we help?</div>
-              <div class="wm-sub">Fill in a few details and we'll connect you right away.</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-                <div style="border:1px solid #8a4cfc;background:rgba(138,76,252,0.1);border-radius:8px;padding:10px;text-align:center;cursor:pointer;color:#8a4cfc;font-size:13px;font-weight:600;">&#127897;&#65039; Voice Call</div>
-                <div style="border:1px solid var(--ghost-med);background:rgba(255,255,255,0.02);border-radius:8px;padding:10px;text-align:center;cursor:pointer;color:var(--on-surface-med);font-size:13px;font-weight:600;">&#128172; Live Chat</div>
-              </div>
-              <input class="wm-inp" placeholder="Your name">
-              <input class="wm-inp" placeholder="you@example.com">
-              <input class="wm-inp" placeholder="Select issue typeâ€¦">
-              <button class="wm-btn" id="prev-btn" style="background:linear-gradient(135deg,#8a4cfc,#bd9dff);">Start Voice Call</button>
-            </div>
-          </div>
-          <button class="wm-trigger" id="prev-trigger" style="background:linear-gradient(135deg,#8a4cfc,#bd9dff);box-shadow:0 4px 20px rgba(138,76,252,0.4);">
-            <span id="prev-trigger-txt">Talk to Support</span>
-            <span style="width:7px;height:7px;background:#c4ffcd;border-radius:50%;box-shadow:0 0 6px #c4ffcd;"></span>
-          </button>
-        </div>
-      </div>
-    </div>
+
 
     <!-- -- TICKETS -- -->
     <div id="page-tickets" class="page">
@@ -1133,149 +1305,200 @@ Instructions:
         </div>
       </div>
     </div>
-
     <!-- -- ANALYTICS -- -->
     <div id="page-analytics" class="page">
       <div class="page-header">
-        <div><div class="page-title">Analytics</div><div class="page-sub">Deep insights into your support performance</div></div>
-        <select class="filter-select" style="height:38px;"><option>Last 30 Days</option><option>Last 7 Days</option><option>This Quarter</option></select>
-      </div>
-      <div class="grid-4" style="margin-bottom:20px;">
-        <div class="card card-sm" style="text-align:center;"><div style="font-family:'Manrope';font-size:30px;font-weight:800;color:var(--primary);margin-bottom:4px;">4,821</div><div class="text-sm text-muted">Total Calls</div><div style="font-size:11px;color:var(--tertiary);margin-top:5px;">18% vs last month</div></div>
-        <div class="card card-sm" style="text-align:center;"><div style="font-family:'Manrope';font-size:30px;font-weight:800;color:var(--tertiary);margin-bottom:4px;">76%</div><div class="text-sm text-muted">Avg Resolution Rate</div><div style="font-size:11px;color:var(--tertiary);margin-top:5px;">4% vs last month</div></div>
-        <div class="card card-sm" style="text-align:center;"><div style="font-family:'Manrope';font-size:30px;font-weight:800;color:var(--amber);margin-bottom:4px;">2m 18s</div><div class="text-sm text-muted">Avg Handle Time</div><div style="font-size:11px;color:var(--tertiary);margin-top:5px;">22s faster</div></div>
-        <div class="card card-sm" style="text-align:center;"><div style="font-family:'Manrope';font-size:30px;font-weight:800;color:var(--red);margin-bottom:4px;">19%</div><div class="text-sm text-muted">Escalation Rate</div><div style="font-size:11px;color:var(--red);margin-top:5px;">2% vs last month</div></div>
-      </div>
-      <div class="analytics-grid">
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Daily Call Volume</div><div class="card-sub">Last 14 days</div></div></div>
-          <div class="chart-container"><div class="chart-placeholder" id="bar-chart"></div></div>
+        <div><div class="page-title">Analytics</div><div class="page-sub">Deep-dive intelligence and bot performance mapping</div></div>
+        <div class="flex gap-2">
+          <select class="filter-select"><option>Last 7 days</option><option>Last 30 days</option><option>This month</option></select>
         </div>
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Resolution Breakdown</div><div class="card-sub">This month</div></div></div>
-          <div style="display:flex;align-items:center;gap:22px;padding-top:10px;">
-            <div class="donut-wrap">
-              <svg viewBox="0 0 120 120" style="transform:rotate(-90deg);">
-                <circle cx="60" cy="60" r="46" fill="none" stroke="var(--surface-highest)" stroke-width="14"/>
-                <circle cx="60" cy="60" r="46" fill="none" stroke="#8a4cfc" stroke-width="14" stroke-dasharray="218 71" stroke-linecap="round"/>
-                <circle cx="60" cy="60" r="46" fill="none" stroke="#ff6e84" stroke-width="14" stroke-dasharray="57 232" stroke-dashoffset="-218" stroke-linecap="round"/>
-              </svg>
-              <div class="donut-center"><div class="donut-num" style="color:var(--primary);">76%</div><div class="donut-lbl">Resolved</div></div>
-            </div>
-            <div style="flex:1;">
-              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#8a4cfc;border-radius:3px;display:inline-block;"></span>Resolved</div><div class="stat-val" style="color:var(--primary);">76%</div></div>
-              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#ff6e84;border-radius:3px;display:inline-block;"></span>Escalated</div><div class="stat-val" style="color:var(--red);">19%</div></div>
-              <div class="stat-row"><div class="stat-key" style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;background:#ffd280;border-radius:3px;display:inline-block;"></span>In Progress</div><div class="stat-val" style="color:var(--amber);">5%</div></div>
-            </div>
+      </div>
+
+      <!-- ROW 1: KPI CARDS -->
+      <div class="kpi-grid" style="margin-bottom: 18px;">
+        <div class="kpi-card">
+          <div class="kpi-cat">TOTAL SESSIONS · THIS WEEK</div>
+          <div class="kpi-val">1,284</div>
+          <div class="flex gap-2" style="margin-top: 4px; margin-bottom: 8px;">
+            <span class="badge badge-purple" style="font-size: 11px;">🎙️ 847 Voice</span>
+            <span class="badge badge-blue" style="font-size: 11px;">💬 437 Chat</span>
+          </div>
+          <div class="kpi-trend up">↑ 12% vs last week</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-cat">RESOLUTION RATE</div>
+          <div class="kpi-val">87%</div>
+          <div class="kpi-trend up">↑ 4% vs last week</div>
+          <div class="sb-bar" style="height: 3px; margin-top: 10px;"><div class="sb-bar-fill" style="width: 87%; background: var(--grad-cta);"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-cat">ESCALATION RATE</div>
+          <div class="kpi-val red">13%</div>
+          <div class="kpi-trend up" style="color: var(--tertiary);">↓ 4% vs last week</div>
+          <div class="sb-bar" style="height: 3px; margin-top: 10px;"><div class="sb-bar-fill" style="width: 13%; background: var(--red);"></div></div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-cat">CSAT SCORE</div>
+          <div class="kpi-val">4.2 <span style="color: var(--on-surface-low); font-size: 16px; font-weight: 400; display: inline;">/5</span></div>
+          <div class="kpi-trend up">↑ 0.3 vs last week</div>
+          <div style="font-size: 14px; margin-top: 6px;">
+            <span style="color: var(--amber);">★★★★</span><span style="color: var(--surface-highest);">★</span>
           </div>
         </div>
       </div>
-      <div class="analytics-grid">
+
+      <!-- ROW 2: CHARTS -->
+      <div class="overview-grid" style="grid-template-columns: 3fr 2fr; gap: 18px; margin-bottom: 18px;">
+        <!-- Left Card: Session Volume -->
         <div class="card">
-          <div class="card-header"><div><div class="card-title">Issue Category Breakdown</div><div class="card-sub">By volume this month</div></div></div>
-          <div style="margin-top:10px;">
-            <div class="stat-row">
-              <div class="stat-key"><span style="width:8px;height:8px;background:var(--primary);border-radius:2px;"></span>Technical Issue</div>
-              <div class="flex items-center gap-3" style="flex:1;justify-content:flex-end;">
-                <div style="width:100px;height:6px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:72%;height:100%;background:var(--primary);border-radius:3px;"></div></div>
-                <div class="stat-val" style="width:40px;text-align:right;">1,472</div>
+          <div class="card-header"><div><div class="card-title">Session Volume</div><div class="card-sub">Last 7 days · Voice and Chat</div></div></div>
+          <div class="chart-area" style="height: 200px; display: flex; flex-direction: column;">
+            <div style="flex: 1; display: flex; align-items: flex-end; gap: 12px; padding: 10px 0;">
+              <!-- Monday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 93px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 51px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Mon</div>
+              </div>
+              <!-- Tuesday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 118px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 64px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Tue</div>
+              </div>
+              <!-- Wednesday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 136px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 85px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Wed</div>
+              </div>
+              <!-- Thursday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 159px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 89px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Thu</div>
+              </div>
+              <!-- Friday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 180px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 106px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Fri</div>
+              </div>
+              <!-- Saturday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 68px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 39px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Sat</div>
+              </div>
+              <!-- Sunday -->
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="display: flex; align-items: flex-end; gap: 3px; height: 180px; width: 100%;">
+                  <div style="flex: 1; background: var(--primary-dim); height: 51px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                  <div style="flex: 1; background: var(--blue); height: 28px; border-radius: 6px 6px 0 0; min-height: 6px;"></div>
+                </div>
+                <div class="text-xs text-muted" style="font-size: 9px; color: var(--on-surface-low);">Sun</div>
               </div>
             </div>
-            <div class="stat-row">
-              <div class="stat-key"><span style="width:8px;height:8px;background:#7eb8ff;border-radius:2px;"></span>Billing & Payments</div>
-              <div class="flex items-center gap-3" style="flex:1;justify-content:flex-end;">
-                <div style="width:100px;height:6px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:51%;height:100%;background:#7eb8ff;border-radius:3px;"></div></div>
-                <div class="stat-val" style="width:40px;text-align:right;">1,041</div>
-              </div>
-            </div>
-            <div class="stat-row">
-              <div class="stat-key"><span style="width:8px;height:8px;background:#c4ffcd;border-radius:2px;"></span>Account & Access</div>
-              <div class="flex items-center gap-3" style="flex:1;justify-content:flex-end;">
-                <div style="width:100px;height:6px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:38%;height:100%;background:#c4ffcd;border-radius:3px;"></div></div>
-                <div class="stat-val" style="width:40px;text-align:right;">776</div>
-              </div>
-            </div>
-            <div class="stat-row">
-              <div class="stat-key"><span style="width:8px;height:8px;background:#ffd280;border-radius:2px;"></span>Feature Help</div>
-              <div class="flex items-center gap-3" style="flex:1;justify-content:flex-end;">
-                <div style="width:100px;height:6px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:24%;height:100%;background:#ffd280;border-radius:3px;"></div></div>
-                <div class="stat-val" style="width:40px;text-align:right;">490</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Support Funnel</div><div class="card-sub">Conversion from start to resolution</div></div></div>
-          <div style="padding-top:10px;">
-            <div class="funnel-bar-wrap">
-              <div class="funnel-bar" style="background:rgba(138,76,252,0.15);width:100%;color:var(--primary);">Total Calls Started <span class="funnel-val">4,821</span></div>
-            </div>
-            <div class="funnel-bar-wrap">
-              <div class="funnel-bar" style="background:rgba(126,184,255,0.12);width:88%;color:#7eb8ff;margin-left:auto;">Intake Completed <span class="funnel-val">4,242</span></div>
-            </div>
-            <div class="funnel-bar-wrap">
-              <div class="funnel-bar" style="background:rgba(196,255,205,0.1);width:76%;color:#c4ffcd;margin-left:auto;">Bot Resolved <span class="funnel-val">3,664</span></div>
-            </div>
-            <div class="funnel-bar-wrap">
-              <div class="funnel-bar" style="background:rgba(255,210,128,0.1);width:24%;color:#ffd280;margin-left:auto;">Escalated <span class="funnel-val">916</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="analytics-grid">
-        <div class="card">
-          <div class="card-header"><div><div class="card-title">Customer Satisfaction</div><div class="card-sub">Post-call CSAT surveys</div></div></div>
-          <div style="display:grid;grid-template-columns:100px 1fr;gap:20px;padding-top:10px;align-items:center;">
-            <div style="text-align:center;border-right:1px solid var(--ghost-med);padding-right:20px;">
-              <div class="csat-score-big">4.8</div>
-              <div style="color:#ffd280;font-size:14px;margin:6px 0;">★★★★★</div>
-              <div class="text-xs text-muted">1,204 reviews</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px;">
-              <div class="flex items-center gap-3">
-                <div style="font-size:11px;font-weight:700;width:8px;color:var(--on-surface-med);">5</div>
-                <div style="flex:1;height:5px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:82%;height:100%;background:var(--primary);border-radius:3px;"></div></div>
-                <div class="text-xs text-muted" style="width:28px;text-align:right;">82%</div>
-              </div>
-              <div class="flex items-center gap-3">
-                <div style="font-size:11px;font-weight:700;width:8px;color:var(--on-surface-med);">4</div>
-                <div style="flex:1;height:5px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:12%;height:100%;background:var(--primary);border-radius:3px;"></div></div>
-                <div class="text-xs text-muted" style="width:28px;text-align:right;">12%</div>
-              </div>
-              <div class="flex items-center gap-3">
-                <div style="font-size:11px;font-weight:700;width:8px;color:var(--on-surface-med);">3</div>
-                <div style="flex:1;height:5px;background:var(--surface-highest);border-radius:3px;overflow:hidden;"><div style="width:4%;height:100%;background:var(--surface-highest);border-radius:3px;"></div></div>
-                <div class="text-xs text-muted" style="width:28px;text-align:right;">4%</div>
-              </div>
+            <!-- Legend -->
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 10px;">
+              <div class="flex items-center gap-2"><span style="width: 8px; height: 8px; background: var(--primary-dim); border-radius: 2px;"></span><span style="font-size: 11px; color: var(--on-surface-med);">Voice</span></div>
+              <div class="flex items-center gap-2"><span style="width: 8px; height: 8px; background: var(--blue); border-radius: 2px;"></span><span style="font-size: 11px; color: var(--on-surface-med);">Chat</span></div>
             </div>
           </div>
         </div>
 
+        <!-- Right Card: Resolution Trend -->
         <div class="card">
-          <div class="card-header"><div><div class="card-title">Knowledge Base Health</div><div class="card-sub">AI confidence mapping</div></div></div>
-          <div class="flex items-center gap-4 mb-4" style="background:var(--primary-glow-sm);padding:12px;border-radius:12px;">
-            <div class="kb-health-circle">
-              <svg><circle cx="35" cy="35" r="30" stroke-dasharray="188" stroke-dashoffset="11" /></svg>
-              94%
+          <div class="card-header"><div><div class="card-title">Resolution Trend</div><div class="card-sub">Last 7 days · Resolution vs Escalation</div></div></div>
+          <div class="chart-area" style="height: 200px; display: flex; flex-direction: column;">
+            <div style="flex: 1; position: relative; padding: 10px 0;">
+              <svg viewBox="0 0 300 160" preserveAspectRatio="none" width="100%" height="160px" style="display: block;">
+                <defs>
+                  <linearGradient id="resGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.15"/>
+                    <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- Grid Lines -->
+                <g stroke="rgba(189,157,255,0.06)" stroke-width="1">
+                  <line x1="0" y1="40" x2="300" y2="40" /><line x1="0" y1="80" x2="300" y2="80" /><line x1="0" y1="120" x2="300" y2="120" />
+                </g>
+                <!-- Resolution Area -->
+                <path d="M10,35.2 C35,32.4 60,33.8 100,29.6 C140,28.2 190,31 235,28.2 L280,28.2 L280,150 L10,150 Z" fill="url(#resGrad)" />
+                <!-- Resolution Line -->
+                <path d="M10,35.2 C35,32.4 60,33.8 100,29.6 C140,28.2 190,31 235,28.2 L280,28.2" fill="none" stroke="var(--primary)" stroke-width="2" />
+                <!-- Escalation Line -->
+                <path d="M10,124.8 C35,127.6 60,126.2 100,130.4 C140,131.8 190,129 235,131.8 L280,131.8" fill="none" stroke="var(--red)" stroke-width="2" stroke-dasharray="4 3" />
+                <!-- Data Points -->
+                <g>
+                  <!-- Resolution dots -->
+                  <circle cx="10" cy="35.2" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="55" cy="32.4" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="100" cy="33.8" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="145" cy="29.6" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="190" cy="28.2" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="235" cy="31" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" /><circle cx="280" cy="28.2" r="3" fill="var(--primary)" stroke="#fff" stroke-width="1.5" />
+                  <!-- Escalation dots -->
+                  <circle cx="10" cy="124.8" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="55" cy="127.6" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="100" cy="126.2" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="145" cy="130.4" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="190" cy="131.8" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="235" cy="129" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" /><circle cx="280" cy="131.8" r="3" fill="var(--red)" stroke="#fff" stroke-width="1.5" />
+                </g>
+                <!-- Axis Labels -->
+                <text x="0" y="10" fill="#455080" font-size="9">100%</text><text x="0" y="45" fill="#455080" font-size="9">75%</text><text x="0" y="85" fill="#455080" font-size="9">50%</text><text x="0" y="125" fill="#455080" font-size="9">25%</text><text x="0" y="155" fill="#455080" font-size="9">0%</text>
+              </svg>
+              <div style="display: flex; justify-content: space-between; padding: 0 10px; margin-top: 5px;">
+                <span style="font-size: 9px; color: #455080;">Mon</span><span style="font-size: 9px; color: #455080;">Tue</span><span style="font-size: 9px; color: #455080;">Wed</span><span style="font-size: 9px; color: #455080;">Thu</span><span style="font-size: 9px; color: #455080;">Fri</span><span style="font-size: 9px; color: #455080;">Sat</span><span style="font-size: 9px; color: #455080;">Sun</span>
+              </div>
             </div>
-            <div>
-              <div style="font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:2px;">Excellent Coverage</div>
-              <div style="font-size:11px;color:var(--on-surface-med);line-height:1.4;">Answered 94% without fallback.</div>
+            <!-- Legend -->
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 10px;">
+              <div class="flex items-center gap-2"><span style="width: 8px; height: 8px; background: var(--primary); border-radius: 2px;"></span><span style="font-size: 11px; color: var(--on-surface-med);">Resolution</span></div>
+              <div class="flex items-center gap-2"><span style="width: 8px; height: 8px; border: 1px dashed var(--red); border-radius: 2px;"></span><span style="font-size: 11px; color: var(--on-surface-med);">Escalation</span></div>
             </div>
           </div>
-          <div class="stat-row" style="padding:8px 0;"><div class="stat-key">Knowledge Lookups</div><div class="stat-val">3,842</div></div>
-          <div class="stat-row" style="padding:8px 0;border-bottom:none;"><div class="stat-key">Content Gaps</div><div class="stat-val" style="color:var(--amber);">18</div></div>
-          <div style="margin-top:10px;padding:10px;background:var(--surface-hi);border-radius:10px;">
-            <div class="flex justify-between items-center mb-2">
-              <div style="font-size:9px;font-weight:700;color:var(--on-surface-low);text-transform:uppercase;">Top Gaps</div>
-              <div class="text-xs" style="color:var(--primary);cursor:pointer;" onclick="nav('knowledgebase')">Fix &rarr;</div>
+        </div>
+      </div>
+
+      <!-- ROW 3: PANELS -->
+      <div class="overview-grid" style="grid-template-columns: 1fr 1fr; gap: 18px;">
+        <!-- Left Card: Top Issue Types -->
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Top Issue Types</div><div class="card-sub">This week by volume</div></div></div>
+          <div class="issue-list">
+            <div class="issue-row"><div class="issue-label">Technical Issue</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width: 38%; background: var(--primary-dim);"></div></div><div class="issue-pct" style="color: var(--primary-dim);">38%</div></div>
+            <div class="issue-row"><div class="issue-label">Billing</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width: 27%; background: var(--blue);"></div></div><div class="issue-pct" style="color: var(--blue);">27%</div></div>
+            <div class="issue-row"><div class="issue-label">Account Access</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width: 18%; background: var(--tertiary);"></div></div><div class="issue-pct" style="color: var(--tertiary);">18%</div></div>
+            <div class="issue-row"><div class="issue-label">Feature Help</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width: 11%; background: var(--amber);"></div></div><div class="issue-pct" style="color: var(--amber);">11%</div></div>
+            <div class="issue-row"><div class="issue-label">Other</div><div class="issue-bar-bg"><div class="issue-bar-fill" style="width: 6%; background: var(--red);"></div></div><div class="issue-pct" style="color: var(--red);">6%</div></div>
+          </div>
+          <div style="border-top: 1px solid var(--ghost-med); padding-top: 12px; margin-top: 12px; text-align: right;"><span style="font-size: 12px; color: var(--on-surface-low);">1,284 total sessions this week</span></div>
+        </div>
+        <!-- Right Card: CSAT Breakdown -->
+        <div class="card">
+          <div class="card-header"><div><div class="card-title">Customer Satisfaction</div><div class="card-sub">Based on post-call ratings this week</div></div></div>
+          <div style="display: flex; gap: 24px; align-items: flex-start; margin-bottom: 20px;">
+            <div style="flex-shrink: 0;"><div style="font-size: 42px; font-weight: 800; color: var(--amber);">4.2</div><div style="font-size: 12px; color: var(--on-surface-low); margin-top: -4px;">out of 5</div><div style="font-size: 11px; color: var(--on-surface-low); margin-top: 8px;">286 ratings</div></div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+              <div class="flex items-center gap-3"><div style="font-size: 11px; width: 30px;">5 ⭐</div><div class="issue-bar-bg" style="height: 6px;"><div class="issue-bar-fill" style="width: 54%; background: var(--tertiary);"></div></div><div style="font-size: 11px; font-weight: 700; width: 30px; text-align: right;">54%</div></div>
+              <div class="flex items-center gap-3"><div style="font-size: 11px; width: 30px;">4 ⭐</div><div class="issue-bar-bg" style="height: 6px;"><div class="issue-bar-fill" style="width: 26%; background: var(--primary);"></div></div><div style="font-size: 11px; font-weight: 700; width: 30px; text-align: right;">26%</div></div>
+              <div class="flex items-center gap-3"><div style="font-size: 11px; width: 30px;">3 ⭐</div><div class="issue-bar-bg" style="height: 6px;"><div class="issue-bar-fill" style="width: 12%; background: var(--amber);"></div></div><div style="font-size: 11px; font-weight: 700; width: 30px; text-align: right;">12%</div></div>
+              <div class="flex items-center gap-3"><div style="font-size: 11px; width: 30px;">2 ⭐</div><div class="issue-bar-bg" style="height: 6px;"><div class="issue-bar-fill" style="width: 5%; background: var(--red); opacity: 0.6;"></div></div><div style="font-size: 11px; font-weight: 700; width: 30px; text-align: right;">5%</div></div>
+              <div class="flex items-center gap-3"><div style="font-size: 11px; width: 30px;">1 ⭐</div><div class="issue-bar-bg" style="height: 6px;"><div class="issue-bar-fill" style="width: 3%; background: var(--red);"></div></div><div style="font-size: 11px; font-weight: 700; width: 30px; text-align: right;">3%</div></div>
             </div>
-            <div class="text-xs flex justify-between" style="color:var(--on-surface-med);margin-bottom:3px;"><span>"SSO Support"</span><span style="font-weight:700;color:var(--amber);">14</span></div>
-            <div class="text-xs flex justify-between" style="color:var(--on-surface-med);"><span>"Canada Shipping"</span><span style="font-weight:700;color:var(--blue);">5</span></div>
+          </div>
+          <div style="border-top: 1px solid var(--ghost-med); padding-top: 12px;">
+            <div class="stat-row"><div class="stat-key">Response Rate</div><div class="stat-val">22% of sessions rated</div></div>
+            <div class="stat-row"><div class="stat-key">This Week vs Last</div><div class="stat-val" style="color: var(--tertiary);">↑ 0.3 improvement</div></div>
           </div>
         </div>
       </div>
     </div>
+
     <!-- -- SETTINGS -- -->
     <div id="page-settings" class="page">
       <div class="page-header"><div><div class="page-title">Settings</div><div class="page-sub">Manage your account, team, and integrations</div></div></div>
@@ -1284,8 +1507,11 @@ Instructions:
           <div class="settings-nav-item active" onclick="showSettingsSection('profile',this)">Profile</div>
           <div class="settings-nav-item" onclick="showSettingsSection('apikeys',this)">API Keys</div>
           <div class="settings-nav-item" onclick="showSettingsSection('billing',this)">Billing</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('widget',this)">Widget</div>
           <div class="settings-nav-item" onclick="showSettingsSection('integrations',this)">Integrations</div>
           <div class="settings-nav-item" onclick="showSettingsSection('notifications',this)">Notifications</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('documentation',this)">Documentation</div>
+          <div class="settings-nav-item" onclick="showSettingsSection('support',this)">Support</div>
         </div>
         <div>
           <div id="sec-profile" class="settings-section">
@@ -1321,11 +1547,97 @@ Instructions:
             <div class="card"><div class="card-header"><div class="card-title">Payment Method</div></div><div class="flex items-center gap-3"><div style="font-size:24px;"></div><div><div style="font-size:13px;font-weight:600;color:var(--on-surface);">Visa ending in 4242</div><div class="text-xs text-muted">Expires 08/2028</div></div><button class="btn btn-ghost btn-sm" style="margin-left:auto;">Update</button></div></div>
           </div>
           <div id="sec-integrations" class="settings-section" style="display:none;">
-            <div class="card"><div class="card-header"><div class="card-title">Connected Integrations</div></div>
-              <div class="member-row"><div style="font-size:22px;width:36px;">📅</div><div class="member-info"><div class="member-name">Google Calendar</div><div class="member-email">AI can book and manage meetings for you</div></div><span class="badge badge-green">Connected</span><button class="btn btn-ghost btn-sm" style="margin-left:10px;">Configure</button></div>
-              <div class="member-row"><div style="font-size:22px;width:36px;">📧</div><div class="member-info"><div class="member-name">Gmail / Outlook</div><div class="member-email">Send follow-up emails and summaries via your account</div></div><span class="badge badge-gray">Disconnected</span><button class="btn btn-primary btn-sm" style="margin-left:10px;">Connect</button></div>
-              <div class="member-row"><div style="font-size:22px;width:36px;">⚙️</div><div class="member-info"><div class="member-name">CRM Custom (via MCP)</div><div class="member-email">Sync contacts and leads via Model Context Protocol</div></div><span class="badge badge-gray">Disconnected</span><button class="btn btn-primary btn-sm" style="margin-left:10px;">Connect</button></div>
-              <div class="member-row"><div style="font-size:22px;width:36px;">💳</div><div class="member-info"><div class="member-name">Razorpay</div><div class="member-email">Accept payments and check subscription status</div></div><span class="badge badge-gray">Disconnected</span><button class="btn btn-primary btn-sm" style="margin-left:10px;">Connect</button></div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">CRM Integrations</div>
+                  <div class="card-sub">Connect your CRM so the bot can access live customer data during support calls</div>
+                </div>
+              </div>
+
+              <!-- HubSpot -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: 1px solid var(--ghost-med); flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: #FF7A59; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;">H</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">HubSpot</div>
+                    <div class="text-xs text-muted">Contacts, deals, and company records</div>
+                  </div>
+                  <span class="badge badge-gray" id="status-HubSpot">Not Connected</span>
+                  <button class="btn btn-primary btn-sm" id="btn-HubSpot" onclick="triggerOAuth('HubSpot')">Connect</button>
+                </div>
+                <div id="conf-HubSpot" style="display: none;"></div>
+              </div>
+
+              <!-- Salesforce -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: 1px solid var(--ghost-med); flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: #00A1E0; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;">S</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">Salesforce</div>
+                    <div class="text-xs text-muted">Enterprise CRM — accounts, cases, and opportunities</div>
+                  </div>
+                  <span class="badge badge-gray" id="status-Salesforce">Not Connected</span>
+                  <button class="btn btn-primary btn-sm" id="btn-Salesforce" onclick="triggerOAuth('Salesforce')">Connect</button>
+                </div>
+                <div id="conf-Salesforce" style="display: none;"></div>
+              </div>
+
+              <!-- Zendesk -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: 1px solid var(--ghost-med); flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: #03363D; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;">Z</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">Zendesk</div>
+                    <div class="text-xs text-muted">Support tickets, customer profiles, and history</div>
+                  </div>
+                  <span class="badge badge-green" id="status-Zendesk">Connected</span>
+                  <button class="btn btn-ghost btn-sm" id="btn-Zendesk" style="color: var(--red);" onclick="disconnectTool('Zendesk')">Disconnect</button>
+                </div>
+                <div id="conf-Zendesk" style="display: none;"></div>
+              </div>
+
+              <!-- Zoho CRM -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: 1px solid var(--ghost-med); flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: #E42527; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;">Z</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">Zoho CRM</div>
+                    <div class="text-xs text-muted">Leads, contacts, and customer accounts</div>
+                  </div>
+                  <span class="badge badge-gray" id="status-ZohoCRM">Not Connected</span>
+                  <button class="btn btn-primary btn-sm" id="btn-ZohoCRM" onclick="triggerOAuth('Zoho CRM', 'ZohoCRM')">Connect</button>
+                </div>
+                <div id="conf-ZohoCRM" style="display: none;"></div>
+              </div>
+
+              <!-- Freshdesk -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: 1px solid var(--ghost-med); flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: #25C16F; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 18px; flex-shrink: 0;">F</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">Freshdesk</div>
+                    <div class="text-xs text-muted">Customer support tickets and contact data</div>
+                  </div>
+                  <span class="badge badge-gray" id="status-Freshdesk">Not Connected</span>
+                  <button class="btn btn-primary btn-sm" id="btn-Freshdesk" onclick="triggerOAuth('Freshdesk')">Connect</button>
+                </div>
+                <div id="conf-Freshdesk" style="display: none;"></div>
+              </div>
+
+              <!-- Custom MCP Server -->
+              <div class="member-row" style="padding: 16px 0; border-bottom: none; flex-direction: column; align-items: stretch;">
+                <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                  <div style="width: 38px; height: 38px; background: var(--surface-bright); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">🔌</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--on-surface);">Custom MCP Server</div>
+                    <div class="text-xs text-muted">Connect any MCP-compatible backend directly</div>
+                  </div>
+                  <span class="badge badge-gray" id="status-MCP">Not Connected</span>
+                  <button class="btn btn-primary btn-sm" id="btn-MCP" onclick="triggerOAuth('Custom MCP Server', 'MCP')">Connect</button>
+                </div>
+                <div id="conf-MCP" style="display: none;"></div>
+              </div>
             </div>
           </div>
           <div id="sec-notifications" class="settings-section" style="display:none;">
@@ -1334,6 +1646,67 @@ Instructions:
               <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Call escalated to human</div><div class="toggle-desc">Alert when AI transfers to a human agent</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
               <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Daily summary email</div><div class="toggle-desc">Receive daily digest of calls and resolutions</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
               <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Usage threshold alerts</div><div class="toggle-desc">Warn me when nearing plan limits (80%)</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+            </div>
+          </div>
+
+          <div id="sec-widget" class="settings-section" style="display:none;">
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-header"><div class="card-title">Branding</div></div>
+              <div class="form-group"><label class="form-label">Bot Display Name</label><input class="form-input" id="wm-name-input" value="AI Support" oninput="updatePreview()"></div>
+              <div class="form-group"><label class="form-label">Trigger Button Text</label><input class="form-input" id="wm-trigger-input" value="Talk to Support" oninput="updatePreview()"></div>
+              <div class="form-group" style="margin-bottom:0;"><label class="form-label">Accent Color</label>
+                <div class="color-swatches" id="color-swatches">
+                  <div class="swatch selected" style="background:#8a4cfc;" data-color="#8a4cfc" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#2563EB;" data-color="#2563EB" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#059669;" data-color="#059669" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#DC2626;" data-color="#DC2626" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#D97706;" data-color="#D97706" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#DB2777;" data-color="#DB2777" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#0891B2;" data-color="#0891B2" onclick="setColor(this)"></div>
+                  <div class="swatch" style="background:#bd9dff;" data-color="#bd9dff" onclick="setColor(this)"></div>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-header"><div class="card-title">Channels & Fields</div></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Enable Voice Channel</div><div class="toggle-desc">Allow customers to start an AI voice call</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Enable Chat Channel</div><div class="toggle-desc">Allow customers to text chat with the AI</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div style="height:1px;background:var(--ghost-med);margin:12px 0;"></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Name field</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Email field</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Issue Type</div></div><label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label></div>
+              <div class="toggle-wrap"><div class="toggle-info"><div class="toggle-label">Show Description</div></div><label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label></div>
+            </div>
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-header"><div class="card-title">Embed Code</div></div>
+              <div class="text-sm text-muted" style="margin-bottom:10px;">Copy and paste into your website's &lt;/body&gt; tag:</div>
+              <div class="embed-box" onclick="copyEmbed()">&lt;script src="https://cdn.Voxio.ai/widget.js"<br>&nbsp;&nbsp;data-key="vra_live_k9f2x8p1q3m7n"<br>&nbsp;&nbsp;data-color="#8a4cfc"&gt;<br>&lt;/script&gt;</div>
+              <div class="text-xs text-muted" style="margin-top:8px;">Click to copy · <span style="color:var(--primary);cursor:pointer;">View docs</span></div>
+            </div>
+          </div>
+
+          <div id="sec-documentation" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Documentation</div><div class="card-sub">Everything you need to build with Voxio</div></div></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;">
+                <div class="card card-sm card-hi" style="cursor:pointer;"><div style="font-weight:700;margin-bottom:4px;color:var(--primary);">Quick Start &rarr;</div><div class="text-xs text-muted">Get your bot live in under 5 minutes.</div></div>
+                <div class="card card-sm card-hi" style="cursor:pointer;"><div style="font-weight:700;margin-bottom:4px;color:var(--tertiary);">API Reference &rarr;</div><div class="text-xs text-muted">Integrate Voxio into your own apps.</div></div>
+                <div class="card card-sm card-hi" style="cursor:pointer;"><div style="font-weight:700;margin-bottom:4px;color:var(--amber);">MCP Guides &rarr;</div><div class="text-xs text-muted">Connecting custom CRM backends.</div></div>
+                <div class="card card-sm card-hi" style="cursor:pointer;"><div style="font-weight:700;margin-bottom:4px;color:var(--blue);">Widget Customization &rarr;</div><div class="text-xs text-muted">Advanced CSS and event hooks.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="sec-support" class="settings-section" style="display:none;">
+            <div class="card">
+              <div class="card-header"><div><div class="card-title">Support</div><div class="card-sub">Need help? Our team is here for you.</div></div></div>
+              <div class="form-group"><label class="form-label">Subject</label><input class="form-input" placeholder="How can we help?"></div>
+              <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Describe your issue in detail..."></textarea></div>
+              <button class="btn btn-primary">Send Message</button>
+              <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--ghost-med);display:flex;justify-content:space-between;align-items:center;">
+                <div class="text-xs text-muted">Average response time: &lt; 2 hours</div>
+                <div style="display:flex;gap:12px;"><span style="font-size:12px;color:var(--primary);cursor:pointer;">Email Us</span><span style="font-size:12px;color:var(--primary);cursor:pointer;">Live Chat</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1406,8 +1779,10 @@ Instructions:
 </div>
 
 <div class="overlay" id="overlay" onclick="closeDetail()"></div>
+<div id="chart-tooltip" class="chart-tooltip"></div>
+<div id="toast-container" class="toast-container"></div>
 <script>
-const titles={overview:'Overview',calllogs:'Call Logs',tickets:'Tickets',analytics:'Analytics',knowledgebase:'Knowledge Base',team:'Team',botconfig:'Bot Config',widget:'Widget Customizer',settings:'Settings'};
+const titles={overview:'Overview',calllogs:'Call Logs',tickets:'Tickets',analytics:'Analytics',knowledgebase:'Knowledge Base',team:'Team',botconfig:'Bot Config',settings:'Settings'};
 
 function nav(page,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1448,6 +1823,84 @@ function setTeamTab(view,el){
   document.querySelectorAll('.team-tab-content').forEach(v=>v.style.display='none');
   document.getElementById('team-'+view).style.display='block';
 }
+
+function triggerOAuth(toolName, idOverride) {
+  const id = idOverride || toolName;
+  const conf = document.getElementById('conf-' + id);
+  conf.innerHTML = `
+    <div style="background: var(--surface-hi); border-radius: 10px; padding: 10px 14px; margin-top: 8px; border: 1px solid var(--ghost-med);">
+      <div style="color: var(--on-surface-med); font-size: 12px; margin-bottom: 12px;">
+        You will be redirected to ${toolName} to authorize access. Voxio will only read customer data — no write access.
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-primary btn-sm" id="cont-${id}" onclick="completeOAuthSim('${toolName}', '${id}')">Continue to ${toolName}</button>
+        <button class="btn btn-ghost btn-sm" onclick="cancelOAuth('${id}')">Cancel</button>
+      </div>
+    </div>
+  `;
+  conf.style.display = 'block';
+}
+
+// Tooltip Logic
+const tooltip = document.getElementById('chart-tooltip');
+document.addEventListener('mouseover', e => {
+  if (e.target.classList.contains('chart-point')) {
+    const val = e.target.getAttribute('data-val');
+    const day = e.target.getAttribute('data-day');
+    tooltip.innerHTML = `<div class="tooltip-title">${day}</div><div class="tooltip-val">${val}</div>`;
+    tooltip.style.display = 'block';
+  }
+});
+document.addEventListener('mousemove', e => {
+  if (tooltip.style.display === 'block') {
+    tooltip.style.left = (e.clientX + 15) + 'px';
+    tooltip.style.top = (e.clientY - 40) + 'px';
+  }
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.classList.contains('chart-point')) {
+    tooltip.style.display = 'none';
+  }
+});
+
+function cancelOAuth(id) {
+  document.getElementById('conf-' + id).style.display = 'none';
+}
+
+function completeOAuthSim(toolName, id) {
+  const btn = document.getElementById('cont-' + id);
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span> Connecting...`;
+  
+  setTimeout(() => {
+    const status = document.getElementById('status-' + id);
+    status.className = 'badge badge-green';
+    status.textContent = 'Connected';
+    
+    const mainBtn = document.getElementById('btn-' + id);
+    mainBtn.className = 'btn btn-ghost btn-sm';
+    mainBtn.style.color = 'var(--red)';
+    mainBtn.textContent = 'Disconnect';
+    mainBtn.onclick = () => disconnectTool(toolName, id);
+    
+    document.getElementById('conf-' + id).style.display = 'none';
+  }, 1500);
+}
+
+function disconnectTool(toolName, idOverride) {
+  const id = idOverride || toolName;
+  const status = document.getElementById('status-' + id);
+  status.className = 'badge badge-gray';
+  status.textContent = 'Not Connected';
+  
+  const mainBtn = document.getElementById('btn-' + id);
+  mainBtn.className = 'btn btn-primary btn-sm';
+  mainBtn.style.color = '';
+  mainBtn.textContent = 'Connect';
+  mainBtn.onclick = () => triggerOAuth(toolName, id);
+}
+
 
 function toggleEditMember(id){
   const el=document.getElementById('edit-'+id);
@@ -1537,6 +1990,58 @@ if(container){
     wrap.innerHTML=`<div class="chart-bar" style="height:${pct}%;background:${bg};min-height:6px;" title="${val} calls"></div><div class="chart-bar-label">Apr ${chartDays[i]}</div>`;
     container.appendChild(wrap);
   });
+}
+
+function setBotConfigTab(tab, el) {
+  document.querySelectorAll('.botconfig-tab-content').forEach(c => c.style.display = 'none');
+  document.getElementById('botconfig-' + tab).style.display = 'block';
+  document.querySelectorAll('#page-botconfig .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updateSpeechPace(val) {
+  const label = document.getElementById('pace-label');
+  let speed = "Normal";
+  const v = parseFloat(val);
+  if (v < 0.8) speed = "Slow";
+  else if (v <= 1.2) speed = "Normal";
+  else if (v <= 1.7) speed = "Fast";
+  else speed = "Very Fast";
+  
+  label.textContent = `${v.toFixed(1)}x — ${speed}`;
+}
+
+function toggleBusinessHours(checkbox) {
+  const block = document.getElementById('business-hours-block');
+  if (checkbox.checked) {
+    block.style.display = 'block';
+    block.style.opacity = '0';
+    setTimeout(() => {
+      block.style.transition = 'opacity 0.3s ease';
+      block.style.opacity = '1';
+    }, 10);
+  } else {
+    block.style.display = 'none';
+  }
+}
+
+function selectVoice(el) {
+  document.querySelectorAll('#botconfig-voice .voice-opt').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function exportLogs() {
+  showToast('Exporting call logs to CSV...');
+  setTimeout(() => showToast('Export complete! File downloaded.'), 1500);
+}
+
+function addKnowledge() {
+  showToast('Knowledge ingestion starting...', 'info');
+  setTimeout(() => showToast('Document processed and indexed!'), 2000);
+}
+
+function inviteMember() {
+  const email = prompt('Enter email to invite:');
+  if(email) showToast(`Invitation sent to ${email}`);
 }
 </script>
 </body>
