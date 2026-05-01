@@ -2,3 +2,11 @@ config.js
 .DS_Store
 node_modules/
 .env
+
+# Ignored directories and backups
+.gemini/
+Voxio-Dashboard/
+*backup*.html
+*_original.html
+*_v1.html
+*.py
