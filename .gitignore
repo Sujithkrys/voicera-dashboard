@@ -1,0 +1,7 @@
+# Ignore secret keys and local configs
+backend/.env
+backend/venv/
+dashboard/config.js
+**/__pycache__/
+*.pyc
+.DS_Store
