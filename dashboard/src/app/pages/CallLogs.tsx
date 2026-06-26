@@ -47,84 +47,66 @@ export default function CallLogs() {
 
   const getIssueBadge = (issue: string) => {
     switch(issue) {
-      case 'Technical Issue': return 'bg-blue-100 text-blue-700 hover:bg-blue-100 border-blue-200';
-      case 'Billing': return 'bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200';
-      case 'Account Access': return 'bg-purple-100 text-purple-700 hover:bg-purple-100 border-purple-200';
-      default: return 'bg-slate-100 text-slate-700 hover:bg-slate-100 border-slate-200';
+      case 'Technical Issue': return 'bg-primary-glow-sm text-primary border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      case 'Billing': return 'bg-amber-bg text-amber border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      case 'Account Access': return 'bg-blue-bg text-blue border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      default: return 'bg-surface-highest text-on-surface-med border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch(status) {
-      case 'resolved': return 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200';
-      case 'escalated': return 'bg-rose-100 text-rose-700 hover:bg-rose-100 border-rose-200';
-      case 'active': return 'bg-amber-100 text-amber-700 hover:bg-amber-100 border-amber-200';
-      default: return 'bg-slate-100 text-slate-700 hover:bg-slate-100 border-slate-200';
+      case 'resolved': return 'bg-tertiary-dim text-tertiary border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      case 'escalated': return 'bg-red-bg text-red border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      case 'active': return 'bg-amber-bg text-amber border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
+      default: return 'bg-surface-highest text-on-surface-med border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1';
     }
   };
 
   return (
-    <div className="p-6 space-y-6 h-full flex flex-col relative overflow-hidden">
+    <div className="space-y-6 max-w-7xl mx-auto h-full flex flex-col relative overflow-hidden pb-10">
       {/* Header */}
-      <div className="flex items-center justify-between flex-shrink-0">
+      <div className="flex items-center justify-between flex-shrink-0 mb-2">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Call Logs</h1>
-          <p className="text-muted-foreground text-sm mt-1">All customer conversations — click any row to view transcript</p>
+          <h1 className="font-manrope text-[24px] font-extrabold tracking-[-0.5px] text-on-surface">Call Logs</h1>
+          <p className="font-inter text-[13px] text-on-surface-med mt-1">All customer conversations — click any row to view transcript</p>
         </div>
-        <Button variant="outline" size="sm" className="bg-white">
+        <Button variant="outline" size="sm" className="bg-surface-highest text-primary border-ghost hover:bg-surface-bright hover:border-ghost-med hover:text-primary transition-all font-inter font-semibold rounded-xl">
           <Download className="mr-2 h-4 w-4" />
           Export CSV
         </Button>
       </div>
 
       {/* Filter Bar */}
-      <div className="flex flex-wrap items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex-shrink-0">
+      <div className="flex flex-wrap items-center gap-2.5 mb-5 flex-shrink-0">
         <div className="relative flex-1 min-w-[200px] max-w-[280px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-on-surface-low" />
           <Input
             placeholder="Search by name or email..."
-            className="pl-9 h-9 bg-slate-50 border-transparent focus-visible:ring-indigo-500"
+            className="pl-[34px] h-[38px] bg-surface-hi border-transparent focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-on-surface font-inter text-[13px] rounded-xl placeholder:text-on-surface-low"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select defaultValue="all">
-          <SelectTrigger className="w-[140px] h-9 bg-slate-50 border-transparent font-medium">
-            <SelectValue placeholder="All Channels" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Channels</SelectItem>
-            <SelectItem value="voice">Voice</SelectItem>
-            <SelectItem value="chat">Chat</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select defaultValue="all">
-          <SelectTrigger className="w-[140px] h-9 bg-slate-50 border-transparent font-medium">
-            <SelectValue placeholder="All Statuses" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="resolved">Resolved</SelectItem>
-            <SelectItem value="escalated">Escalated</SelectItem>
-            <SelectItem value="active">In Progress</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select defaultValue="all">
-          <SelectTrigger className="w-[140px] h-9 bg-slate-50 border-transparent font-medium">
-            <SelectValue placeholder="All Issues" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Issues</SelectItem>
-            <SelectItem value="billing">Billing</SelectItem>
-            <SelectItem value="tech">Technical Issue</SelectItem>
-            <SelectItem value="access">Account Access</SelectItem>
-          </SelectContent>
-        </Select>
+        
+        {['All Channels', 'All Statuses', 'All Issues'].map((placeholder, idx) => (
+          <Select key={idx} defaultValue="all">
+            <SelectTrigger className="w-[140px] h-[38px] bg-surface-hi border-transparent text-on-surface-med font-inter text-[12px] rounded-xl focus:ring-0">
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent className="bg-surface-hi border-ghost-med text-on-surface">
+              <SelectItem value="all">{placeholder}</SelectItem>
+              <SelectItem value="opt1">Option 1</SelectItem>
+              <SelectItem value="opt2">Option 2</SelectItem>
+            </SelectContent>
+          </Select>
+        ))}
+
         <Select defaultValue="7d">
-          <SelectTrigger className="w-[140px] h-9 bg-slate-50 border-transparent font-medium ml-auto">
+          <SelectTrigger className="w-[140px] h-[38px] bg-surface-hi border-transparent text-on-surface-med font-inter text-[12px] rounded-xl focus:ring-0 ml-auto">
             <SelectValue placeholder="Date Range" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-surface-hi border-ghost-med text-on-surface">
             <SelectItem value="7d">Last 7 Days</SelectItem>
             <SelectItem value="30d">Last 30 Days</SelectItem>
             <SelectItem value="custom">Custom Range</SelectItem>
@@ -133,71 +115,68 @@ export default function CallLogs() {
       </div>
 
       {/* Main Table */}
-      <div className="border rounded-xl bg-white shadow-sm overflow-auto flex-1 relative">
-        <Table>
-          <TableHeader className="bg-slate-50/50 sticky top-0 z-10">
-            <TableRow>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4 px-6">Caller</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Issue Type</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Channel</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Duration</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Status</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Ticket</TableHead>
-              <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-500 py-4">Date</TableHead>
-              <TableHead className="w-12 py-4 px-6"></TableHead>
+      <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] overflow-x-auto flex-1 relative border-none">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow className="border-b border-ghost-med hover:bg-transparent">
+              {['Caller', 'Issue Type', 'Channel', 'Duration', 'Status', 'Ticket', 'Date', ''].map((head, idx) => (
+                <TableHead key={idx} className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px] px-4 py-3 h-auto">
+                  {head}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={8} className="text-center py-12 text-muted-foreground">Loading call logs...</TableCell>
+              <TableRow className="border-none hover:bg-transparent">
+                <TableCell colSpan={8} className="text-center py-12 text-on-surface-low font-inter">Loading call logs...</TableCell>
               </TableRow>
             ) : calls.map((call) => (
               <TableRow 
                 key={call.id} 
-                className="cursor-pointer hover:bg-slate-50 transition-colors"
+                className="cursor-pointer transition-colors border-none hover:bg-surface-hi group"
                 onClick={() => setSelectedCall(call)}
               >
-                <TableCell className="px-6 py-4">
+                <TableCell className="px-4 py-3.5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-bold text-white shadow-sm">
+                    <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[12px] font-manrope font-extrabold text-[14px] text-white bg-gradient-to-br from-primary-dim to-primary">
                       {call.name[0]?.toUpperCase()}
                     </div>
                     <div>
-                      <div className="font-semibold text-[13px] text-slate-900">{call.name}</div>
-                      <div className="text-xs text-slate-500 font-medium">{call.email}</div>
+                      <div className="font-semibold text-[13px] text-on-surface font-inter">{call.name}</div>
+                      <div className="text-[12px] text-on-surface-low font-inter">{call.email}</div>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="py-4">
-                  <Badge variant="outline" className={`font-semibold border ${getIssueBadge(call.issue)}`}>
+                <TableCell className="px-4 py-3.5">
+                  <Badge variant="outline" className={getIssueBadge(call.issue)}>
                     {call.issue}
                   </Badge>
                 </TableCell>
-                <TableCell className="py-4">
-                  <Badge variant="outline" className="font-semibold bg-indigo-50 text-indigo-700 border-indigo-200">
+                <TableCell className="px-4 py-3.5">
+                  <Badge variant="outline" className="bg-surface-highest text-on-surface-med border-none font-bold uppercase tracking-wider text-[10px] px-3 py-1">
                     {call.channel === 'Voice' ? '🎙️ Voice' : '💬 Chat'}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm font-medium text-slate-600 py-4">
+                <TableCell className="text-[13px] font-inter text-on-surface px-4 py-3.5">
                   {call.duration}
                 </TableCell>
-                <TableCell className="py-4">
-                  <Badge variant="outline" className={`font-semibold border ${getStatusBadge(call.status)}`}>
-                    <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${call.status === 'resolved' ? 'bg-emerald-500' : call.status === 'escalated' ? 'bg-rose-500' : 'bg-amber-500'}`} />
-                    {call.status.charAt(0).toUpperCase() + call.status.slice(1)}
+                <TableCell className="px-4 py-3.5">
+                  <Badge variant="outline" className={getStatusBadge(call.status)}>
+                    <div className="w-1 h-1 rounded-full bg-current mr-1.5" />
+                    {call.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="py-4">
-                  <span className="font-mono text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-md">{call.ticket}</span>
+                <TableCell className="px-4 py-3.5">
+                  <span className="font-mono text-[11px] font-bold text-primary">{call.ticket}</span>
                 </TableCell>
-                <TableCell className="text-xs font-medium text-slate-500 py-4">
+                <TableCell className="text-[13px] font-inter text-on-surface-med px-4 py-3.5">
                   {call.date}
                 </TableCell>
-                <TableCell className="px-6 py-4 text-right">
-                  <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
-                    <Play className="h-3.5 w-3.5 ml-0.5" />
-                  </Button>
+                <TableCell className="px-4 py-3.5 text-right">
+                  <div className="w-7 h-7 rounded-full bg-primary-glow-sm flex items-center justify-center cursor-pointer transition-transform text-primary hover:bg-primary hover:text-white hover:scale-105 ml-auto">
+                    <Play className="h-2.5 w-2.5 ml-0.5" />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -206,83 +185,69 @@ export default function CallLogs() {
       </div>
 
       {/* Slide-out Detail Panel */}
-      <div className={`absolute top-0 right-0 bottom-0 w-[450px] bg-white border-l border-slate-200 shadow-2xl transition-transform duration-300 ease-in-out z-50 flex flex-col ${selectedCall ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`absolute top-0 right-0 bottom-0 w-[390px] bg-surface-bright-blur backdrop-blur-[40px] border-l border-ghost shadow-[0_24px_60px_rgba(0,0,0,0.5)] transition-transform duration-300 ease-in-out z-50 flex flex-col ${selectedCall ? 'translate-x-0' : 'translate-x-full'}`}>
         {selectedCall && (
           <>
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="p-[20px_24px] border-b border-ghost-med flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-bold text-white shadow-md">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[12px] font-manrope font-extrabold text-[15px] text-white bg-gradient-to-br from-primary-dim to-primary">
                   {selectedCall.name[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-slate-900">{selectedCall.name}</h3>
-                  <p className="text-sm text-slate-500 font-medium">{selectedCall.email}</p>
+                  <h3 className="font-manrope font-extrabold text-[15px] text-on-surface leading-none mb-1">{selectedCall.name}</h3>
+                  <p className="font-inter text-[12px] text-on-surface-med">{selectedCall.email}</p>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200" onClick={() => setSelectedCall(null)}>
-                <X className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="w-[30px] h-[30px] rounded-[9px] bg-surface-highest text-on-surface-med hover:text-on-surface border-none" onClick={() => setSelectedCall(null)}>
+                <X className="h-3.5 w-3.5" />
               </Button>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Issue Type</div>
-                  <div className="font-semibold text-sm text-slate-700">{selectedCall.issue}</div>
+            <div className="flex-1 overflow-y-auto p-[20px_24px] scrollbar-thin scrollbar-thumb-surface-highest scrollbar-track-transparent">
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="bg-surface-hi p-3.5 rounded-2xl border border-ghost-med">
+                  <div className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px] mb-1">Issue Type</div>
+                  <div className="font-manrope font-bold text-[14px] text-on-surface">{selectedCall.issue}</div>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Duration</div>
-                  <div className="font-semibold text-sm text-slate-700">{selectedCall.duration}</div>
-                </div>
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ticket</div>
-                  <div className="font-mono text-sm font-bold text-indigo-600">{selectedCall.ticket}</div>
-                </div>
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status</div>
-                  <div className="font-semibold text-sm text-slate-700 capitalize">{selectedCall.status}</div>
+                <div className="bg-surface-hi p-3.5 rounded-2xl border border-ghost-med">
+                  <div className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px] mb-1">Duration</div>
+                  <div className="font-manrope font-bold text-[14px] text-on-surface">{selectedCall.duration}</div>
                 </div>
               </div>
 
               <div className="mb-6">
-                <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-indigo-500" />
+                <h4 className="font-inter text-[11px] font-bold text-on-surface-low uppercase tracking-[0.5px] mb-4 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                   Call Transcript
                 </h4>
                 
                 <div className="space-y-4">
-                  <div className="flex gap-3">
+                  {/* Agent Bubble */}
+                  <div className="flex gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <div className="flex-1">
-                      <div className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-1">Agent</div>
-                      <div className="bg-indigo-50 text-indigo-900 text-sm p-3 rounded-2xl rounded-tl-none leading-relaxed">
+                      <div className="font-inter text-[9px] font-bold text-primary uppercase tracking-[0.5px] mb-1">Agent</div>
+                      <div className="bg-primary-glow-sm border border-ghost text-on-surface text-[12px] p-[9px_13px] rounded-2xl rounded-tl-none leading-[1.65]">
                         Hi Priya! Thank you for calling Voicera support. How can I help you today?
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex gap-3">
+                  {/* User Bubble */}
+                  <div className="flex gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-75">
                     <div className="flex-1">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 text-right">User</div>
-                      <div className="bg-slate-100 text-slate-700 text-sm p-3 rounded-2xl rounded-tr-none leading-relaxed ml-8">
+                      <div className="font-inter text-[9px] font-bold text-on-surface-low uppercase tracking-[0.5px] mb-1 text-right">User</div>
+                      <div className="bg-surface-hi border border-ghost-med text-on-surface text-[12px] p-[9px_13px] rounded-2xl rounded-tr-none leading-[1.65] ml-8">
                         Hi, I'm having trouble logging into my dashboard. It keeps saying invalid credentials but I just reset my password.
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
+                  {/* Agent Bubble */}
+                  <div className="flex gap-2.5 animate-in fade-in slide-in-from-bottom-2 duration-300 delay-150">
                     <div className="flex-1">
-                      <div className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-1">Agent</div>
-                      <div className="bg-indigo-50 text-indigo-900 text-sm p-3 rounded-2xl rounded-tl-none leading-relaxed">
+                      <div className="font-inter text-[9px] font-bold text-primary uppercase tracking-[0.5px] mb-1">Agent</div>
+                      <div className="bg-primary-glow-sm border border-ghost text-on-surface text-[12px] p-[9px_13px] rounded-2xl rounded-tl-none leading-[1.65]">
                         I can certainly help with that. Let me pull up your account. I see you just changed your password 10 minutes ago. Sometimes it takes a few minutes for the cache to clear. Can you try logging in using an incognito window?
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 text-right">User</div>
-                      <div className="bg-slate-100 text-slate-700 text-sm p-3 rounded-2xl rounded-tr-none leading-relaxed ml-8">
-                        Oh, you're right. It works perfectly in incognito. Thank you!
                       </div>
                     </div>
                   </div>
@@ -290,12 +255,9 @@ export default function CallLogs() {
               </div>
             </div>
             
-            <div className="p-6 border-t border-slate-100 bg-white flex gap-3">
-              <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
+            <div className="p-[20px_24px] border-t border-ghost-med flex gap-3 mt-auto">
+              <Button className="flex-1 bg-gradient-to-r from-primary-dim to-primary hover:-translate-y-[1px] transition-transform text-white font-inter font-bold text-[13px] rounded-xl shadow-[0_4px_18px_var(--color-primary-glow)] border-none">
                 View Full Session
-              </Button>
-              <Button variant="outline" className="flex-1">
-                View Ticket
               </Button>
             </div>
           </>
@@ -305,7 +267,7 @@ export default function CallLogs() {
       {/* Overlay for Detail Panel */}
       {selectedCall && (
         <div 
-          className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm z-40 transition-opacity"
+          className="absolute inset-0 bg-[#060e20]/60 backdrop-blur-[4px] z-40 transition-opacity"
           onClick={() => setSelectedCall(null)}
         />
       )}

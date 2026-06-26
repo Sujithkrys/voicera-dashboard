@@ -10,104 +10,83 @@ export default function Settings() {
   const [activeTab, setActiveTab] = useState<'profile' | 'api' | 'billing' | 'integrations'>('profile');
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto h-full flex flex-col">
+    <div className="space-y-6 max-w-7xl mx-auto h-full flex flex-col pb-10">
       {/* Header */}
-      <div className="flex items-center justify-between flex-shrink-0">
+      <div className="flex items-center justify-between flex-shrink-0 mb-2">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage your account, team, and integrations</p>
+          <h1 className="font-manrope text-[24px] font-extrabold tracking-[-0.5px] text-on-surface">Settings</h1>
+          <p className="font-inter text-[13px] text-on-surface-med mt-1">Manage your account, team, and integrations</p>
         </div>
       </div>
 
-      <div className="flex gap-8 flex-1 min-h-0 overflow-y-auto pb-10 flex-col md:flex-row">
+      <div className="flex gap-8 flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-surface-highest scrollbar-track-transparent flex-col md:flex-row pr-1">
         {/* Left Side Navigation */}
-        <div className="w-full md:w-64 shrink-0 space-y-1">
-          <button 
-            onClick={() => setActiveTab('profile')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'profile' 
-                ? 'bg-indigo-50 text-indigo-700' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
-          >
-            <User className="h-4 w-4" /> Profile Settings
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('api')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'api' 
-                ? 'bg-indigo-50 text-indigo-700' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
-          >
-            <Key className="h-4 w-4" /> API Keys
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('billing')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'billing' 
-                ? 'bg-indigo-50 text-indigo-700' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
-          >
-            <CreditCard className="h-4 w-4" /> Billing & Usage
-          </button>
-          
-          <button 
-            onClick={() => setActiveTab('integrations')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'integrations' 
-                ? 'bg-indigo-50 text-indigo-700' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-            }`}
-          >
-            <Puzzle className="h-4 w-4" /> Integrations
-          </button>
+        <div className="w-full md:w-64 shrink-0 space-y-2">
+          {[
+            { id: 'profile', icon: User, label: 'Profile Settings' },
+            { id: 'api', icon: Key, label: 'API Keys' },
+            { id: 'billing', icon: CreditCard, label: 'Billing & Usage' },
+            { id: 'integrations', icon: Puzzle, label: 'Integrations' }
+          ].map(tab => (
+            <button 
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`w-full flex items-center gap-3.5 px-5 py-3.5 rounded-[14px] text-[13px] font-bold transition-all font-inter border ${
+                activeTab === tab.id 
+                  ? 'bg-primary-glow-sm text-primary border-primary/20 shadow-[0_0_20px_var(--color-primary-glow)]' 
+                  : 'text-on-surface-med hover:bg-surface-hi hover:text-on-surface border-transparent'
+              }`}
+            >
+              <tab.icon className="h-[18px] w-[18px]" /> {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Right Side Content */}
-        <div className="flex-1 max-w-4xl space-y-6">
+        <div className="flex-1 max-w-4xl space-y-6 pb-6">
           
           {/* Profile Settings */}
           {activeTab === 'profile' && (
-            <Card className="border-slate-200 shadow-sm bg-white">
-              <CardHeader className="pb-4 border-b border-slate-100">
-                <CardTitle className="text-lg">Profile Settings</CardTitle>
-                <CardDescription>Update your personal information and preferences.</CardDescription>
-              </CardHeader>
-              <CardContent className="pt-6 space-y-6">
-                <div className="flex items-center gap-6 pb-6 border-b border-slate-100">
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-bold text-white shadow-md">
+            <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary-dim to-primary opacity-0 transition-opacity" />
+              <div className="p-[24px_28px] border-b border-ghost-med">
+                <h2 className="font-manrope font-extrabold text-[18px] text-on-surface mb-1">Profile Settings</h2>
+                <p className="font-inter text-[13px] text-on-surface-med">Update your personal information and preferences.</p>
+              </div>
+              
+              <div className="p-[28px] space-y-8">
+                <div className="flex items-center gap-6 pb-8 border-b border-ghost-med">
+                  <div className="h-[84px] w-[84px] rounded-2xl bg-gradient-to-br from-primary-dim to-primary flex items-center justify-center text-[28px] font-manrope font-extrabold text-white shadow-[0_8px_24px_var(--color-primary-glow)]">
                     AS
                   </div>
                   <div>
-                    <Button variant="outline" className="mb-2 bg-white">Change Avatar</Button>
-                    <p className="text-xs text-slate-500 font-medium">JPG, GIF or PNG. Max size of 800K</p>
+                    <Button variant="outline" className="mb-2 bg-surface-hi border-ghost text-on-surface hover:bg-surface-highest hover:text-on-surface transition-colors font-inter rounded-xl h-9 px-4 text-[13px] font-bold">
+                      Change Avatar
+                    </Button>
+                    <p className="text-[12px] text-on-surface-low font-inter font-medium">JPG, GIF or PNG. Max size of 800K</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">First Name</label>
-                    <Input defaultValue="Alex" className="bg-slate-50 font-medium" />
+                <div className="grid grid-cols-2 gap-7">
+                  <div className="space-y-2.5">
+                    <label className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px]">First Name</label>
+                    <Input defaultValue="Alex" className="bg-surface-hi border-transparent focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-on-surface font-inter text-[14px] rounded-xl h-[42px] px-4" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Last Name</label>
-                    <Input defaultValue="Smith" className="bg-slate-50 font-medium" />
+                  <div className="space-y-2.5">
+                    <label className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px]">Last Name</label>
+                    <Input defaultValue="Smith" className="bg-surface-hi border-transparent focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-on-surface font-inter text-[14px] rounded-xl h-[42px] px-4" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
-                    <Input defaultValue="alex@acmecorp.com" className="bg-slate-50 font-medium" type="email" />
+                  <div className="space-y-2.5">
+                    <label className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px]">Email Address</label>
+                    <Input defaultValue="alex@acmecorp.com" className="bg-surface-hi border-transparent focus-visible:ring-primary focus-visible:ring-offset-0 focus-visible:border-primary text-on-surface font-inter text-[14px] rounded-xl h-[42px] px-4" type="email" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</label>
+                  <div className="space-y-2.5">
+                    <label className="font-inter text-[10px] font-bold text-on-surface-low uppercase tracking-[0.6px]">Role</label>
                     <Select defaultValue="admin">
-                      <SelectTrigger className="bg-slate-50 font-medium">
+                      <SelectTrigger className="bg-surface-hi border-transparent text-on-surface font-inter text-[14px] rounded-xl h-[42px] px-4 focus:ring-0">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-surface-highest border-ghost-med text-on-surface font-inter text-[13px]">
                         <SelectItem value="admin">Administrator</SelectItem>
                         <SelectItem value="specialist">Specialist</SelectItem>
                         <SelectItem value="viewer">Viewer</SelectItem>
@@ -116,225 +95,194 @@ export default function Settings() {
                   </div>
                 </div>
 
-                <div className="pt-4 flex justify-end">
-                  <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
+                <div className="pt-6 flex justify-end">
+                  <Button className="bg-gradient-to-r from-primary-dim to-primary hover:-translate-y-[1px] transition-transform text-white font-inter font-bold text-[13px] rounded-xl shadow-[0_4px_18px_var(--color-primary-glow)] border-none h-[42px] px-6">
                     Save Changes
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* API Keys */}
           {activeTab === 'api' && (
-            <Card className="border-slate-200 shadow-sm bg-white">
-              <CardHeader className="pb-4 border-b border-slate-100 flex flex-row items-center justify-between">
+            <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none relative overflow-hidden">
+              <div className="p-[24px_28px] border-b border-ghost-med flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-lg">API Keys</CardTitle>
-                  <CardDescription className="mt-1">Manage keys for external services and widget embedding.</CardDescription>
+                  <h2 className="font-manrope font-extrabold text-[18px] text-on-surface mb-1">API Keys</h2>
+                  <p className="font-inter text-[13px] text-on-surface-med">Manage keys for external services and widget embedding.</p>
                 </div>
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-9">
+                <Button className="bg-gradient-to-r from-primary-dim to-primary hover:-translate-y-[1px] transition-transform text-white font-inter font-bold text-[13px] rounded-xl shadow-[0_4px_18px_var(--color-primary-glow)] border-none h-[42px] px-5">
                   Generate Key
                 </Button>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="divide-y divide-slate-100">
-                  <div className="p-6 flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <div className="font-semibold text-sm text-slate-900">Deepgram API Key</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Speech-to-Text</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="font-mono text-sm bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 flex-1 text-slate-700">
-                        sk-deepgram-••••••••••••••••••••••••••••••••
+              </div>
+              
+              <div className="p-0">
+                <div className="divide-y divide-ghost-med">
+                  {[
+                    { name: 'Deepgram API Key', type: 'Speech-to-Text', key: 'sk-deepgram-••••••••••••••••••••••••••••••••' },
+                    { name: 'Voicera Widget Key', type: 'Frontend Auth', key: 'vwk_live_84kx9f2m4nv93nx1••••••••••••' },
+                    { name: 'Webhook Secret', type: 'Server Validation', key: 'whsec_29fj49d03kd92kdl••••••••••••' }
+                  ].map((item, i) => (
+                    <div key={i} className="p-[24px_28px] flex flex-col gap-3.5 hover:bg-surface-hi transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div className="font-semibold text-[14px] text-on-surface font-inter">{item.name}</div>
+                        <div className="font-inter text-[10px] text-on-surface-low font-bold uppercase tracking-[0.6px] bg-surface-highest px-2 py-1 rounded-md">{item.type}</div>
                       </div>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Eye className="h-4 w-4" /></Button>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Copy className="h-4 w-4" /></Button>
-                    </div>
-                  </div>
-                  
-                  <div className="p-6 flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <div className="font-semibold text-sm text-slate-900">Voicera Widget Key</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Frontend Auth</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="font-mono text-sm bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 flex-1 text-slate-700">
-                        vwk_live_84kx9f2m4nv93nx1••••••••••••
+                      <div className="flex items-center gap-3">
+                        <div className="font-mono text-[13px] bg-[#0a0a0f] px-4 py-3.5 rounded-xl border border-ghost flex-1 text-primary shadow-inner">
+                          {item.key}
+                        </div>
+                        <Button variant="outline" size="icon" className="bg-surface-highest border-ghost text-on-surface hover:bg-surface-hi hover:text-white rounded-xl h-[46px] w-[46px] shrink-0 transition-colors"><Eye className="h-4 w-4" /></Button>
+                        <Button variant="outline" size="icon" className="bg-surface-highest border-ghost text-on-surface hover:bg-surface-hi hover:text-white rounded-xl h-[46px] w-[46px] shrink-0 transition-colors"><Copy className="h-4 w-4" /></Button>
                       </div>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Eye className="h-4 w-4" /></Button>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Copy className="h-4 w-4" /></Button>
                     </div>
-                  </div>
-
-                  <div className="p-6 flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <div className="font-semibold text-sm text-slate-900">Webhook Secret</div>
-                      <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Server Validation</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="font-mono text-sm bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 flex-1 text-slate-700">
-                        whsec_29fj49d03kd92kdl••••••••••••
-                      </div>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Eye className="h-4 w-4" /></Button>
-                      <Button variant="outline" size="icon" className="bg-white shrink-0"><Copy className="h-4 w-4" /></Button>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* Billing & Usage */}
           {activeTab === 'billing' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="border-slate-200 shadow-sm bg-indigo-600 text-white border-0 overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg text-white">Current Plan</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-extrabold tracking-tight mb-1">Pro</div>
-                    <p className="text-indigo-200 text-sm font-medium mb-6">$99/month, billed annually</p>
-                    <Button className="w-full bg-white text-indigo-600 hover:bg-slate-50 font-bold shadow-sm">
+                <div className="bg-gradient-to-br from-primary-dim to-primary rounded-[1.5rem] text-white border-0 overflow-hidden relative shadow-[0_8px_32px_var(--color-primary-glow)]">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+                  <div className="p-[24px_28px] pb-4">
+                    <h2 className="font-manrope font-extrabold text-[16px] text-white/90">Current Plan</h2>
+                  </div>
+                  <div className="p-[0_28px_28px_28px]">
+                    <div className="font-manrope text-[40px] font-extrabold tracking-tight mb-1">Pro</div>
+                    <p className="text-white/80 font-inter text-[13px] font-medium mb-8">$99/month, billed annually</p>
+                    <Button className="w-full bg-white text-primary hover:bg-white/90 transition-colors font-bold shadow-lg h-[46px] rounded-xl text-[14px]">
                       Manage Subscription
                     </Button>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
-                <Card className="border-slate-200 shadow-sm bg-white">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Payment Method</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex flex-col h-[calc(100%-60px)]">
-                    <div className="flex-1 flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                      <div className="w-12 h-8 bg-white border border-slate-200 rounded flex items-center justify-center font-bold text-slate-800 text-xs italic">
+                <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none flex flex-col relative overflow-hidden">
+                  <div className="p-[24px_28px] border-b border-ghost-med">
+                    <h2 className="font-manrope font-extrabold text-[16px] text-on-surface">Payment Method</h2>
+                  </div>
+                  <div className="p-[24px_28px] flex flex-col flex-1">
+                    <div className="flex-1 flex items-center gap-5 bg-surface-hi p-5 rounded-[1.25rem] border border-ghost">
+                      <div className="w-[52px] h-[36px] bg-white rounded-md flex items-center justify-center font-extrabold text-blue text-sm italic shadow-sm">
                         VISA
                       </div>
                       <div>
-                        <div className="font-semibold text-sm text-slate-900">•••• •••• •••• 4242</div>
-                        <div className="text-xs text-slate-500 font-medium">Expires 12/25</div>
+                        <div className="font-inter font-semibold text-[14px] text-on-surface mb-0.5">•••• •••• •••• 4242</div>
+                        <div className="font-inter text-[12px] text-on-surface-med font-medium">Expires 12/25</div>
                       </div>
                     </div>
-                    <Button variant="outline" className="w-full mt-auto bg-white">Update Method</Button>
-                  </CardContent>
-                </Card>
+                    <Button variant="outline" className="w-full mt-6 bg-surface-hi border-ghost text-on-surface hover:bg-surface-highest transition-colors rounded-xl h-[46px] font-bold">Update Method</Button>
+                  </div>
+                </div>
               </div>
 
-              <Card className="border-slate-200 shadow-sm bg-white">
-                <CardHeader className="pb-4 border-b border-slate-100 flex flex-row justify-between items-center">
+              <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none relative overflow-hidden">
+                <div className="p-[24px_28px] border-b border-ghost-med flex flex-row justify-between items-center">
                   <div>
-                    <CardTitle className="text-lg">Current Usage</CardTitle>
-                    <CardDescription className="mt-1">Billing cycle resets in 12 days.</CardDescription>
+                    <h2 className="font-manrope font-extrabold text-[18px] text-on-surface mb-1">Current Usage</h2>
+                    <p className="font-inter text-[13px] text-on-surface-med">Billing cycle resets in 12 days.</p>
                   </div>
-                  <Button variant="ghost" size="sm" className="text-indigo-600 hover:bg-indigo-50 font-bold">
+                  <Button variant="ghost" size="sm" className="text-primary hover:text-white hover:bg-primary-glow-sm transition-colors font-bold bg-transparent font-inter h-9 px-4 rounded-xl">
                     View History <ChevronRight className="h-4 w-4 ml-1" />
                   </Button>
-                </CardHeader>
-                <CardContent className="pt-6 space-y-8">
-                  <div>
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="font-semibold text-sm text-slate-900">Voice Minutes</div>
-                      <div className="text-sm font-bold text-slate-900">4,821 <span className="text-slate-400 font-medium text-xs">/ 10,000</span></div>
+                </div>
+                
+                <div className="p-[28px] space-y-9">
+                  {[
+                    { label: 'Voice Minutes', value: '4,821', limit: '/ 10,000', pct: 48, color: 'bg-primary shadow-[0_0_12px_var(--color-primary)]' },
+                    { label: 'Support Tickets', value: '842', limit: '/ 2,000', pct: 42, color: 'bg-blue shadow-[0_0_12px_var(--color-blue)]' },
+                    { label: 'Automations', value: '95%', limit: 'of limit', pct: 95, color: 'bg-red shadow-[0_0_12px_var(--color-red)]', valueColor: 'text-red' }
+                  ].map((usage, i) => (
+                    <div key={i}>
+                      <div className="flex justify-between items-end mb-3">
+                        <div className="font-inter font-semibold text-[14px] text-on-surface">{usage.label}</div>
+                        <div className={`font-inter text-[14px] font-bold ${usage.valueColor || 'text-on-surface'}`}>{usage.value} <span className="text-on-surface-low font-medium text-[12px] ml-1">{usage.limit}</span></div>
+                      </div>
+                      <div className="h-2 w-full bg-surface-highest rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full transition-all duration-1000 ${usage.color}`} style={{ width: `${usage.pct}%` }} />
+                      </div>
                     </div>
-                    <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-indigo-500 rounded-full" style={{ width: '48%' }} />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="font-semibold text-sm text-slate-900">Support Tickets</div>
-                      <div className="text-sm font-bold text-slate-900">842 <span className="text-slate-400 font-medium text-xs">/ 2,000</span></div>
-                    </div>
-                    <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-blue-500 rounded-full" style={{ width: '42%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="font-semibold text-sm text-slate-900">Automations</div>
-                      <div className="text-sm font-bold text-rose-500">95% <span className="text-slate-400 font-medium text-xs">of limit</span></div>
-                    </div>
-                    <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-rose-500 rounded-full" style={{ width: '95%' }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
           {/* Integrations */}
           {activeTab === 'integrations' && (
             <div className="space-y-6">
-              <Card className="border-slate-200 shadow-sm bg-white overflow-hidden">
-                <CardHeader className="pb-4 border-b border-slate-100 bg-slate-50/50">
-                  <CardTitle className="text-lg">CRM Integrations</CardTitle>
-                  <CardDescription>Connect Voicera with your existing tools.</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="divide-y divide-slate-100">
-                    <div className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 shrink-0">
+              <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none relative overflow-hidden">
+                <div className="p-[24px_28px] border-b border-ghost-med bg-surface/50">
+                  <h2 className="font-manrope font-extrabold text-[18px] text-on-surface mb-1">CRM Integrations</h2>
+                  <p className="font-inter text-[13px] text-on-surface-med">Connect Voicera with your existing tools.</p>
+                </div>
+                
+                <div className="p-0">
+                  <div className="divide-y divide-ghost-med">
+                    <div className="p-[24px_28px] flex items-center justify-between hover:bg-surface-hi transition-colors">
+                      <div className="flex items-center gap-5">
+                        <div className="w-[52px] h-[52px] rounded-2xl bg-[#ff7a59]/10 flex items-center justify-center text-[#ff7a59] shrink-0 border border-[#ff7a59]/20 shadow-[0_0_16px_rgba(255,122,89,0.1)]">
                           <Zap className="h-6 w-6" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-slate-900">HubSpot</h4>
-                          <p className="text-sm text-slate-500 font-medium mt-0.5">Sync contacts and log support calls to deals automatically.</p>
+                          <h4 className="font-manrope font-extrabold text-[16px] text-on-surface mb-1">HubSpot</h4>
+                          <p className="text-[13px] text-on-surface-med font-inter">Sync contacts and log support calls to deals automatically.</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 ml-6 shrink-0">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md"><CheckCircle2 className="h-3.5 w-3.5" /> Connected</span>
-                        <Switch defaultChecked />
+                      <div className="flex items-center gap-5 ml-6 shrink-0">
+                        <span className="inline-flex items-center gap-1.5 font-inter text-[11px] font-bold text-tertiary bg-tertiary-dim px-3 py-1.5 rounded-lg uppercase tracking-[0.5px]"><CheckCircle2 className="h-3.5 w-3.5" /> Connected</span>
+                        <Switch defaultChecked className="data-[state=checked]:bg-primary" />
                       </div>
                     </div>
 
-                    <div className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 shrink-0">
+                    <div className="p-[24px_28px] flex items-center justify-between hover:bg-surface-hi transition-colors">
+                      <div className="flex items-center gap-5">
+                        <div className="w-[52px] h-[52px] rounded-2xl bg-[#00a1e0]/10 flex items-center justify-center text-[#00a1e0] shrink-0 border border-[#00a1e0]/20 shadow-[0_0_16px_rgba(0,161,224,0.1)]">
                           <Zap className="h-6 w-6" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-slate-900">Salesforce</h4>
-                          <p className="text-sm text-slate-500 font-medium mt-0.5">Enterprise-grade sync for cases and accounts.</p>
+                          <h4 className="font-manrope font-extrabold text-[16px] text-on-surface mb-1">Salesforce</h4>
+                          <p className="text-[13px] text-on-surface-med font-inter">Enterprise-grade sync for cases and accounts.</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 ml-6 shrink-0">
-                        <Button variant="outline" size="sm" className="bg-white">Configure</Button>
-                        <Switch defaultChecked />
+                      <div className="flex items-center gap-5 ml-6 shrink-0">
+                        <Button variant="outline" className="bg-surface-hi border-ghost text-on-surface hover:bg-surface-highest transition-colors rounded-xl h-[38px] font-bold text-[12px]">Configure</Button>
+                        <Switch defaultChecked className="data-[state=checked]:bg-primary" />
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
               
-              <Card className="border-slate-200 shadow-sm bg-white overflow-hidden">
-                <CardHeader className="pb-4 border-b border-slate-100 bg-slate-50/50">
-                  <CardTitle className="text-lg">Support Platforms</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="divide-y divide-slate-100">
-                    <div className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+              <div className="bg-surface rounded-[1.5rem] shadow-[0_0_40px_rgba(6,14,32,0.5)] border-none relative overflow-hidden">
+                <div className="p-[24px_28px] border-b border-ghost-med bg-surface/50">
+                  <h2 className="font-manrope font-extrabold text-[18px] text-on-surface mb-1">Support Platforms</h2>
+                  <p className="font-inter text-[13px] text-on-surface-med">Route tickets to your helpdesk.</p>
+                </div>
+                
+                <div className="p-0">
+                  <div className="divide-y divide-ghost-med">
+                    <div className="p-[24px_28px] flex items-center justify-between hover:bg-surface-hi transition-colors">
+                      <div className="flex items-center gap-5">
+                        <div className="w-[52px] h-[52px] rounded-2xl bg-[#03363d]/40 flex items-center justify-center text-emerald-400 shrink-0 border border-emerald-500/20 shadow-[0_0_16px_rgba(16,185,129,0.1)]">
                           <Zap className="h-6 w-6" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-slate-900">Zendesk</h4>
-                          <p className="text-sm text-slate-500 font-medium mt-0.5">Automatically create tickets from support calls.</p>
+                          <h4 className="font-manrope font-extrabold text-[16px] text-on-surface mb-1">Zendesk</h4>
+                          <p className="text-[13px] text-on-surface-med font-inter">Automatically create tickets from support calls.</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4 ml-6 shrink-0">
-                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-9">Connect</Button>
+                        <Button className="bg-surface-highest hover:bg-surface-bright text-on-surface transition-colors font-inter font-bold text-[13px] rounded-xl h-[38px] px-6 border-none">Connect</Button>
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </div>
           )}
 
