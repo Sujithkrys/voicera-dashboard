@@ -24,6 +24,9 @@ CREATE TABLE users (
     department TEXT,
     avatar_url TEXT,
     is_active BOOLEAN DEFAULT true,
+    activation_token TEXT,
+    onboarding_completed BOOLEAN DEFAULT false,
+    display_preference TEXT DEFAULT 'full_name',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -52,6 +55,10 @@ CREATE TABLE bot_config (
     voice_model TEXT,
     stt_model TEXT,
     chat_response_length TEXT,
+    escalation_keywords TEXT,
+    voice_greeting TEXT,
+    chat_greeting TEXT,
+    response_format TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
