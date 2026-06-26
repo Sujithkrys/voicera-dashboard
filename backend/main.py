@@ -24,6 +24,8 @@ fastapi_app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
 import traceback
 from fastapi.responses import JSONResponse
 
