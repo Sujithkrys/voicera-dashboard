@@ -1,176 +1,141 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Badge } from '../components/ui/badge';
+import React, { useState } from "react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Plus, MoreHorizontal, Mail, Shield, User, Clock, Briefcase } from 'lucide-react';
+import { Plus, MoreHorizontal, Mail } from "lucide-react";
 
 const mockTeam = [
-  { id: '1', name: 'Alex Smith', email: 'alex@voicera.ai', role: 'Admin', status: 'active', department: 'All' },
-  { id: '2', name: 'Priya Sharma', email: 'priya@voicera.ai', role: 'Specialist', status: 'active', department: 'Technical' },
-  { id: '3', name: 'Marcus Johnson', email: 'marcus@voicera.ai', role: 'Specialist', status: 'offline', department: 'Billing' },
-  { id: '4', name: 'Elena Rodriguez', email: 'elena@voicera.ai', role: 'Viewer', status: 'invited', department: 'Analytics' }
+  { id: "1", name: "Alex Smith", email: "alex@voicera.ai", role: "Admin", status: "active", department: "All", tickets: 12 },
+  { id: "2", name: "Priya Sharma", email: "priya@voicera.ai", role: "Specialist", status: "active", department: "Technical", tickets: 42 },
+  { id: "3", name: "Marcus Johnson", email: "marcus@voicera.ai", role: "Specialist", status: "offline", department: "Billing", tickets: 28 },
+  { id: "4", name: "Elena Rodriguez", email: "elena@voicera.ai", role: "Viewer", status: "invited", department: "Analytics", tickets: 0 },
 ];
 
 export default function Team() {
   const [members] = useState(mockTeam);
 
   return (
-    <div className="p-6 space-y-8 max-w-7xl mx-auto h-full flex flex-col bg-[#fafafa]">
-      {/* Header */}
-      <div className="flex items-center justify-between flex-shrink-0">
-        <div>
-          <h1 className="text-[24px] font-manrope font-extrabold tracking-tight text-slate-900">Team Management</h1>
-          <p className="text-slate-500 font-inter text-[13px] mt-1 font-medium">Manage who has access to your Voicera dashboard</p>
-        </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold font-inter h-[42px] px-6 rounded-xl shadow-[0_4px_14px_rgba(79,70,229,0.3)] hover:-translate-y-[1px] transition-all">
-          <Plus className="mr-2 h-4 w-4" strokeWidth={3} />
+    <div className="p-6 space-y-5 h-full flex flex-col">
+      <div className="flex items-center justify-between">
+        <h1 className="text-[18px] font-semibold text-neutral-900">Team</h1>
+        <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">
+          <Plus className="mr-1.5 h-3.5 w-3.5" />
           Invite Member
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0 overflow-y-auto pb-10">
-        {/* Left Column: Team Members */}
-        <div className="lg:col-span-8 space-y-6">
-          <Card className="border border-slate-200/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] bg-white rounded-2xl overflow-hidden">
-            <CardHeader className="pb-4 border-b border-slate-100 flex flex-row items-center justify-between bg-white">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                  <Shield className="h-4 w-4 text-indigo-600" strokeWidth={2.5} />
-                </div>
-                <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Active Members</CardTitle>
-              </div>
-              <Badge variant="secondary" className="bg-slate-100 text-slate-600 font-bold border border-slate-200/50">
-                {members.length} Members
-              </Badge>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="divide-y divide-slate-100/80">
-                {members.map(member => (
-                  <div key={member.id} className="p-5 flex items-center justify-between hover:bg-slate-50/80 transition-colors group">
-                    <div className="flex items-center gap-4">
-                      <div className="relative">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200/50 text-[15px] font-bold text-indigo-700 shadow-sm">
-                          {member.name[0]}
+      <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
+        {/* Members table */}
+        <div className="col-span-8">
+          <div className="border border-neutral-200 rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-100">
+                  <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Member</th>
+                  <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Department</th>
+                  <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Role</th>
+                  <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Status</th>
+                  <th className="w-10"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {members.map((member) => (
+                  <tr key={member.id} className="border-b border-neutral-50 last:border-0 hover:bg-neutral-50 transition-colors group">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="relative">
+                          <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-[12px] font-medium text-neutral-600">
+                            {member.name[0]}
+                          </div>
+                          <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${
+                            member.status === "active" ? "bg-emerald-500" : member.status === "offline" ? "bg-neutral-300" : "bg-amber-400"
+                          }`} />
                         </div>
-                        {member.status === 'active' && (
-                          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full shadow-sm" />
-                        )}
-                        {member.status === 'offline' && (
-                          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-slate-300 border-2 border-white rounded-full shadow-sm" />
-                        )}
-                        {member.status === 'invited' && (
-                          <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-full shadow-sm" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-bold text-[14px] text-slate-900 flex items-center gap-2 font-inter tracking-tight">
-                          {member.name}
-                          {member.role === 'Admin' && <Badge variant="outline" className="text-[9px] h-[18px] px-1.5 bg-indigo-50 text-indigo-700 border-indigo-200 font-bold tracking-wider">ADMIN</Badge>}
-                        </div>
-                        <div className="text-[12px] text-slate-500 font-medium flex items-center gap-3 mt-1 font-inter">
-                          <span className="flex items-center gap-1.5"><Mail className="h-3 w-3 text-slate-400" /> {member.email}</span>
+                        <div>
+                          <div className="text-[13px] font-medium text-neutral-900">{member.name}</div>
+                          <div className="text-[11px] text-neutral-400">{member.email}</div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-5">
-                      <div className="hidden sm:flex flex-col items-end mr-2">
-                        <div className="text-[13px] font-bold text-slate-700 font-inter">{member.department}</div>
-                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Department</div>
-                      </div>
-                      
-                      <Select defaultValue={member.role.toLowerCase()}>
-                        <SelectTrigger className="w-[120px] h-9 text-[13px] font-semibold font-inter bg-white border-slate-200/60 rounded-xl focus:ring-indigo-500">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-xl border-slate-200 shadow-lg">
-                          <SelectItem value="admin" className="font-inter text-[13px]">Admin</SelectItem>
-                          <SelectItem value="specialist" className="font-inter text-[13px]">Specialist</SelectItem>
-                          <SelectItem value="viewer" className="font-inter text-[13px]">Viewer</SelectItem>
-                        </SelectContent>
-                      </Select>
-
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all">
+                    </td>
+                    <td className="py-3 px-4 text-[13px] text-neutral-600">{member.department}</td>
+                    <td className="py-3 px-4">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${
+                        member.role === "Admin" ? "bg-neutral-900 text-white" : "bg-neutral-100 text-neutral-600"
+                      }`}>
+                        {member.role}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${
+                        member.status === "active" ? "bg-emerald-50 text-emerald-700" : member.status === "offline" ? "bg-neutral-100 text-neutral-500" : "bg-amber-50 text-amber-700"
+                      }`}>
+                        {member.status.charAt(0).toUpperCase() + member.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <button className="p-1 rounded hover:bg-neutral-100 text-neutral-400 opacity-0 group-hover:opacity-100 transition-all">
                         <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
+                      </button>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Right Column: Invite & Workload */}
-        <div className="lg:col-span-4 space-y-6">
-          <Card className="border border-slate-200/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] bg-white rounded-2xl">
-            <CardHeader className="pb-4 border-b border-slate-100/50 mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                  <User className="h-4 w-4 text-indigo-600" strokeWidth={2.5} />
-                </div>
-                <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Invite New Member</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-5">
+        {/* Right column */}
+        <div className="col-span-4 space-y-5">
+          {/* Invite */}
+          <div className="border border-neutral-200 rounded-lg p-5">
+            <h2 className="text-[14px] font-semibold text-neutral-900 mb-4">Invite New Member</h2>
+            <div className="space-y-3">
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block font-inter">Email Address</label>
-                <Input placeholder="colleague@company.com" className="bg-slate-50/80 border-slate-200/60 font-medium font-inter rounded-xl h-10 text-[13px] focus-visible:bg-white" />
+                <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Email</label>
+                <Input placeholder="colleague@company.com" className="h-9 text-[13px] border-neutral-200 rounded-md" />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 block font-inter">Role</label>
+                <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Role</label>
                 <Select defaultValue="specialist">
-                  <SelectTrigger className="bg-slate-50/80 border-slate-200/60 font-medium font-inter rounded-xl h-10 text-[13px] focus-visible:bg-white">
+                  <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl border-slate-200 shadow-lg">
-                    <SelectItem value="admin" className="font-inter text-[13px]">Admin (Full Access)</SelectItem>
-                    <SelectItem value="specialist" className="font-inter text-[13px]">Specialist (Support Only)</SelectItem>
-                    <SelectItem value="viewer" className="font-inter text-[13px]">Viewer (Read Only)</SelectItem>
+                  <SelectContent className="rounded-md">
+                    <SelectItem value="admin" className="text-[13px]">Admin</SelectItem>
+                    <SelectItem value="specialist" className="text-[13px]">Specialist</SelectItem>
+                    <SelectItem value="viewer" className="text-[13px]">Viewer</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold font-inter h-[42px] rounded-xl shadow-sm transition-colors mt-2">
+              <Button className="w-full bg-neutral-900 text-white hover:bg-neutral-800 h-9 text-[13px] font-medium rounded-md mt-1">
                 Send Invitation
               </Button>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="border border-slate-200/60 shadow-sm bg-slate-50/50 rounded-2xl">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/60 flex items-center justify-center shadow-sm">
-                    <Briefcase className="h-4 w-4 text-slate-600" strokeWidth={2.5} />
+          {/* Workload */}
+          <div className="border border-neutral-200 rounded-lg p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[14px] font-semibold text-neutral-900">Workload</h2>
+              <span className="text-[11px] text-neutral-400">This week</span>
+            </div>
+            <div className="space-y-4">
+              {members.filter(m => m.tickets > 0).map((agent) => (
+                <div key={agent.name}>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[13px] text-neutral-700">{agent.name}</span>
+                    <span className="text-[12px] text-neutral-400">{agent.tickets}</span>
                   </div>
-                  <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Agent Workload</CardTitle>
-                </div>
-                <Badge variant="outline" className="bg-white font-bold text-slate-600 text-[10px] px-2 py-0.5 border-slate-200 shadow-sm">This Week</Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              {[
-                { name: 'Priya Sharma', tickets: 42, capacity: 85, color: 'bg-rose-500' },
-                { name: 'Marcus Johnson', tickets: 28, capacity: 55, color: 'bg-amber-500' },
-                { name: 'Alex Smith', tickets: 12, capacity: 25, color: 'bg-emerald-500' },
-              ].map(agent => (
-                <div key={agent.name} className="space-y-2.5">
-                  <div className="flex justify-between items-center text-[13px] font-bold text-slate-900 font-inter">
-                    <span>{agent.name}</span>
-                    <span className="text-slate-500 font-medium">{agent.tickets} tickets</span>
-                  </div>
-                  <div className="h-2 w-full bg-slate-200/60 rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.05)]">
-                    <div 
-                      className={`h-full rounded-full ${agent.color}`} 
-                      style={{ width: `${agent.capacity}%` }} 
+                  <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-neutral-400 rounded-full"
+                      style={{ width: `${Math.min((agent.tickets / 50) * 100, 100)}%` }}
                     />
                   </div>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
