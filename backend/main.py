@@ -17,10 +17,12 @@ fastapi_app.add_middleware(
         "https://voicera-dashboard.teamvoicera7.workers.dev",
         "https://voicera-landing.teamvoicera7.workers.dev",
         "https://voicera-superadmin.vercel.app",
+        "https://voicera-dashboard.pages.dev",
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:8000"
     ],
+    allow_origin_regex=r"https://.*\.pages\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
