@@ -44,6 +44,22 @@ async def health_check():
         "service": "voicera-backend"
     }
 
+import os
+@fastapi_app.get("/debug-env")
+async def debug_env():
+    db_url = os.getenv("DATABASE_URL") or ""
+    masked_db = db_url
+    if "@" in db_url:
+        parts = db_url.split("@")
+        masked_db = "postgresql://***:***@" + parts[-1]
+    return {
+        "DATABASE_URL": masked_db,
+        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
+        "JWT_SECRET_SET": bool(os.getenv("JWT_SECRET")),
+        "BREVO_API_KEY_SET": bool(os.getenv("BREVO_API_KEY")),
+        "SUPABASE_SERVICE_KEY_SET": bool(os.getenv("SUPABASE_SERVICE_KEY")),
+    }
+
 from app.api.v1.routes import (
     auth_router, kb_router, config_router, chat_router, 
     sessions_router, tickets_router, waitlist_router, calendar_router, voice_router, voice_llm_router,
