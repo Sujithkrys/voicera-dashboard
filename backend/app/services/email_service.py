@@ -6,7 +6,7 @@ from supabase import create_client, Client
 
 class EmailService:
     def __init__(self):
-        self.from_email = "teamvoicera7@gmail.com"
+        self.from_email = "prabhasmahesh1708@gmail.com"
         self.from_name = "Voicera Support"
 
     def _get_brevo_client(self):
@@ -210,7 +210,7 @@ async def send_booking_email(
         
         send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(
             to=[{"email": to_email, "name": to_name}],
-            sender={"name": "Voicera Support", "email": "support@voicera.ai"},
+            sender={"name": "Voicera Support", "email": "prabhasmahesh1708@gmail.com"},
             subject=subject,
             html_content=html
         )
