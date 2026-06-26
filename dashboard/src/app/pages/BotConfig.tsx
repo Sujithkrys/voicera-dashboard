@@ -29,14 +29,14 @@ export default function BotConfig() {
   const [widgetSubtitle, setWidgetSubtitle] = useState('Typically replies in seconds');
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto h-full flex flex-col">
+    <div className="p-6 space-y-6 max-w-7xl mx-auto h-full flex flex-col bg-[#fafafa]">
       {/* Header */}
       <div className="flex items-center justify-between flex-shrink-0">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Bot Config</h1>
-          <p className="text-muted-foreground text-sm mt-1">Configure your AI agent's voice, personality, and widget appearance</p>
+          <h1 className="text-[24px] font-manrope font-extrabold tracking-tight text-slate-900">Bot Config</h1>
+          <p className="text-slate-500 font-inter text-[13px] mt-1 font-medium">Configure your AI agent's voice, personality, and widget appearance</p>
         </div>
-        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
+        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold font-inter h-[42px] px-6 rounded-xl shadow-[0_4px_14px_rgba(79,70,229,0.3)] hover:-translate-y-[1px] transition-all">
           <Save className="mr-2 h-4 w-4" />
           Save Changes
         </Button>
@@ -45,11 +45,13 @@ export default function BotConfig() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 min-h-0 overflow-y-auto pb-10">
         {/* Left Column: Settings */}
         <div className="lg:col-span-7 space-y-6">
-          <Card className="border-slate-200 shadow-sm bg-white">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Settings2 className="h-5 w-5 text-indigo-500" />
-                <CardTitle className="text-lg">General Settings</CardTitle>
+          <Card className="border border-slate-200/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] bg-white rounded-2xl">
+            <CardHeader className="pb-4 border-b border-slate-100/50 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <Settings2 className="h-4 w-4 text-indigo-600" strokeWidth={2.5} />
+                </div>
+                <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">General Settings</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -85,11 +87,13 @@ export default function BotConfig() {
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200 shadow-sm bg-white">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Mic className="h-5 w-5 text-indigo-500" />
-                <CardTitle className="text-lg">Voice Selection</CardTitle>
+          <Card className="border border-slate-200/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] bg-white rounded-2xl">
+            <CardHeader className="pb-4 border-b border-slate-100/50 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <Mic className="h-4 w-4 text-indigo-600" strokeWidth={2.5} />
+                </div>
+                <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Voice Selection</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
@@ -129,11 +133,13 @@ export default function BotConfig() {
 
         {/* Right Column: Widget Customizer & Preview */}
         <div className="lg:col-span-5 space-y-6">
-          <Card className="border-slate-200 shadow-sm bg-white">
-            <CardHeader className="pb-4">
-              <div className="flex items-center gap-2">
-                <Palette className="h-5 w-5 text-indigo-500" />
-                <CardTitle className="text-lg">Widget Appearance</CardTitle>
+          <Card className="border border-slate-200/60 shadow-[0_2px_12px_rgba(0,0,0,0.02)] bg-white rounded-2xl">
+            <CardHeader className="pb-4 border-b border-slate-100/50 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <Palette className="h-4 w-4 text-indigo-600" strokeWidth={2.5} />
+                </div>
+                <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Widget Appearance</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">

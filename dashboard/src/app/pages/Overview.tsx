@@ -122,8 +122,8 @@ export default function Overview() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Overview</h1>
-          <p className="text-muted-foreground text-sm mt-1">Welcome back — here's what's happening with Voicera today.</p>
+          <h1 className="text-[24px] font-manrope font-extrabold tracking-tight text-slate-900">Overview</h1>
+          <p className="text-slate-500 font-inter text-sm mt-1 font-medium">Welcome back — here's what's happening with Voicera today.</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm">
@@ -146,7 +146,7 @@ export default function Overview() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <div className={`text-3xl font-extrabold leading-none tracking-tight ${metric.label === 'Escalations' && metric.value !== '0%' ? 'text-rose-500' : ''}`}>
+                  <div className={`text-[32px] font-manrope font-extrabold leading-none tracking-tight text-slate-900 ${metric.label === 'Escalations' && metric.value !== '0%' ? 'text-rose-500' : ''}`}>
                     {metric.value}
                   </div>
                   {metric.subtitle && (
@@ -178,8 +178,8 @@ export default function Overview() {
         <Card className="lg:col-span-2 border-0 shadow-sm flex flex-col min-h-0">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div>
-              <CardTitle className="text-base font-bold">Call Volume</CardTitle>
-              <p className="text-xs text-muted-foreground mt-1">Daily call counts over the past 7 days</p>
+              <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Call Volume</CardTitle>
+              <p className="text-xs text-slate-500 font-inter font-medium mt-1">Daily call counts over the past 7 days</p>
             </div>
             <div className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -223,8 +223,8 @@ export default function Overview() {
         {/* Top Issues Panel */}
         <Card className="border-0 shadow-sm flex flex-col min-h-0 bg-slate-50">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-bold">Top Issues</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">This week's breakdown</p>
+            <CardTitle className="text-[16px] font-manrope font-bold text-slate-900">Top Issues</CardTitle>
+            <p className="text-xs font-inter font-medium text-slate-500 mt-1">This week's breakdown</p>
           </CardHeader>
           <CardContent className="flex-1 flex flex-col">
             <div className="flex items-center justify-center gap-6 py-4 border-b border-slate-200 mb-4">
