@@ -24,7 +24,18 @@ fastapi_app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+import traceback
+from fastapi.responses import JSONResponse
+
+@fastapi_app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": f"Unhandled Exception: {str(exc)}",
+            "traceback": traceback.format_exc()
+        }
+    )
 
 @fastapi_app.get("/health")
 async def health_check():
