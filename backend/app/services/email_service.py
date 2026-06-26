@@ -128,7 +128,7 @@ class EmailService:
             <p>Hi {to_name},</p>
             <p><strong>{invited_by}</strong> has invited you to join <strong>{company_name}</strong> on Voicera — an AI-powered customer support platform.</p>
             <p>Voicera helps your team handle customer queries automatically with AI and escalates to specialists when needed.</p>
-            <a href="{invite_link or 'https://voicera-dashboard.teamvoicera7.workers.dev/login'}"
+            <a href="{invite_link or 'https://voicera-dashboard.thalathotysujith.workers.dev/login'}"
                style="display:inline-block;background:linear-gradient(135deg,#8a4cfc,#bd9dff);color:#fff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;margin:16px 0;">
                 Accept Invitation
             </a>

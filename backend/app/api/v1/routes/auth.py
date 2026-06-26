@@ -58,7 +58,7 @@ async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
         await db.commit()
 
         # 6. Send Activation Email via Brevo
-        activation_link = f"https://voicera-backend-production.up.railway.app/api/v1/auth/activate?token={activation_token}"
+        activation_link = f"https://voicera-dashboard-production.up.railway.app/api/v1/auth/activate?token={activation_token}"
         from app.services.email_service import email_service
         try:
             await email_service.send_activation_email(
@@ -97,7 +97,7 @@ async def activate_account(token: str, db: AsyncSession = Depends(get_db)):
         user = result.fetchone()
         
         if not user:
-            return RedirectResponse("https://voicera-dashboard.teamvoicera7.workers.dev/login?error=activation_failed")
+            return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?error=activation_failed")
         
         # Activate user and remove token
         update_query = text("""
@@ -108,12 +108,12 @@ async def activate_account(token: str, db: AsyncSession = Depends(get_db)):
         await db.execute(update_query, {"id": user.id})
         await db.commit()
         
-        return RedirectResponse("https://voicera-dashboard.teamvoicera7.workers.dev/login?activated=true")
+        return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?activated=true")
         
     except Exception as e:
         await db.rollback()
         print(f"Activation error: {e}")
-        return RedirectResponse("https://voicera-dashboard.teamvoicera7.workers.dev/login?error=activation_failed")
+        return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?error=activation_failed")
 
 @router.post("/login", response_model=AuthResponse)
 async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
@@ -583,7 +583,7 @@ async def invite_member(request: Request, db: AsyncSession = Depends(get_db), cu
         new_member = result.fetchone()
 
         # Send invite email with activation link
-        invite_link = f"https://voicera-dashboard.teamvoicera7.workers.dev/login?invite={invite_token}&email={email}&name={full_name}"
+        invite_link = f"https://voicera-dashboard.thalathotysujith.workers.dev/login?invite={invite_token}&email={email}&name={full_name}"
         
         from app.services.email_service import email_service
         await email_service.send_invite_email(

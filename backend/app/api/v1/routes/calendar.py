@@ -42,7 +42,7 @@ async def google_oauth_callback(request: Request):
     await calendar_service.exchange_code_for_tokens(code, specialist_id)
     
     # Redirect to dashboard success page
-    dashboard_url = "https://voicera-dashboard.teamvoicera7.workers.dev/index?calendar=connected"
+    dashboard_url = "https://voicera-dashboard.thalathotysujith.workers.dev/index?calendar=connected"
     return RedirectResponse(url=dashboard_url)
 
 

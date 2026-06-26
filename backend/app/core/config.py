@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
-    GOOGLE_REDIRECT_URI: str = "https://voicera-backend-production.up.railway.app/api/v1/calendar/callback"
+    GOOGLE_REDIRECT_URI: str = "https://voicera-dashboard-production.up.railway.app/api/v1/calendar/callback"
     BREVO_API_KEY: str = ""
 
     model_config = SettingsConfigDict(
