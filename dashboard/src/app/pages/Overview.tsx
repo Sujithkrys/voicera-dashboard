@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import {
   AreaChart,
   Area,
@@ -7,57 +6,71 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart as RechartsPieChart,
-  Pie,
-  Cell,
 } from "recharts";
 import { Button } from "../components/ui/button";
-import { StemChart } from "../components/StemChart";
+import { Sparkline, MiniBars, DottedTrack, TickBar } from "../components/charts";
 import { apiClient } from "../../api/client";
 
-const defaultMetrics = [
+type ChartKind = "sparkline" | "minibars" | "dotted" | "tickbar";
+
+interface Metric {
+  label: string;
+  value: string;
+  change: string;
+  /** Show a trend arrow (↗) next to the label — only for cumulative metrics */
+  trending: boolean;
+  chartKind: ChartKind;
+  /** Numeric data for sparkline / minibars charts */
+  chartData: number[];
+  /** 0-1 fraction for dotted track / tick bar charts */
+  chartPct: number;
+}
+
+const defaultMetrics: Metric[] = [
   {
     label: "Total calls",
     value: "4,821",
     change: "+12%",
-    up: true,
-    chartData: Array.from({ length: 20 }, (_, i) => ({
-      value: Math.floor(Math.random() * 30) + 30 + i * 2,
-    })),
+    trending: true,
+    chartKind: "sparkline",
+    chartData: [32, 38, 45, 40, 55, 60, 52, 64, 58, 70, 66, 74, 80, 78, 85, 82, 90, 88, 95, 98],
+    chartPct: 0,
   },
   {
     label: "Active sessions",
     value: "856",
     change: "+14%",
-    up: true,
-    chartData: Array.from({ length: 20 }, (_, i) => ({
-      value: Math.floor(Math.random() * 20) + 40 + i,
-    })),
+    trending: true,
+    chartKind: "sparkline",
+    chartData: [40, 42, 48, 44, 50, 55, 53, 56, 58, 60, 57, 62, 65, 63, 68, 70, 72, 74, 78, 82],
+    chartPct: 0,
   },
   {
     label: "Escalations",
     value: "80",
     change: "-8%",
-    up: false,
-    chartData: Array.from({ length: 20 }, (_, i) => ({
-      value: Math.floor(Math.random() * 15) + 10,
-    })),
+    trending: false,
+    chartKind: "minibars",
+    chartData: [12, 18, 8, 15, 10, 22, 14, 9],
+    chartPct: 0,
   },
   {
     label: "Resolution rate",
     value: "92%",
     change: "Normal",
-    up: true,
+    trending: false,
+    chartKind: "tickbar",
     chartData: [],
+    chartPct: 0.92,
   },
   {
     label: "Avg handle time",
     value: "2:44",
     change: "",
-    up: true,
+    trending: false,
+    chartKind: "dotted",
     chartData: [],
+    chartPct: 0.45,
   },
 ];
 
@@ -86,8 +99,23 @@ const issueBreakdown = [
   { label: "Other", pct: 15, color: "#f43f5e" },
 ];
 
+function MetricChart({ metric }: { metric: Metric }) {
+  switch (metric.chartKind) {
+    case "sparkline":
+      return <Sparkline data={metric.chartData} width={110} height={24} />;
+    case "minibars":
+      return <MiniBars data={metric.chartData} width={40} height={24} />;
+    case "dotted":
+      return <DottedTrack value={metric.chartPct} width={110} height={18} />;
+    case "tickbar":
+      return <TickBar value={metric.chartPct} segments={28} width={110} height={18} />;
+    default:
+      return null;
+  }
+}
+
 export default function Overview() {
-  const [metrics, setMetrics] = useState(defaultMetrics);
+  const [metrics, setMetrics] = useState<Metric[]>(defaultMetrics);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -121,7 +149,7 @@ export default function Overview() {
                 .filter((s: any) => s.status === "escalated")
                 .length.toString(),
             },
-            { ...prev[3], value: `${resRate}%` },
+            { ...prev[3], value: `${resRate}%`, chartPct: resRate / 100 },
             prev[4],
           ]);
         }
@@ -137,52 +165,47 @@ export default function Overview() {
   return (
     <div className="p-6 space-y-6">
       {/* Metrics row */}
-      <div className="flex items-end gap-8 border-b border-neutral-100 pb-6">
+      <div className="flex items-end gap-12 border-b border-neutral-100 pb-6">
         {metrics.map((m, i) => (
-          <div key={i} className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 mb-1">
-              <span className="text-[12px] text-neutral-500 font-medium">
+          <div key={i} className="min-w-0" style={{ width: 140 }}>
+            {/* Label + optional trend arrow */}
+            <div className="flex items-center gap-1 mb-1">
+              <span style={{ fontSize: 12, color: "#6b7280", fontWeight: 400 }}>
                 {m.label}
               </span>
-              {m.chartData.length > 0 && (
-                <svg className="w-3 h-3 text-neutral-400" viewBox="0 0 12 12" fill="none">
-                  <path d="M6 2v8M2 6h8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                </svg>
+              {m.trending && (
+                <span style={{ fontSize: 11, color: "#9ca3af", lineHeight: 1 }}>↗</span>
               )}
             </div>
+            {/* Big value + neutral sub-badge */}
             <div className="flex items-baseline gap-2">
-              <span className="text-[28px] font-semibold text-neutral-900 tracking-tight leading-none">
+              <span
+                style={{
+                  fontSize: 27,
+                  fontWeight: 600,
+                  color: "#111827",
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1,
+                }}
+              >
                 {m.value}
               </span>
               {m.change && (
                 <span
-                  className={`text-[12px] font-medium ${
-                    m.change.startsWith("+")
-                      ? "text-emerald-600"
-                      : m.change.startsWith("-")
-                      ? "text-emerald-600"
-                      : "text-neutral-400"
-                  }`}
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 500,
+                    color: "#9ca3af",
+                  }}
                 >
                   {m.change}
                 </span>
               )}
             </div>
-            {m.chartData.length > 0 && (
-              <div className="h-8 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={m.chartData}>
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke="#a3a3a3"
-                      strokeWidth={1.5}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            )}
+            {/* Micro-chart */}
+            <div className="mt-2">
+              <MetricChart metric={m} />
+            </div>
           </div>
         ))}
       </div>
