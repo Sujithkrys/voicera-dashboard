@@ -33,7 +33,7 @@ export function MiniBars({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       className={className}
-      style={{ color: "#d1d5db" }}
+      style={{ color: "#4b5563" }}
     >
       {data.map((v, i) => {
         const barH = Math.max(2, (v / max) * height);

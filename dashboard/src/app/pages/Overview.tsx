@@ -188,19 +188,19 @@ export default function Overview() {
         {metrics.map((m, i) => (
           <div key={i} className="min-w-0">
             {/* Label + optional trend arrow */}
-            <div className="flex items-center gap-1 mb-1">
-              <span style={{ fontSize: 13, color: "#374151", fontWeight: 500 }}>
+            <div className="flex items-center gap-1 mb-1.5">
+              <span style={{ fontSize: 14, color: "#374151", fontWeight: 500 }}>
                 {m.label}
               </span>
               {m.trending && (
-                <span style={{ fontSize: 11, color: "#6b7280", lineHeight: 1 }}>↗</span>
+                <span style={{ fontSize: 12, color: "#6b7280", lineHeight: 1 }}>↗</span>
               )}
             </div>
             {/* Big value + neutral sub-badge */}
             <div className="flex items-baseline gap-1.5">
               <span
                 style={{
-                  fontSize: 30,
+                  fontSize: 38,
                   fontWeight: 600,
                   color: "#111827",
                   letterSpacing: "-0.02em",
@@ -212,7 +212,7 @@ export default function Overview() {
               {m.change && (
                 <span
                   style={{
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: 500,
                     color: "#9ca3af",
                   }}
@@ -222,7 +222,7 @@ export default function Overview() {
               )}
             </div>
             {/* Micro-chart */}
-            <div className="mt-2" style={{ height: 24 }}>
+            <div className="mt-3" style={{ height: 28 }}>
               <MetricChart metric={m} />
             </div>
           </div>

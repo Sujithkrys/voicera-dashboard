@@ -40,7 +40,7 @@ export function TickBar({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       className={className}
-      style={{ color: "#d1d5db" }}
+      style={{ color: "#4b5563" }}
     >
       {/* Tick rectangles */}
       {Array.from({ length: segments }, (_, i) => (

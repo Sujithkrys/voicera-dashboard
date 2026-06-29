@@ -53,7 +53,7 @@ export function Sparkline({
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
       className={className}
-      style={{ color: "#9ca3af" }}
+      style={{ color: "#374151" }}
     >
       <path
         d={d}
