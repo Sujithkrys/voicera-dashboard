@@ -103,22 +103,26 @@ function MetricChart({ metric }: { metric: Metric }) {
   switch (metric.chartKind) {
     case "sparkline":
       return (
-        <div className="w-full">
-          <Sparkline data={metric.chartData} width={160} height={24} className="w-full" />
+        <div className="w-full" style={{ maxWidth: 140 }}>
+          <Sparkline data={metric.chartData} width={140} height={24} className="w-full" />
         </div>
       );
     case "minibars":
-      return <MiniBars data={metric.chartData} width={60} height={24} />;
+      return (
+        <div className="w-full" style={{ maxWidth: 140 }}>
+          <MiniBars data={metric.chartData} width={140} height={24} className="w-full" />
+        </div>
+      );
     case "dotted":
       return (
-        <div className="w-full">
-          <DottedTrack value={metric.chartPct} width={160} height={18} className="w-full" />
+        <div className="w-full" style={{ maxWidth: 140 }}>
+          <DottedTrack value={metric.chartPct} width={140} height={18} className="w-full" />
         </div>
       );
     case "tickbar":
       return (
-        <div className="w-full">
-          <TickBar value={metric.chartPct} segments={32} width={160} height={18} className="w-full" />
+        <div className="w-full" style={{ maxWidth: 140 }}>
+          <TickBar value={metric.chartPct} segments={32} width={140} height={18} className="w-full" />
         </div>
       );
     default:
@@ -177,9 +181,12 @@ export default function Overview() {
   return (
     <div className="p-6 space-y-6">
       {/* Metrics row */}
-      <div className="flex items-end gap-8 border-b border-neutral-100 pb-6">
+      <div
+        className="border-b border-neutral-100 pb-6"
+        style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0 }}
+      >
         {metrics.map((m, i) => (
-          <div key={i} className="flex-1 min-w-0">
+          <div key={i} className="min-w-0">
             {/* Label + optional trend arrow */}
             <div className="flex items-center gap-1 mb-1">
               <span style={{ fontSize: 12, color: "#6b7280", fontWeight: 400 }}>
@@ -215,7 +222,7 @@ export default function Overview() {
               )}
             </div>
             {/* Micro-chart */}
-            <div className="mt-2">
+            <div className="mt-2" style={{ height: 24 }}>
               <MetricChart metric={m} />
             </div>
           </div>
