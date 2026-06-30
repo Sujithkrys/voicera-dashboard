@@ -315,10 +315,10 @@ export default function AIChat() {
           )}
         </div>
 
-        {/* ─── Input area ─── */}
-        <div className="shrink-0 border-t border-neutral-100 px-4 py-4">
+        {/* ─── Input area (Centered floating) ─── */}
+        <div className="shrink-0 bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4">
           <div className="max-w-3xl mx-auto w-full">
-            <div className="flex items-end gap-3 bg-neutral-50 border border-neutral-200 rounded-2xl px-5 py-3 focus-within:border-neutral-400 focus-within:bg-white focus-within:shadow-sm transition-all">
+            <div className="flex items-end gap-3 bg-[#f4f4f4] rounded-2xl px-5 py-3.5 focus-within:bg-white focus-within:shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-transparent focus-within:border-[#e5e5e5] transition-all">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -326,13 +326,13 @@ export default function AIChat() {
                 onKeyDown={handleKeyDown}
                 placeholder="Message Voicera AI..."
                 rows={1}
-                className="flex-1 bg-transparent text-[14px] text-neutral-900 placeholder:text-neutral-400 outline-none resize-none leading-relaxed min-h-[24px] max-h-[150px]"
+                className="flex-1 bg-transparent text-[15px] text-neutral-900 placeholder:text-neutral-500 outline-none resize-none leading-relaxed min-h-[24px] max-h-[150px]"
                 style={{ scrollbarWidth: "none" }}
               />
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
                   input.trim() && !isTyping
                     ? "bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer"
                     : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
@@ -341,8 +341,8 @@ export default function AIChat() {
                 <Send className="size-4" strokeWidth={2} />
               </button>
             </div>
-            <p className="text-[11px] text-neutral-400 mt-2.5 text-center">
-              Voicera AI can make mistakes. Verify important information.
+            <p className="text-[12px] text-neutral-400 mt-3 text-center">
+              Voicera AI can make mistakes. Check important info.
             </p>
           </div>
         </div>
