@@ -14,6 +14,7 @@ import {
   Inbox,
   BarChart3,
   FileText,
+  Sparkles,
 } from "lucide-react";
 import {
   Sidebar,
@@ -90,6 +91,14 @@ export function AppSidebar() {
                   <Link to="/scheduled-calls" className="flex items-center gap-2.5 px-2.5">
                     <Calendar className="size-4" strokeWidth={1.8} />
                     <span>Scheduled Calls</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={navItem(isActive("/ai-chat"))}>
+                  <Link to="/ai-chat" className="flex items-center gap-2.5 px-2.5">
+                    <Sparkles className="size-4" strokeWidth={1.8} />
+                    <span>AI Chat</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
