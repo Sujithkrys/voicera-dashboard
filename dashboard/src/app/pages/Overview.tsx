@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { Button } from "../components/ui/button";
 import { Sparkline, MiniBars, DottedTrack, TickBar } from "../components/charts";
+import { AIChatBox } from "../components/AIChatBox";
 import { apiClient } from "../../api/client";
 
 type ChartKind = "sparkline" | "minibars" | "dotted" | "tickbar";
@@ -180,6 +181,9 @@ export default function Overview() {
 
   return (
     <div className="p-6 space-y-6">
+      {/* AI Chat Section */}
+      <AIChatBox />
+
       {/* Metrics row */}
       <div
         className="border-b border-neutral-100 pb-6"
