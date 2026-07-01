@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link, Outlet } from "react-router-dom";
+import SettingsModal from "../pages/Settings";
 import {
   Home,
   PhoneCall,
@@ -46,6 +47,7 @@ export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
   const [isAiChatOpen, setIsAiChatOpen] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const isActive = (path: string) =>
     location.pathname === path ||
     (path === "/" && location.pathname === "/overview");
@@ -172,11 +174,12 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/settings")} className={navItem(isActive("/settings"))}>
-                  <Link to="/settings">
-                    <Settings className="size-4" strokeWidth={1.8} />
-                    <span>Settings</span>
-                  </Link>
+                <SidebarMenuButton 
+                  onClick={() => setIsSettingsOpen(true)}
+                  className={`cursor-pointer ${navItem(false)} group-data-[collapsible=icon]:!justify-center`}
+                >
+                  <Settings className="size-4" strokeWidth={1.8} />
+                  <span className="group-data-[collapsible=icon]:hidden">Settings</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -193,6 +196,7 @@ export function AppSidebar() {
           </span>
         </div>
       </SidebarFooter>
+      <SettingsModal open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
     </Sidebar>
   );
 }

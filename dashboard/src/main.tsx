@@ -10,7 +10,6 @@ import ScheduledCalls from "./app/pages/ScheduledCalls";
 import KnowledgeBase from "./app/pages/KnowledgeBase";
 import BotConfig from "./app/pages/BotConfig";
 import Team from "./app/pages/Team";
-import Settings from "./app/pages/Settings";
 import AIChat from "./app/pages/AIChat";
 import AIChatHistory from "./app/pages/AIChatHistory";
 import { ChatProvider } from "./app/context/ChatContext";
@@ -31,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/knowledge-base" element={<KnowledgeBase />} />
         <Route path="/bot-config" element={<BotConfig />} />
         <Route path="/team" element={<Team />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   </ChatProvider>

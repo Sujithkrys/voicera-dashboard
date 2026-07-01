@@ -1,28 +1,36 @@
 import React, { useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut } from "lucide-react";
 import { Switch } from "../components/ui/switch";
 
-export default function Settings() {
+interface SettingsProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function Settings({ open, onOpenChange }: SettingsProps) {
   const [activeTab, setActiveTab] = useState<"profile" | "api" | "billing" | "integrations" | "notifications" | "security">("profile");
 
   const navItem = (tab: string) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
       activeTab === tab
         ? "bg-neutral-100 text-neutral-900"
-        : "text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50"
+        : "text-neutral-500 hover:text-neutral-700 hover:bg-transparent"
     }`;
 
   return (
-    <div className="p-6 space-y-5 h-full flex flex-col">
-      <h1 className="text-[18px] font-semibold text-neutral-900">Settings</h1>
-
-      <div className="flex gap-8 flex-1 min-h-0 overflow-y-auto">
-        {/* Nav */}
-        <div className="w-[200px] shrink-0 space-y-0.5">
-          <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-[1000px] w-[95vw] h-[85vh] p-0 overflow-hidden flex gap-0 border-none rounded-2xl shadow-2xl bg-white [&>button]:top-4 [&>button]:right-4">
+        <DialogTitle className="sr-only">Settings</DialogTitle>
+        <div className="flex h-full w-full">
+          {/* Nav Sidebar */}
+          <div className="w-[240px] shrink-0 border-r border-neutral-100 bg-[#FDFCFB] p-6 space-y-6 flex flex-col">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-neutral-400 uppercase ml-1">Settings</div>
+            <div className="space-y-1 flex-1">
+              <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
             <User className="h-4 w-4" strokeWidth={1.8} /> Profile
           </button>
           <button onClick={() => setActiveTab("notifications")} className={navItem("notifications")}>
@@ -40,12 +48,14 @@ export default function Settings() {
           <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
             <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
           </button>
-        </div>
+            </div>
+          </div>
 
-        {/* Content */}
-        <div className="flex-1 max-w-3xl space-y-5 pb-10">
+          {/* Content Area */}
+          <div className="flex-1 overflow-y-auto p-10 bg-white">
+            <div className="max-w-2xl space-y-8">
 
-          {/* ───── Profile ───── */}
+              {/* ───── Profile ───── */}
           {activeTab === "profile" && (
             <>
               <div className="border border-neutral-200 rounded-lg p-6 space-y-6">
@@ -444,8 +454,10 @@ export default function Settings() {
             </div>
           )}
 
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
