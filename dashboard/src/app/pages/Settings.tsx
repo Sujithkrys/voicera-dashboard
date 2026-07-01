@@ -23,7 +23,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[1000px] w-[95vw] h-[85vh] p-0 overflow-hidden flex gap-0 border-none rounded-2xl shadow-2xl bg-white [&>button]:top-4 [&>button]:right-4">
+      <DialogContent className="max-w-[1000px] sm:max-w-[1000px] w-[95vw] h-[85vh] p-0 overflow-hidden flex gap-0 border-none rounded-2xl shadow-2xl bg-white [&>button]:top-4 [&>button]:right-4">
         <DialogTitle className="sr-only">Settings</DialogTitle>
         <div className="flex h-full w-full">
           {/* Nav Sidebar */}
