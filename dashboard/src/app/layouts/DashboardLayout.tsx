@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 import {
   Home,
@@ -18,6 +18,7 @@ import {
   History,
   Plus,
   PanelLeftClose,
+  ChevronDown,
 } from "lucide-react";
 import {
   Sidebar,
@@ -43,6 +44,7 @@ const navItem = (isActive: boolean) =>
 
 export function AppSidebar() {
   const location = useLocation();
+  const [isAiChatOpen, setIsAiChatOpen] = useState(true);
   const isActive = (path: string) =>
     location.pathname === path ||
     (path === "/" && location.pathname === "/overview");
@@ -100,27 +102,37 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <div className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-neutral-900">
-                  <Sparkles className="size-4" strokeWidth={1.8} />
-                  <span>AI Chat</span>
-                </div>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={navItem(isActive("/ai-chat"))}>
-                  <Link to="/ai-chat" className="flex items-center gap-2.5 pl-8 pr-2.5">
-                    <Plus className="size-3.5" strokeWidth={1.8} />
-                    <span>New Chat</span>
-                  </Link>
+                <SidebarMenuButton 
+                  onClick={() => setIsAiChatOpen(!isAiChatOpen)}
+                  className={`w-full justify-between cursor-pointer ${navItem(false)}`}
+                >
+                  <div className="flex items-center gap-2.5 px-0.5">
+                    <Sparkles className="size-4" strokeWidth={1.8} />
+                    <span>AI Chat</span>
+                  </div>
+                  <ChevronDown className={`size-3.5 transition-transform opacity-70 ${isAiChatOpen ? "rotate-180" : ""}`} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/ai-chat/history")} className={navItem(isActive("/ai-chat/history"))}>
-                  <Link to="/ai-chat/history" className="flex items-center gap-2.5 pl-8 pr-2.5">
-                    <History className="size-3.5" strokeWidth={1.8} />
-                    <span>History</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {isAiChatOpen && (
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={navItem(isActive("/ai-chat"))}>
+                      <Link to="/ai-chat" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                        <Plus className="size-3.5" strokeWidth={1.8} />
+                        <span>New Chat</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive("/ai-chat/history")} className={navItem(isActive("/ai-chat/history"))}>
+                      <Link to="/ai-chat/history" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                        <History className="size-3.5" strokeWidth={1.8} />
+                        <span>History</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
