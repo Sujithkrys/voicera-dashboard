@@ -43,6 +43,7 @@ const navItem = (isActive: boolean) =>
   }`;
 
 export function AppSidebar() {
+  const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
   const [isAiChatOpen, setIsAiChatOpen] = useState(true);
   const isActive = (path: string) =>
@@ -50,20 +51,25 @@ export function AppSidebar() {
     (path === "/" && location.pathname === "/overview");
 
   return (
-    <Sidebar className="border-r border-neutral-200 bg-white w-[220px]">
-      <SidebarHeader className="px-4 py-4 border-b border-neutral-100 flex-row items-center justify-between">
+    <Sidebar collapsible="icon" className="border-r border-neutral-200 bg-white">
+      <SidebarHeader 
+        className="px-4 py-4 border-b border-neutral-100 flex-row items-center justify-between group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 cursor-pointer"
+        onClick={() => state === "collapsed" && toggleSidebar()}
+      >
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-neutral-900 text-white">
+          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-neutral-900 text-white shrink-0">
             <Activity className="size-3.5" strokeWidth={2} />
           </div>
-          <span className="font-semibold text-[15px] text-neutral-900">
+          <span className="font-semibold text-[15px] text-neutral-900 group-data-[collapsible=icon]:hidden">
             Voicera
           </span>
-          <svg className="ml-1 w-3 h-3 text-neutral-400" viewBox="0 0 12 12" fill="none">
+          <svg className="ml-1 w-3 h-3 text-neutral-400 group-data-[collapsible=icon]:hidden" viewBox="0 0 12 12" fill="none">
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <SidebarTrigger />
+        <div className="group-data-[collapsible=icon]:hidden">
+          <SidebarTrigger />
+        </div>
       </SidebarHeader>
       <SidebarContent className="px-3 py-3 gap-5">
         <SidebarGroup>
@@ -179,12 +185,12 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t border-neutral-100 p-3">
-        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-neutral-50 cursor-pointer transition-colors">
-          <div className="size-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center font-medium text-xs">
+      <SidebarFooter className="border-t border-neutral-100 p-3 group-data-[collapsible=icon]:p-2">
+        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-neutral-50 cursor-pointer transition-colors group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center">
+          <div className="size-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center font-medium text-xs shrink-0">
             {localStorage.getItem("voicera_name")?.[0]?.toUpperCase() || "U"}
           </div>
-          <span className="text-[13px] font-medium text-neutral-700 truncate">
+          <span className="text-[13px] font-medium text-neutral-700 truncate group-data-[collapsible=icon]:hidden">
             {localStorage.getItem("voicera_name") || "User"}
           </span>
         </div>
@@ -207,20 +213,8 @@ function SidebarTrigger() {
 }
 
 function MainContent() {
-  const { state, toggleSidebar } = useSidebar();
   return (
     <main className="flex-1 overflow-auto bg-white relative flex flex-col min-w-0">
-      {state === "collapsed" && (
-        <div className="absolute top-3 left-4 z-50">
-          <button
-            onClick={toggleSidebar}
-            className="w-9 h-9 bg-white border border-neutral-200 shadow-sm flex items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-50 transition-all"
-            title="Open Sidebar"
-          >
-            <PanelLeftClose className="size-4.5 rotate-180" strokeWidth={1.8} />
-          </button>
-        </div>
-      )}
       <Outlet />
     </main>
   );
@@ -237,7 +231,7 @@ export default function DashboardLayout() {
   }, [navigate]);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider style={{ "--sidebar-width": "220px" } as React.CSSProperties}>
       <div className="flex min-h-screen w-full bg-white relative">
         <AppSidebar />
         <MainContent />
