@@ -71,7 +71,7 @@ export function AppSidebar() {
           <SidebarTrigger />
         </div>
       </SidebarHeader>
-      <SidebarContent className="px-3 py-3 gap-5">
+      <SidebarContent className="px-3 group-data-[collapsible=icon]:px-0 py-3 gap-5">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-0.5">
