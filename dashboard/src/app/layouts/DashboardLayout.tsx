@@ -77,7 +77,7 @@ export function AppSidebar() {
             <SidebarMenu className="gap-0.5">
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/")} className={navItem(isActive("/"))}>
-                  <Link to="/" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/">
                     <Home className="size-4" strokeWidth={1.8} />
                     <span>Dashboard</span>
                   </Link>
@@ -85,7 +85,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/call-logs")} className={navItem(isActive("/call-logs"))}>
-                  <Link to="/call-logs" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/call-logs">
                     <PhoneCall className="size-4" strokeWidth={1.8} />
                     <span>Call Logs</span>
                   </Link>
@@ -93,7 +93,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/tickets")} className={navItem(isActive("/tickets"))}>
-                  <Link to="/tickets" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/tickets">
                     <Ticket className="size-4" strokeWidth={1.8} />
                     <span>Tickets</span>
                   </Link>
@@ -101,7 +101,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/scheduled-calls")} className={navItem(isActive("/scheduled-calls"))}>
-                  <Link to="/scheduled-calls" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/scheduled-calls">
                     <Calendar className="size-4" strokeWidth={1.8} />
                     <span>Scheduled Calls</span>
                   </Link>
@@ -110,28 +110,26 @@ export function AppSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   onClick={() => setIsAiChatOpen(!isAiChatOpen)}
-                  className={`w-full justify-between cursor-pointer ${navItem(false)}`}
+                  className={`cursor-pointer ${navItem(false)} group-data-[collapsible=icon]:!justify-center`}
                 >
-                  <div className="flex items-center gap-2.5 px-0.5">
-                    <Sparkles className="size-4" strokeWidth={1.8} />
-                    <span>AI Chat</span>
-                  </div>
-                  <ChevronDown className={`size-3.5 transition-transform opacity-70 ${isAiChatOpen ? "rotate-180" : ""}`} />
+                  <Sparkles className="size-4" strokeWidth={1.8} />
+                  <span className="group-data-[collapsible=icon]:hidden">AI Chat</span>
+                  <ChevronDown className={`size-3.5 transition-transform opacity-70 ml-auto group-data-[collapsible=icon]:hidden ${isAiChatOpen ? "rotate-180" : ""}`} />
                 </SidebarMenuButton>
               </SidebarMenuItem>
               {isAiChatOpen && (
                 <>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={navItem(isActive("/ai-chat"))}>
-                      <Link to="/ai-chat" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                    <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={`${navItem(isActive("/ai-chat"))} pl-8`}>
+                      <Link to="/ai-chat">
                         <Plus className="size-3.5" strokeWidth={1.8} />
                         <span>New Chat</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive("/ai-chat/history")} className={navItem(isActive("/ai-chat/history"))}>
-                      <Link to="/ai-chat/history" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                    <SidebarMenuButton asChild isActive={isActive("/ai-chat/history")} className={`${navItem(isActive("/ai-chat/history"))} pl-8`}>
+                      <Link to="/ai-chat/history">
                         <History className="size-3.5" strokeWidth={1.8} />
                         <span>History</span>
                       </Link>
@@ -151,7 +149,7 @@ export function AppSidebar() {
             <SidebarMenu className="gap-0.5">
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/knowledge-base")} className={navItem(isActive("/knowledge-base"))}>
-                  <Link to="/knowledge-base" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/knowledge-base">
                     <BookOpen className="size-4" strokeWidth={1.8} />
                     <span>Knowledge Base</span>
                   </Link>
@@ -159,7 +157,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/bot-config")} className={navItem(isActive("/bot-config"))}>
-                  <Link to="/bot-config" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/bot-config">
                     <Bot className="size-4" strokeWidth={1.8} />
                     <span>Bot Config</span>
                   </Link>
@@ -167,7 +165,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/team")} className={navItem(isActive("/team"))}>
-                  <Link to="/team" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/team">
                     <Users className="size-4" strokeWidth={1.8} />
                     <span>Team</span>
                   </Link>
@@ -175,7 +173,7 @@ export function AppSidebar() {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/settings")} className={navItem(isActive("/settings"))}>
-                  <Link to="/settings" className="flex items-center gap-2.5 px-2.5">
+                  <Link to="/settings">
                     <Settings className="size-4" strokeWidth={1.8} />
                     <span>Settings</span>
                   </Link>
