@@ -12,10 +12,13 @@ import BotConfig from "./app/pages/BotConfig";
 import Team from "./app/pages/Team";
 import Settings from "./app/pages/Settings";
 import AIChat from "./app/pages/AIChat";
+import AIChatHistory from "./app/pages/AIChatHistory";
+import { ChatProvider } from "./app/context/ChatContext";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <Routes>
+    <ChatProvider>
+      <Routes>
       <Route path="/login" element={<Login />} />
       <Route element={<DashboardLayout />}>
         <Route path="/" element={<Overview />} />
@@ -24,11 +27,13 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/tickets" element={<Tickets />} />
         <Route path="/scheduled-calls" element={<ScheduledCalls />} />
         <Route path="/ai-chat" element={<AIChat />} />
+        <Route path="/ai-chat/history" element={<AIChatHistory />} />
         <Route path="/knowledge-base" element={<KnowledgeBase />} />
         <Route path="/bot-config" element={<BotConfig />} />
         <Route path="/team" element={<Team />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </ChatProvider>
+</BrowserRouter>
 );

@@ -1,19 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Plus, Sparkles, User, MoreHorizontal, PanelLeftClose } from "lucide-react";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
-
-interface ChatThread {
-  id: string;
-  title: string;
-  messages: Message[];
-  createdAt: Date;
-}
+import { Send, Sparkles, User, MoreHorizontal } from "lucide-react";
+import { useChat, Message } from "../context/ChatContext";
 
 const suggestionCards = [
   { icon: "📊", title: "Summarize today's calls", desc: "Get an overview of call volume and outcomes" },
@@ -43,11 +30,9 @@ function getAIResponse(input: string): string {
 }
 
 export default function AIChat() {
-  const [threads, setThreads] = useState<ChatThread[]>([]);
-  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
+  const { threads, activeThreadId, createThread, addMessage } = useChat();
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -68,24 +53,11 @@ export default function AIChat() {
     }
   }, [input]);
 
-  const createThread = (firstMessage?: string) => {
-    const id = Date.now().toString();
-    const thread: ChatThread = {
-      id,
-      title: firstMessage ? firstMessage.slice(0, 40) + (firstMessage.length > 40 ? "..." : "") : "New chat",
-      messages: [],
-      createdAt: new Date(),
-    };
-    setThreads((prev) => [thread, ...prev]);
-    setActiveThreadId(id);
-    return id;
-  };
-
-  const sendMessage = (text: string, threadId?: string) => {
+  const sendMessage = (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    let targetId = threadId || activeThreadId;
+    let targetId = activeThreadId;
     if (!targetId) {
       targetId = createThread(trimmed);
     }
@@ -97,17 +69,7 @@ export default function AIChat() {
       timestamp: new Date(),
     };
 
-    setThreads((prev) =>
-      prev.map((t) => {
-        if (t.id !== targetId) return t;
-        const updated = { ...t, messages: [...t.messages, userMsg] };
-        if (t.messages.length === 0) {
-          updated.title = trimmed.slice(0, 40) + (trimmed.length > 40 ? "..." : "");
-        }
-        return updated;
-      })
-    );
-
+    addMessage(targetId, userMsg);
     setInput("");
     setIsTyping(true);
 
@@ -118,11 +80,7 @@ export default function AIChat() {
         content: getAIResponse(trimmed),
         timestamp: new Date(),
       };
-      setThreads((prev) =>
-        prev.map((t) =>
-          t.id === targetId ? { ...t, messages: [...t.messages, aiMsg] } : t
-        )
-      );
+      addMessage(targetId!, aiMsg);
       setIsTyping(false);
     }, 1000 + Math.random() * 1000);
   };
@@ -139,212 +97,142 @@ export default function AIChat() {
   const hasMessages = activeThread && activeThread.messages.length > 0;
 
   return (
-    <div className="flex h-full bg-white">
-      {/* ─── Chat history sidebar ─── */}
-      {showSidebar && (
-        <div className="w-[260px] border-r border-neutral-100 flex flex-col bg-[#fafafa] shrink-0">
-          <div className="p-3 flex items-center gap-2">
-            <button
-              onClick={() => {
-                setActiveThreadId(null);
-                setInput("");
-              }}
-              className="flex-1 flex items-center gap-2 h-[38px] px-3 bg-white border border-neutral-200 rounded-lg text-[13px] font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
-            >
-              <Plus className="size-4" strokeWidth={2} />
-              New chat
-            </button>
-            <button
-              onClick={() => setShowSidebar(false)}
-              className="w-[38px] h-[38px] flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
-            >
-              <PanelLeftClose className="size-4" strokeWidth={1.8} />
-            </button>
+    <div className="flex h-full bg-white flex-col w-full relative">
+      {/* Header */}
+      <div className="h-[52px] border-b border-neutral-100 flex items-center px-5 shrink-0 w-full bg-white relative z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center">
+            <Sparkles className="size-3.5 text-white" strokeWidth={2} />
           </div>
+          <span className="text-[14px] font-semibold text-neutral-900">Voicera AI</span>
+        </div>
+        <div className="ml-auto">
+          <button className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors">
+            <MoreHorizontal className="size-4" strokeWidth={1.8} />
+          </button>
+        </div>
+      </div>
 
-          <div className="flex-1 overflow-y-auto px-2 py-1">
-            {threads.length === 0 ? (
-              <p className="text-[12px] text-neutral-400 text-center mt-8 px-4">
-                No conversations yet. Start a new chat!
-              </p>
-            ) : (
-              <div className="space-y-0.5">
-                {threads.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setActiveThreadId(t.id)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg text-[13px] transition-colors truncate ${
-                      t.id === activeThreadId
-                        ? "bg-white text-neutral-900 font-medium shadow-sm border border-neutral-100"
-                        : "text-neutral-600 hover:bg-white hover:text-neutral-900"
+      {/* Messages area */}
+      <div className="flex-1 overflow-y-auto w-full">
+        {!hasMessages ? (
+          /* ─── Empty / Welcome state ─── */
+          <div className="flex flex-col items-center justify-center h-full px-6">
+            <div className="w-14 h-14 rounded-2xl bg-neutral-900 flex items-center justify-center mb-5">
+              <Sparkles className="size-7 text-white" strokeWidth={1.6} />
+            </div>
+            <h2 className="text-[22px] font-semibold text-neutral-900 mb-2">
+              How can I help you today?
+            </h2>
+            <p className="text-[14px] text-neutral-400 mb-8 text-center max-w-md">
+              Ask me about your calls, metrics, team performance, or get help with bot configuration.
+            </p>
+            <div className="grid grid-cols-2 gap-3 max-w-lg w-full">
+              {suggestionCards.map((card, i) => (
+                <button
+                  key={i}
+                  onClick={() => sendMessage(card.title)}
+                  className="text-left p-4 border border-neutral-200 rounded-xl hover:bg-neutral-50 hover:border-neutral-300 transition-all group"
+                >
+                  <span className="text-[18px] mb-2 block">{card.icon}</span>
+                  <span className="text-[13px] font-medium text-neutral-900 block mb-0.5 group-hover:text-neutral-900">
+                    {card.title}
+                  </span>
+                  <span className="text-[12px] text-neutral-400">{card.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* ─── Conversation ─── */
+          <div className="max-w-3xl mx-auto w-full px-4 py-6 pb-32">
+            {activeThread.messages.map((msg) => (
+              <div key={msg.id} className="mb-6">
+                <div className="flex gap-4">
+                  {/* Avatar */}
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                      msg.role === "assistant"
+                        ? "bg-neutral-900 text-white"
+                        : "bg-neutral-200 text-neutral-600"
                     }`}
                   >
-                    {t.title}
-                  </button>
-                ))}
+                    {msg.role === "assistant" ? (
+                      <Sparkles className="size-4" strokeWidth={2} />
+                    ) : (
+                      <User className="size-4" strokeWidth={2} />
+                    )}
+                  </div>
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] font-semibold text-neutral-900 mb-1">
+                      {msg.role === "assistant" ? "Voicera AI" : "You"}
+                    </p>
+                    <div className="text-[14px] text-neutral-700 leading-relaxed whitespace-pre-wrap">
+                      {msg.content.split(/(\*\*.*?\*\*)/).map((part, i) => {
+                        if (part.startsWith("**") && part.endsWith("**")) {
+                          return <strong key={i} className="font-semibold text-neutral-900">{part.slice(2, -2)}</strong>;
+                        }
+                        return <span key={i}>{part}</span>;
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className="mb-6">
+                <div className="flex gap-4">
+                  <div className="w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="size-4" strokeWidth={2} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[13px] font-semibold text-neutral-900 mb-2">Voicera AI</p>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
+        )}
+      </div>
 
-          <div className="p-3 border-t border-neutral-100">
-            <div className="flex items-center gap-2.5 px-2">
-              <div className="w-7 h-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center text-[11px] font-semibold">
-                {localStorage.getItem("voicera_name")?.[0]?.toUpperCase() || "U"}
-              </div>
-              <span className="text-[13px] text-neutral-700 truncate">
-                {localStorage.getItem("voicera_name") || "User"}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Main chat area ─── */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
-        <div className="h-[52px] border-b border-neutral-100 flex items-center px-5 shrink-0">
-          {!showSidebar && (
+      {/* ─── Input area (Centered floating) ─── */}
+      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4 z-20">
+        <div className="max-w-3xl mx-auto w-full">
+          <div className="flex items-end gap-3 bg-[#f4f4f4] rounded-2xl px-5 py-3.5 focus-within:bg-white focus-within:shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-transparent focus-within:border-[#e5e5e5] transition-all">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Message Voicera AI..."
+              rows={1}
+              className="flex-1 bg-transparent text-[15px] text-neutral-900 placeholder:text-neutral-500 outline-none resize-none leading-relaxed min-h-[24px] max-h-[150px]"
+              style={{ scrollbarWidth: "none" }}
+            />
             <button
-              onClick={() => setShowSidebar(true)}
-              className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors mr-3"
+              onClick={handleSend}
+              disabled={!input.trim() || isTyping}
+              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                input.trim() && !isTyping
+                  ? "bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer"
+                  : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
+              }`}
             >
-              <PanelLeftClose className="size-4 rotate-180" strokeWidth={1.8} />
-            </button>
-          )}
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center">
-              <Sparkles className="size-3.5 text-white" strokeWidth={2} />
-            </div>
-            <span className="text-[14px] font-semibold text-neutral-900">Voicera AI</span>
-          </div>
-          <div className="ml-auto">
-            <button className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors">
-              <MoreHorizontal className="size-4" strokeWidth={1.8} />
+              <Send className="size-4" strokeWidth={2} />
             </button>
           </div>
-        </div>
-
-        {/* Messages area */}
-        <div className="flex-1 overflow-y-auto">
-          {!hasMessages ? (
-            /* ─── Empty / Welcome state ─── */
-            <div className="flex flex-col items-center justify-center h-full px-6">
-              <div className="w-14 h-14 rounded-2xl bg-neutral-900 flex items-center justify-center mb-5">
-                <Sparkles className="size-7 text-white" strokeWidth={1.6} />
-              </div>
-              <h2 className="text-[22px] font-semibold text-neutral-900 mb-2">
-                How can I help you today?
-              </h2>
-              <p className="text-[14px] text-neutral-400 mb-8 text-center max-w-md">
-                Ask me about your calls, metrics, team performance, or get help with bot configuration.
-              </p>
-              <div className="grid grid-cols-2 gap-3 max-w-lg w-full">
-                {suggestionCards.map((card, i) => (
-                  <button
-                    key={i}
-                    onClick={() => sendMessage(card.title)}
-                    className="text-left p-4 border border-neutral-200 rounded-xl hover:bg-neutral-50 hover:border-neutral-300 transition-all group"
-                  >
-                    <span className="text-[18px] mb-2 block">{card.icon}</span>
-                    <span className="text-[13px] font-medium text-neutral-900 block mb-0.5 group-hover:text-neutral-900">
-                      {card.title}
-                    </span>
-                    <span className="text-[12px] text-neutral-400">{card.desc}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            /* ─── Conversation ─── */
-            <div className="max-w-3xl mx-auto w-full px-4 py-6">
-              {activeThread.messages.map((msg) => (
-                <div key={msg.id} className="mb-6">
-                  <div className="flex gap-4">
-                    {/* Avatar */}
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
-                        msg.role === "assistant"
-                          ? "bg-neutral-900 text-white"
-                          : "bg-neutral-200 text-neutral-600"
-                      }`}
-                    >
-                      {msg.role === "assistant" ? (
-                        <Sparkles className="size-4" strokeWidth={2} />
-                      ) : (
-                        <User className="size-4" strokeWidth={2} />
-                      )}
-                    </div>
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-neutral-900 mb-1">
-                        {msg.role === "assistant" ? "Voicera AI" : "You"}
-                      </p>
-                      <div className="text-[14px] text-neutral-700 leading-relaxed whitespace-pre-wrap">
-                        {msg.content.split(/(\*\*.*?\*\*)/).map((part, i) => {
-                          if (part.startsWith("**") && part.endsWith("**")) {
-                            return <strong key={i} className="font-semibold text-neutral-900">{part.slice(2, -2)}</strong>;
-                          }
-                          return <span key={i}>{part}</span>;
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {/* Typing indicator */}
-              {isTyping && (
-                <div className="mb-6">
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-neutral-900 text-white flex items-center justify-center shrink-0 mt-0.5">
-                      <Sparkles className="size-4" strokeWidth={2} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-[13px] font-semibold text-neutral-900 mb-2">Voicera AI</p>
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                        <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                        <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-          )}
-        </div>
-
-        {/* ─── Input area (Centered floating) ─── */}
-        <div className="shrink-0 bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4">
-          <div className="max-w-3xl mx-auto w-full">
-            <div className="flex items-end gap-3 bg-[#f4f4f4] rounded-2xl px-5 py-3.5 focus-within:bg-white focus-within:shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-transparent focus-within:border-[#e5e5e5] transition-all">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Message Voicera AI..."
-                rows={1}
-                className="flex-1 bg-transparent text-[15px] text-neutral-900 placeholder:text-neutral-500 outline-none resize-none leading-relaxed min-h-[24px] max-h-[150px]"
-                style={{ scrollbarWidth: "none" }}
-              />
-              <button
-                onClick={handleSend}
-                disabled={!input.trim() || isTyping}
-                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
-                  input.trim() && !isTyping
-                    ? "bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer"
-                    : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
-                }`}
-              >
-                <Send className="size-4" strokeWidth={2} />
-              </button>
-            </div>
-            <p className="text-[12px] text-neutral-400 mt-3 text-center">
-              Voicera AI can make mistakes. Check important info.
-            </p>
-          </div>
+          <p className="text-[12px] text-neutral-400 mt-3 text-center">
+            Voicera AI can make mistakes. Check important info.
+          </p>
         </div>
       </div>
     </div>

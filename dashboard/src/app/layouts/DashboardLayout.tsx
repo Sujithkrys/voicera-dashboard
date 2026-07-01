@@ -15,6 +15,8 @@ import {
   BarChart3,
   FileText,
   Sparkles,
+  History,
+  Plus,
 } from "lucide-react";
 import {
   Sidebar,
@@ -95,10 +97,24 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <div className="flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium text-neutral-900">
+                  <Sparkles className="size-4" strokeWidth={1.8} />
+                  <span>AI Chat</span>
+                </div>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={navItem(isActive("/ai-chat"))}>
-                  <Link to="/ai-chat" className="flex items-center gap-2.5 px-2.5">
-                    <Sparkles className="size-4" strokeWidth={1.8} />
-                    <span>AI Chat</span>
+                  <Link to="/ai-chat" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                    <Plus className="size-3.5" strokeWidth={1.8} />
+                    <span>New Chat</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/ai-chat/history")} className={navItem(isActive("/ai-chat/history"))}>
+                  <Link to="/ai-chat/history" className="flex items-center gap-2.5 pl-8 pr-2.5">
+                    <History className="size-3.5" strokeWidth={1.8} />
+                    <span>History</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
