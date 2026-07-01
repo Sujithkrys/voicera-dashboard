@@ -17,6 +17,7 @@ import {
   Sparkles,
   History,
   Plus,
+  PanelLeftClose,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,6 +31,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  useSidebar,
 } from "../components/ui/sidebar";
 
 const navItem = (isActive: boolean) =>
@@ -47,7 +49,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar className="border-r border-neutral-200 bg-white w-[220px]">
-      <SidebarHeader className="px-4 py-4 border-b border-neutral-100">
+      <SidebarHeader className="px-4 py-4 border-b border-neutral-100 flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex items-center justify-center w-7 h-7 rounded-md bg-neutral-900 text-white">
             <Activity className="size-3.5" strokeWidth={2} />
@@ -59,6 +61,7 @@ export function AppSidebar() {
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
+        <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent className="px-3 py-3 gap-5">
         <SidebarGroup>
@@ -178,6 +181,39 @@ export function AppSidebar() {
   );
 }
 
+function SidebarTrigger() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <button
+      onClick={toggleSidebar}
+      className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
+      title="Close Sidebar"
+    >
+      <PanelLeftClose className="size-4.5" strokeWidth={1.8} />
+    </button>
+  );
+}
+
+function MainContent() {
+  const { state, toggleSidebar } = useSidebar();
+  return (
+    <main className="flex-1 overflow-auto bg-white relative flex flex-col min-w-0">
+      {state === "collapsed" && (
+        <div className="absolute top-3 left-4 z-50">
+          <button
+            onClick={toggleSidebar}
+            className="w-9 h-9 bg-white border border-neutral-200 shadow-sm flex items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-50 transition-all"
+            title="Open Sidebar"
+          >
+            <PanelLeftClose className="size-4.5 rotate-180" strokeWidth={1.8} />
+          </button>
+        </div>
+      )}
+      <Outlet />
+    </main>
+  );
+}
+
 export default function DashboardLayout() {
   const navigate = useNavigate();
 
@@ -190,11 +226,9 @@ export default function DashboardLayout() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-white">
+      <div className="flex min-h-screen w-full bg-white relative">
         <AppSidebar />
-        <main className="flex-1 overflow-auto bg-white">
-          <Outlet />
-        </main>
+        <MainContent />
       </div>
     </SidebarProvider>
   );
