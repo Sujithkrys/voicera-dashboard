@@ -5,6 +5,7 @@ import os
 from supabase import create_client
 from app.core.config import settings
 from app.core.middleware import get_current_user
+from app.core.security import verify_token
 
 router = APIRouter(prefix="/oauth", tags=["oauth"])
 
@@ -29,7 +30,10 @@ NOTION_REDIRECT_URI = os.getenv("NOTION_REDIRECT_URI")
 
 
 @router.get("/google/authorize")
-async def google_authorize(user=Depends(get_current_user)):
+async def google_authorize(token: str):
+    user = verify_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
     user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     url = (
         "https://accounts.google.com/o/oauth2/v2/auth"
@@ -85,7 +89,10 @@ async def google_callback(code: str, state: str, request: Request):
 
 
 @router.get("/notion/authorize")
-async def notion_authorize(user=Depends(get_current_user)):
+async def notion_authorize(token: str):
+    user = verify_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
     user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     url = (
         "https://api.notion.com/v1/oauth/authorize"
