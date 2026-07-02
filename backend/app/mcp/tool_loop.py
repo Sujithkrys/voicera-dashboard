@@ -4,7 +4,7 @@ import os
 from typing import Any
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
-GROK_MODEL = "grok-2-latest"  # switch to a stable model
+GROK_MODEL = "grok-4.3"
 
 async def run_tool_loop(
     messages: list[dict],
