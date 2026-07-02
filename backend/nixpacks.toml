@@ -1,0 +1,6 @@
+[providers]
+python = "3.11"
+node = "20"
+
+[phases.setup]
+nixPkgs = ["...", "nodejs"]
