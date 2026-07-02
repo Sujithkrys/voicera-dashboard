@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, HTTPException, Depends
 from fastapi.responses import RedirectResponse
 import httpx
 import os
+import urllib.parse
 from supabase import create_client
 from app.core.config import settings
 from app.core.middleware import get_current_user
@@ -38,7 +39,7 @@ async def google_authorize(token: str):
     url = (
         "https://accounts.google.com/o/oauth2/v2/auth"
         f"?client_id={GOOGLE_CLIENT_ID}"
-        f"&redirect_uri={GOOGLE_REDIRECT_URI}"
+        f"&redirect_uri={urllib.parse.quote(GOOGLE_REDIRECT_URI or '')}"
         "&response_type=code"
         f"&scope={GOOGLE_SCOPES}"
         "&access_type=offline"
@@ -97,7 +98,7 @@ async def notion_authorize(token: str):
     url = (
         "https://api.notion.com/v1/oauth/authorize"
         f"?client_id={NOTION_CLIENT_ID}"
-        f"&redirect_uri={NOTION_REDIRECT_URI}"
+        f"&redirect_uri={urllib.parse.quote(NOTION_REDIRECT_URI or '')}"
         "&response_type=code"
         f"&owner=user"
         f"&state={user_id}"
