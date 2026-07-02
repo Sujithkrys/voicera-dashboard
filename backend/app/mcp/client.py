@@ -161,7 +161,7 @@ class MCPClientManager:
                 "command": "npx",
                 "args": ["-y", "@notionhq/notion-mcp-server"],
                 "env": {
-                    "NOTION_API_TOKEN": tokens.get("notion_token", ""),
+                    "NOTION_TOKEN": tokens.get("notion_token", ""),
                 }
             }
         }
