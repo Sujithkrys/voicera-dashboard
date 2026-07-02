@@ -112,5 +112,6 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
 
         return {"reply": reply}
     except Exception as e:
-        print(f"Unhandled exception in chat endpoint: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"{type(e).__name__}: {str(e)}")

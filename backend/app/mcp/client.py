@@ -16,8 +16,13 @@ class MCPServerProcess:
 
     async def start(self):
         full_env = {**os.environ, **self.env}
-        self.process = await asyncio.create_subprocess_exec(
-            self.command, *self.args,
+        
+        # Build the shell command string (e.g. "npx -y @notionhq/notion-mcp-server")
+        import shlex
+        shell_cmd = f"{self.command} " + " ".join(shlex.quote(arg) for arg in self.args)
+        
+        self.process = await asyncio.create_subprocess_shell(
+            shell_cmd,
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
