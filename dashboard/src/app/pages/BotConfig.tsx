@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Textarea } from "../components/ui/textarea";
-import { Mic, Play, Sparkles, MessageSquare, Save, Link, Copy } from "lucide-react";
-
+import { Mic, Play, Sparkles, MessageSquare, Save, Link, Copy, Workflow } from "lucide-react";
+import VisualBuilder from "../components/flow/VisualBuilder";
 const voices = [
   { id: "v1", name: "Aria", type: "Female, Professional", tag: "Top Choice" },
   { id: "v2", name: "Marcus", type: "Male, Friendly", tag: "" },
@@ -18,15 +18,25 @@ export default function BotConfig() {
   const [primaryColor, setPrimaryColor] = useState(colors[0]);
   const [botName, setBotName] = useState("Voicera Assistant");
   const [widgetSubtitle, setWidgetSubtitle] = useState("Typically replies in seconds");
+  const [showVisualBuilder, setShowVisualBuilder] = useState(false);
 
   return (
     <div className="p-6 space-y-6 h-full overflow-y-auto">
       <div className="flex items-center justify-between">
         <h1 className="text-[18px] font-semibold text-neutral-900">Bot Config</h1>
-        <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">
-          <Save className="mr-1.5 h-3.5 w-3.5" />
-          Save Changes
-        </Button>
+        <div className="flex gap-3">
+          <Button 
+            onClick={() => setShowVisualBuilder(true)}
+            className="bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50 h-8 text-[13px] font-medium rounded-md shadow-sm"
+          >
+            <Workflow className="mr-1.5 h-3.5 w-3.5 text-blue-500" />
+            Visual Builder
+          </Button>
+          <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md shadow-sm">
+            <Save className="mr-1.5 h-3.5 w-3.5" />
+            Save Changes
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-8 max-w-6xl">
@@ -170,6 +180,8 @@ export default function BotConfig() {
           </div>
         </div>
       </div>
+      
+      {showVisualBuilder && <VisualBuilder onClose={() => setShowVisualBuilder(false)} />}
     </div>
   );
 }
