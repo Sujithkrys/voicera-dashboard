@@ -85,7 +85,7 @@ async def google_callback(code: str, state: str, request: Request):
             "enabled": True
         }).execute()
 
-    dashboard_url = os.getenv("DASHBOARD_URL", "http://localhost:5173")
+    dashboard_url = os.getenv("FRONTEND_URL") or os.getenv("DASHBOARD_URL") or "https://voicera-dashboard.pages.dev"
     return RedirectResponse(f"{dashboard_url}/settings/integrations?status=google_connected")
 
 
@@ -139,7 +139,7 @@ async def notion_callback(code: str, state: str):
         "enabled": True
     }).execute()
 
-    dashboard_url = os.getenv("DASHBOARD_URL", "http://localhost:5173")
+    dashboard_url = os.getenv("FRONTEND_URL") or os.getenv("DASHBOARD_URL") or "https://voicera-dashboard.pages.dev"
     return RedirectResponse(f"{dashboard_url}/settings/integrations?status=notion_connected")
 
 
