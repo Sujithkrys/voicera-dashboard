@@ -12,7 +12,7 @@ export default function Integrations() {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/v1/oauth/status", {
+      const response = await fetch("https://voicera-dashboard-production.up.railway.app/api/v1/oauth/status", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -29,11 +29,11 @@ export default function Integrations() {
   };
 
   const handleConnectGoogle = () => {
-    window.location.href = `http://localhost:8000/api/v1/oauth/google/authorize?token=${token}`;
+    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/google/authorize?token=${token}`;
   };
 
   const handleConnectNotion = () => {
-    window.location.href = `http://localhost:8000/api/v1/oauth/notion/authorize?token=${token}`;
+    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/notion/authorize?token=${token}`;
   };
 
   const googleConnected = status["gmail"] || status["google-calendar"] || status["google-drive"] || status["google-docs"];
