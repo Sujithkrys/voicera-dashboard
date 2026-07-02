@@ -93,18 +93,21 @@ export default function AIChat() {
       
       const data = await res.json();
       
+      const errorMessage = data.detail || 'Sorry, an error occurred while connecting to the AI.';
+      
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: res.ok ? (data.reply || data.response) : 'Sorry, an error occurred while connecting to OpenAI.',
+        content: res.ok ? (data.reply || data.response) : errorMessage,
         timestamp: new Date(),
       };
       addMessage(targetId!, aiMsg);
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Chat error:', err);
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: 'Failed to connect to the server. Please check your connection.',
+        content: `Failed to connect to the server. ${err.message || ''}`,
         timestamp: new Date(),
       };
       addMessage(targetId!, aiMsg);
