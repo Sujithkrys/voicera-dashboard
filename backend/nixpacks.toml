@@ -1,4 +1,2 @@
-providers = ["python", "node"]
-
 [phases.setup]
-nixPkgs = ["...", "nodejs"]
+nixPkgs = ["...", "nodejs_20"]
