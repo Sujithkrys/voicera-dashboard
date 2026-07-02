@@ -98,7 +98,13 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             f"Currently, the user has enabled the following tools: {request.enabled_tools}. "
             "If the user asks you to perform an action using a service (like Notion, Gmail, Calendar, Docs, or Drive) "
             "but the corresponding tool is NOT in the enabled list, you MUST politely inform them that they "
-            "need to connect that service first by navigating to 'Settings > Integrations' in the dashboard."
+            "need to connect that service first by navigating to 'Settings > Integrations' in the dashboard.\n"
+            "CRITICAL INSTRUCTION: If the user asks you to perform an action (e.g., create a Notion page, send an email) "
+            "and the tool IS available, you MUST invoke the tool immediately! Do NOT just reply with text saying 'I will do it' "
+            "or 'I have created it'. You must actually call the tool function.\n"
+            "NOTION TOOL RULES: \n"
+            "- If you need to create a page but don't know the `parent_page_id`, you can either ask the user, or if they mention a parent page name, use `notion_search` to find its ID first.\n"
+            "- If no parent page is specified and you want to create a top-level page, try searching for a general workspace page or ask the user for a destination.\n"
             f"{dashboard_context}"
         )
         
