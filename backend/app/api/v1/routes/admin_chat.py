@@ -32,7 +32,7 @@ async def send_admin_chat_message(request: AdminChatRequest):
         messages.append({"role": "user", "content": request.message})
         
         response = oai.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=messages,
             temperature=0.7,
             max_tokens=600
