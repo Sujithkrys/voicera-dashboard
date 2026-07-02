@@ -30,7 +30,7 @@ NOTION_REDIRECT_URI = os.getenv("NOTION_REDIRECT_URI")
 
 @router.get("/google/authorize")
 async def google_authorize(user=Depends(get_current_user)):
-    user_id = user["id"] if isinstance(user, dict) else user.id
+    user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     url = (
         "https://accounts.google.com/o/oauth2/v2/auth"
         f"?client_id={GOOGLE_CLIENT_ID}"
@@ -86,7 +86,7 @@ async def google_callback(code: str, state: str, request: Request):
 
 @router.get("/notion/authorize")
 async def notion_authorize(user=Depends(get_current_user)):
-    user_id = user["id"] if isinstance(user, dict) else user.id
+    user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     url = (
         "https://api.notion.com/v1/oauth/authorize"
         f"?client_id={NOTION_CLIENT_ID}"
@@ -138,7 +138,7 @@ async def notion_callback(code: str, state: str):
 @router.get("/status")
 async def integration_status(user=Depends(get_current_user)):
     supabase = get_supabase()
-    user_id = user["id"] if isinstance(user, dict) else user.id
+    user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     
     rows = supabase.table("user_mcp_tools")\
         .select("tool_name, enabled")\

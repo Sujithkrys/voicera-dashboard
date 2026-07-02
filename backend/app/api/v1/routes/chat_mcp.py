@@ -18,7 +18,7 @@ class ChatRequest(BaseModel):
 
 @router.post("")
 async def chat(request: ChatRequest, user=Depends(get_current_user)):
-    user_id = user["id"] if isinstance(user, dict) else user.id
+    user_id = user.get("user_id") if isinstance(user, dict) else getattr(user, "id", None)
     supabase = get_supabase()
     
     all_mcp_tools = []
