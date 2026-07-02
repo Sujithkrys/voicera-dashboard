@@ -82,7 +82,7 @@ export default function AIChat() {
         console.warn("Failed to fetch oauth status", e);
       }
 
-      const res = await fetch(`${BACKEND_URL}/api/v1/chat/`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/chat`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

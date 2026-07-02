@@ -35,6 +35,7 @@ import {
   SidebarProvider,
   useSidebar,
 } from "../components/ui/sidebar";
+import { useChat } from "../context/ChatContext";
 
 const navItem = (isActive: boolean) =>
   `h-8 rounded-md text-[13px] transition-colors ${
@@ -45,6 +46,7 @@ const navItem = (isActive: boolean) =>
 
 export function AppSidebar() {
   const { state, toggleSidebar } = useSidebar();
+  const { setActiveThreadId } = useChat();
   const location = useLocation();
   const [isAiChatOpen, setIsAiChatOpen] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -123,7 +125,7 @@ export function AppSidebar() {
                 <>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive("/ai-chat")} className={`${navItem(isActive("/ai-chat"))} pl-8`}>
-                      <Link to="/ai-chat">
+                      <Link to="/ai-chat" onClick={() => setActiveThreadId(null)}>
                         <Plus className="size-3.5" strokeWidth={1.8} />
                         <span>New Chat</span>
                       </Link>
