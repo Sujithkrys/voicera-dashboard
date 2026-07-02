@@ -13,6 +13,7 @@ class MCPServerProcess:
         self.env = env
         self.process: Optional[asyncio.subprocess.Process] = None
         self.tools: list = []
+        self._request_counter = 0
 
     async def start(self):
         import shutil
@@ -54,7 +55,7 @@ class MCPServerProcess:
         })
         # Fetch available tools
         tools_response = await self._send_request("tools/list", {})
-        self.tools = tools_response.get("tools", [])
+        self.tools = tools_response.get("result", {}).get("tools", [])
         return self.tools
 
     async def call_tool(self, tool_name: str, arguments: dict) -> dict:
@@ -65,9 +66,12 @@ class MCPServerProcess:
         return response
 
     async def _send_request(self, method: str, params: dict) -> dict:
+        self._request_counter += 1
+        current_id = self._request_counter
+        
         request = {
             "jsonrpc": "2.0",
-            "id": 1,
+            "id": current_id,
             "method": method,
             "params": params
         }
@@ -99,7 +103,13 @@ class MCPServerProcess:
                 
             if line_str.startswith("{"):
                 try:
-                    return json.loads(line_str)
+                    data = json.loads(line_str)
+                    if data.get("id") == current_id:
+                        return data
+                    elif "method" in data:
+                        # It's a notification from the server, just log and ignore
+                        print(f"[MCP {self.name}] Notification: {line_str}")
+                        continue
                 except json.JSONDecodeError:
                     pass # could be a weird log starting with {
             
