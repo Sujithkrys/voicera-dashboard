@@ -4,7 +4,7 @@ import os
 from typing import Any
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"
-GROK_MODEL = "grok-3-latest"  # or grok-2
+GROK_MODEL = "grok-2-latest"  # switch to a stable model
 
 async def run_tool_loop(
     messages: list[dict],
@@ -41,8 +41,13 @@ async def run_tool_loop(
                 payload.pop("tools", None)
                 payload.pop("tool_choice", None)
 
-            response = await client.post(GROK_API_URL, json=payload, headers=headers)
-            response.raise_for_status()
+            try:
+                response = await client.post(GROK_API_URL, json=payload, headers=headers)
+                response.raise_for_status()
+            except httpx.HTTPStatusError as e:
+                error_body = e.response.text
+                raise ValueError(f"Grok API error: {e.response.status_code} - {error_body}")
+            
             data = response.json()
 
             choice = data["choices"][0]
