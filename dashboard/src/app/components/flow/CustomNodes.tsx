@@ -1,6 +1,6 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { MessageSquare, Settings2, Cpu, FileOutput } from "lucide-react";
+import { MessageSquare, Settings2, Cpu, FileOutput, Mail, Table, FileText, Calendar, BookOpen } from "lucide-react";
 
 const NodeWrapper = ({ children, title, icon: Icon, color }: any) => (
   <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden w-[260px] font-sans">
@@ -75,9 +75,74 @@ export const ChatOutputNode = ({ data }: any) => {
   );
 };
 
+export const GmailNode = ({ data }: any) => {
+  return (
+    <>
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-red-500 border-2 border-white" />
+      <NodeWrapper title="Gmail" icon={Mail} color="bg-red-50">
+        <div className="text-[11px] text-neutral-500">Send or read emails from Gmail.</div>
+      </NodeWrapper>
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-red-500 border-2 border-white" />
+    </>
+  );
+};
+
+export const GoogleSheetsNode = ({ data }: any) => {
+  return (
+    <>
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-emerald-500 border-2 border-white" />
+      <NodeWrapper title="Google Sheets" icon={Table} color="bg-emerald-50">
+        <div className="text-[11px] text-neutral-500">Read or append rows to Sheets.</div>
+      </NodeWrapper>
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-emerald-500 border-2 border-white" />
+    </>
+  );
+};
+
+export const GoogleDocsNode = ({ data }: any) => {
+  return (
+    <>
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-blue-500 border-2 border-white" />
+      <NodeWrapper title="Google Docs" icon={FileText} color="bg-blue-50">
+        <div className="text-[11px] text-neutral-500">Generate or read documents.</div>
+      </NodeWrapper>
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-blue-500 border-2 border-white" />
+    </>
+  );
+};
+
+export const GoogleCalendarNode = ({ data }: any) => {
+  return (
+    <>
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-teal-500 border-2 border-white" />
+      <NodeWrapper title="Google Calendar" icon={Calendar} color="bg-teal-50">
+        <div className="text-[11px] text-neutral-500">Schedule or list events.</div>
+      </NodeWrapper>
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-teal-500 border-2 border-white" />
+    </>
+  );
+};
+
+export const NotionNode = ({ data }: any) => {
+  return (
+    <>
+      <Handle type="target" position={Position.Left} className="w-3 h-3 bg-neutral-800 border-2 border-white" />
+      <NodeWrapper title="Notion" icon={BookOpen} color="bg-neutral-100">
+        <div className="text-[11px] text-neutral-500">Update databases and pages.</div>
+      </NodeWrapper>
+      <Handle type="source" position={Position.Right} className="w-3 h-3 bg-neutral-800 border-2 border-white" />
+    </>
+  );
+};
+
 export const nodeTypes = {
   chatInput: ChatInputNode,
   prompt: PromptNode,
   llm: LLMNode,
   chatOutput: ChatOutputNode,
+  gmail: GmailNode,
+  googleSheets: GoogleSheetsNode,
+  googleDocs: GoogleDocsNode,
+  googleCalendar: GoogleCalendarNode,
+  notion: NotionNode,
 };

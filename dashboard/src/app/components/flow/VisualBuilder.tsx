@@ -99,6 +99,30 @@ export default function VisualBuilder({ onClose }: { onClose: () => void }) {
                 <span className="text-[12px] font-medium text-neutral-700">Chat Output</span>
               </div>
             </div>
+
+            <div>
+              <h3 className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-3">Integrations</h3>
+              <div className="p-3 border border-neutral-200 rounded-lg cursor-grab hover:border-red-500 hover:shadow-sm transition-all bg-red-50/50 flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                <span className="text-[12px] font-medium text-neutral-700">Gmail</span>
+              </div>
+              <div className="p-3 border border-neutral-200 rounded-lg cursor-grab hover:border-emerald-500 hover:shadow-sm transition-all bg-emerald-50/50 flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <span className="text-[12px] font-medium text-neutral-700">Google Sheets</span>
+              </div>
+              <div className="p-3 border border-neutral-200 rounded-lg cursor-grab hover:border-blue-500 hover:shadow-sm transition-all bg-blue-50/50 flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                <span className="text-[12px] font-medium text-neutral-700">Google Docs</span>
+              </div>
+              <div className="p-3 border border-neutral-200 rounded-lg cursor-grab hover:border-teal-500 hover:shadow-sm transition-all bg-teal-50/50 flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+                <span className="text-[12px] font-medium text-neutral-700">Google Calendar</span>
+              </div>
+              <div className="p-3 border border-neutral-200 rounded-lg cursor-grab hover:border-neutral-800 hover:shadow-sm transition-all bg-neutral-100/50 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-neutral-800"></div>
+                <span className="text-[12px] font-medium text-neutral-700">Notion</span>
+              </div>
+            </div>
           </div>
 
           {/* React Flow Canvas */}
@@ -122,6 +146,11 @@ export default function VisualBuilder({ onClose }: { onClose: () => void }) {
                   if (n.type === 'prompt') return '#a855f7';
                   if (n.type === 'llm') return '#22c55e';
                   if (n.type === 'chatOutput') return '#f97316';
+                  if (n.type === 'gmail') return '#ef4444';
+                  if (n.type === 'googleSheets') return '#10b981';
+                  if (n.type === 'googleDocs') return '#3b82f6';
+                  if (n.type === 'googleCalendar') return '#14b8a6';
+                  if (n.type === 'notion') return '#262626';
                   return '#eee';
                 }}
                 nodeColor={(n) => {
@@ -129,6 +158,11 @@ export default function VisualBuilder({ onClose }: { onClose: () => void }) {
                   if (n.type === 'prompt') return '#faf5ff';
                   if (n.type === 'llm') return '#f0fdf4';
                   if (n.type === 'chatOutput') return '#fff7ed';
+                  if (n.type === 'gmail') return '#fef2f2';
+                  if (n.type === 'googleSheets') return '#ecfdf5';
+                  if (n.type === 'googleDocs') return '#eff6ff';
+                  if (n.type === 'googleCalendar') return '#f0fdfa';
+                  if (n.type === 'notion') return '#f5f5f5';
                   return '#fff';
                 }}
                 className="border-neutral-200 shadow-sm rounded-lg"
