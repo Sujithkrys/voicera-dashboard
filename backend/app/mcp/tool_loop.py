@@ -3,8 +3,8 @@ import httpx
 import os
 from typing import Any
 
-GROK_API_URL = "https://api.x.ai/v1/chat/completions"
-GROK_MODEL = "grok-4.3"
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
 async def run_tool_loop(
     messages: list[dict],
@@ -19,7 +19,7 @@ async def run_tool_loop(
     Returns the final text response.
     """
     headers = {
-        "Authorization": f"Bearer {os.getenv('GROK_API_KEY')}",
+        "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
         "Content-Type": "application/json"
     }
 
@@ -30,7 +30,7 @@ async def run_tool_loop(
             iteration += 1
 
             payload = {
-                "model": GROK_MODEL,
+                "model": GROQ_MODEL,
                 "messages": messages,
                 "tools": available_tools if available_tools else None,
                 "tool_choice": "auto" if available_tools else "none"
@@ -42,11 +42,11 @@ async def run_tool_loop(
                 payload.pop("tool_choice", None)
 
             try:
-                response = await client.post(GROK_API_URL, json=payload, headers=headers)
+                response = await client.post(GROQ_API_URL, json=payload, headers=headers)
                 response.raise_for_status()
             except httpx.HTTPStatusError as e:
                 error_body = e.response.text
-                raise ValueError(f"Grok API error: {e.response.status_code} - {error_body}")
+                raise ValueError(f"Groq API error: {e.response.status_code} - {error_body}")
             
             data = response.json()
 
