@@ -15,6 +15,23 @@ class MCPServerProcess:
         self.tools: list = []
 
     async def start(self):
+        import shutil
+        import subprocess
+        
+        # If npx is not found, dynamically install nodejs in the current python env
+        if not shutil.which("npx"):
+            print(f"[MCP {self.name}] npx not found. Installing Node.js via nodeenv...")
+            subprocess.run(["python", "-m", "pip", "install", "nodeenv"], check=True)
+            subprocess.run(["nodeenv", "-p"], check=True)
+            print(f"[MCP {self.name}] Node.js installed successfully.")
+            
+            # Update current process PATH with the new nodeenv path
+            # nodeenv -p modifies the current python sys.prefix/bin
+            import sys
+            new_path = os.path.join(sys.prefix, "bin")
+            if new_path not in os.environ["PATH"]:
+                os.environ["PATH"] = f"{new_path}{os.pathsep}{os.environ.get('PATH', '')}"
+
         full_env = {**os.environ, **self.env}
         
         # Build the shell command string (e.g. "npx -y @notionhq/notion-mcp-server")
