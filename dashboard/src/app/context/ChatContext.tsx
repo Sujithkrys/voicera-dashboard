@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 export interface Message {
   id: string;
@@ -25,9 +25,57 @@ interface ChatContextType {
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
+const STORAGE_KEY = "voicera_chat_threads";
+const ACTIVE_THREAD_KEY = "voicera_active_thread";
+
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const [threads, setThreads] = useState<ChatThread[]>([]);
-  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
+  const [threads, setThreads] = useState<ChatThread[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return parsed.map((t: any) => ({
+          ...t,
+          createdAt: new Date(t.createdAt),
+          messages: t.messages.map((m: any) => ({
+            ...m,
+            timestamp: new Date(m.timestamp)
+          }))
+        }));
+      }
+    } catch (e) {
+      console.error("Error loading chat history", e);
+    }
+    return [];
+  });
+
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(ACTIVE_THREAD_KEY) || null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(threads));
+    } catch (e) {
+      console.error("Error saving chat history", e);
+    }
+  }, [threads]);
+
+  useEffect(() => {
+    try {
+      if (activeThreadId) {
+        localStorage.setItem(ACTIVE_THREAD_KEY, activeThreadId);
+      } else {
+        localStorage.removeItem(ACTIVE_THREAD_KEY);
+      }
+    } catch (e) {
+      console.error("Error saving active thread", e);
+    }
+  }, [activeThreadId]);
 
   const createThread = (firstMessage?: string) => {
     const id = Date.now().toString();
