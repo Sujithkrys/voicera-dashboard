@@ -40,4 +40,6 @@ async def send_admin_chat_message(request: AdminChatRequest):
         return {"response": response.choices[0].message.content}
     except Exception as e:
         print(f"Admin chat error: {e}")
-        return {"response": "Sorry, an error occurred while connecting to Groq. Please check your API key or try again later."}
+        api_key = os.getenv("GROQ_API_KEY")
+        key_status = "present" if api_key else "missing"
+        return {"response": f"Sorry, an error occurred while connecting to Groq. (Key status: {key_status}). Error details: {str(e)}"}
