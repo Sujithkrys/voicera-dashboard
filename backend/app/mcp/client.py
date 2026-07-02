@@ -60,11 +60,25 @@ class MCPServerProcess:
         self.process.stdin.write(payload.encode())
         await self.process.stdin.drain()
         
-        line = await asyncio.wait_for(
-            self.process.stdout.readline(), 
-            timeout=60.0
-        )
-        return json.loads(line.decode())
+        while True:
+            line = await asyncio.wait_for(
+                self.process.stdout.readline(), 
+                timeout=60.0
+            )
+            if not line:
+                raise RuntimeError(f"MCP {self.name} closed stdout unexpectedly")
+            
+            line_str = line.decode().strip()
+            if not line_str:
+                continue
+                
+            if line_str.startswith("{"):
+                try:
+                    return json.loads(line_str)
+                except json.JSONDecodeError:
+                    pass # could be a weird log starting with {
+            
+            print(f"[MCP {self.name}] stdout: {line_str}")
 
     async def stop(self):
         if self.process:
