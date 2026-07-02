@@ -6,6 +6,7 @@ from app.mcp.tool_loop import run_tool_loop, format_mcp_tools_for_grok
 from app.core.middleware import get_current_user
 from supabase import create_client
 from app.core.config import settings
+from datetime import datetime, timedelta
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -56,6 +57,34 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
         result = await server.call_tool(t_name, arguments)
         return result
 
+    # Fetch dashboard data context
+    try:
+        today_iso = (datetime.utcnow() - timedelta(days=1)).isoformat()
+        
+        # Recent sessions
+        sessions_res = supabase.table("sessions").select("id, status, created_at").eq("client_id", str(user_id)).gte("created_at", today_iso).execute()
+        sessions = sessions_res.data or []
+        resolved_sessions = [s for s in sessions if s.get("status") == "resolved"]
+        active_sessions = [s for s in sessions if s.get("status") == "active"]
+        
+        # Recent tickets
+        tickets_res = supabase.table("tickets").select("id, status, issue_summary").eq("client_id", str(user_id)).gte("created_at", today_iso).execute()
+        tickets = tickets_res.data or []
+        open_tickets = [t for t in tickets if t.get("status") == "open"]
+        resolved_tickets = [t for t in tickets if t.get("status") == "resolved"]
+
+        dashboard_context = (
+            f"\n\n--- TODAY'S DASHBOARD SUMMARY ---\n"
+            f"Total Sessions (last 24h): {len(sessions)} ({len(resolved_sessions)} resolved, {len(active_sessions)} active)\n"
+            f"Total Tickets (last 24h): {len(tickets)} ({len(open_tickets)} open, {len(resolved_tickets)} resolved)\n"
+            "Recent Ticket Summaries:\n" + "\n".join([f"- {t.get('issue_summary')} ({t.get('status')})" for t in tickets[:5]]) +
+            "\n---------------------------------\n"
+            "Use this data if the user asks for 'today's analysis', 'what happened today', 'call resolutions', etc."
+        )
+    except Exception as e:
+        print(f"Error fetching dashboard context: {e}")
+        dashboard_context = ""
+
     system_prompt = (
         "You are Voicera AI, a powerful assistant. "
         "You have access to MCP tools to interact with external services. "
@@ -63,6 +92,7 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
         "If the user asks you to perform an action using a service (like Notion, Gmail, Calendar, Docs, or Drive) "
         "but the corresponding tool is NOT in the enabled list, you MUST politely inform them that they "
         "need to connect that service first by navigating to 'Settings > Integrations' in the dashboard."
+        f"{dashboard_context}"
     )
     
     messages_with_sys = [{"role": "system", "content": system_prompt}] + request.messages
