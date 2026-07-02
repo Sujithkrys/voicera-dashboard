@@ -66,7 +66,14 @@ class MCPServerProcess:
                 timeout=60.0
             )
             if not line:
-                raise RuntimeError(f"MCP {self.name} closed stdout unexpectedly")
+                stderr_output = ""
+                if self.process.stderr:
+                    try:
+                        stderr_bytes = await asyncio.wait_for(self.process.stderr.read(), timeout=1.0)
+                        stderr_output = stderr_bytes.decode().strip()
+                    except:
+                        pass
+                raise RuntimeError(f"MCP {self.name} closed stdout unexpectedly. Stderr: {stderr_output}")
             
             line_str = line.decode().strip()
             if not line_str:
