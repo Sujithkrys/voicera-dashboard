@@ -57,7 +57,7 @@ class MCPServerProcess:
         
         line = await asyncio.wait_for(
             self.process.stdout.readline(), 
-            timeout=30.0
+            timeout=60.0
         )
         return json.loads(line.decode())
 
