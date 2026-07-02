@@ -9,25 +9,7 @@ const suggestionCards = [
   { icon: "🎯", title: "Resolution rate insights", desc: "Understand your team's performance" },
 ];
 
-function getAIResponse(input: string): string {
-  const lower = input.toLowerCase();
-  if (lower.includes("call") && (lower.includes("summary") || lower.includes("today"))) {
-    return "Here's your call summary for today:\n\n**Total Calls:** 4,821 (+12% from yesterday)\n**Active Sessions:** 856 (+14%)\n**Escalations:** 80 (-8%)\n**Resolution Rate:** 92%\n**Avg Handle Time:** 2m 44s\n\nYour team is performing above average today. Escalations are trending down, which is a great sign. The main call drivers are Technical Issues (72%) and Billing (51%).";
-  }
-  if (lower.includes("escalation") || lower.includes("escalated")) {
-    return "Here's the escalation analysis:\n\n**Current Count:** 80 escalations today (-8% vs yesterday)\n\n**Top Escalation Reasons:**\n1. Technical Issues — 45% of escalations\n2. Billing Disputes — 38%\n3. Account Access — 12%\n4. Other — 5%\n\n**Recommendation:** The billing-related escalations could be reduced by updating the FAQ in your Knowledge Base with the latest pricing changes. Would you like me to help draft those entries?";
-  }
-  if (lower.includes("bot") || lower.includes("config")) {
-    return "I can help you configure your bot. Here are the main settings you can adjust:\n\n1. **Greeting Message** — The first message callers hear\n2. **Auto-Responses** — Set up keyword-triggered replies\n3. **Escalation Triggers** — Define when to route to a human agent\n4. **Business Hours** — Set availability windows\n5. **Language Settings** — Configure supported languages\n\nHead to **Bot Config** in the sidebar to access these settings, or tell me which one you'd like to learn more about.";
-  }
-  if (lower.includes("resolution") || lower.includes("rate") || lower.includes("performance")) {
-    return "Here's your resolution rate breakdown:\n\n**Overall Rate:** 92% (Normal range)\n**7-Day Trend:** 88% → 90% → 91% → 89% → 94% → 91% → 92%\n\n**By Category:**\n- Technical Issues: 89% resolution\n- Billing: 95% resolution\n- Account Access: 91% resolution\n- Feature Help: 97% resolution\n\nYour billing resolution rate is excellent. Technical issues could use improvement — consider adding more troubleshooting guides to the Knowledge Base.";
-  }
-  if (lower.includes("hello") || lower.includes("hi") || lower.includes("hey")) {
-    return "Hello! 👋 I'm your Voicera AI assistant. I can help you with:\n\n- **Call analytics** — summaries, trends, and breakdowns\n- **Team performance** — resolution rates and handle times\n- **Bot configuration** — setup and optimization tips\n- **Troubleshooting** — identify and resolve common issues\n\nWhat would you like to explore?";
-  }
-  return "I can help you with call analytics, session insights, escalation trends, and bot configuration. Here are some things you can ask me:\n\n- \"Summarize today's calls\"\n- \"What's the escalation trend?\"\n- \"Help me configure the bot\"\n- \"Analyze resolution rate\"\n\nWhat would you like to know?";
-}
+const BACKEND_URL = import.meta.env.DEV ? 'http://localhost:8000' : 'https://voicera-dashboard-production.up.railway.app';
 
 export default function AIChat() {
   const { threads, activeThreadId, createThread, addMessage } = useChat();
@@ -53,7 +35,7 @@ export default function AIChat() {
     }
   }, [input]);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed) return;
 
@@ -61,6 +43,8 @@ export default function AIChat() {
     if (!targetId) {
       targetId = createThread(trimmed);
     }
+
+    const currentThread = threads.find((t) => t.id === targetId) || (targetId === activeThreadId ? activeThread : null);
 
     const userMsg: Message = {
       id: Date.now().toString(),
@@ -73,16 +57,38 @@ export default function AIChat() {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const history = currentThread?.messages.map(m => ({
+        role: m.role,
+        content: m.content
+      })) || [];
+
+      const res = await fetch(`${BACKEND_URL}/api/v1/admin-chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed, history })
+      });
+      
+      const data = await res.json();
+      
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: getAIResponse(trimmed),
+        content: res.ok ? data.response : 'Sorry, an error occurred while connecting to OpenAI.',
         timestamp: new Date(),
       };
       addMessage(targetId!, aiMsg);
+    } catch (err) {
+      const aiMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: 'Failed to connect to the server. Please check your connection.',
+        timestamp: new Date(),
+      };
+      addMessage(targetId!, aiMsg);
+    } finally {
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+    }
   };
 
   const handleSend = () => sendMessage(input);

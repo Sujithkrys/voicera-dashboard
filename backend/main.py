@@ -91,4 +91,7 @@ fastapi_app.include_router(voice_kb_router, prefix="/api/v1")
 from app.api.v1.routes.superadmin import router as superadmin_router
 fastapi_app.include_router(superadmin_router, prefix="/api/v1")
 
+from app.api.v1.routes.admin_chat import router as admin_chat_router
+fastapi_app.include_router(admin_chat_router, prefix="/api/v1")
+
 
