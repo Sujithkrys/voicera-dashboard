@@ -62,11 +62,33 @@ export default function AIChat() {
         role: m.role,
         content: m.content
       })) || [];
+      
+      const messages = [...history, { role: "user", content: trimmed }];
+      
+      const token = localStorage.getItem('voicera_token');
+      let activeTools: string[] = [];
+      
+      try {
+        const statusRes = await fetch(`${BACKEND_URL}/api/v1/oauth/status`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (statusRes.ok) {
+          const enabledTools = await statusRes.json();
+          activeTools = Object.entries(enabledTools)
+            .filter(([_, enabled]) => enabled)
+            .map(([name]) => name);
+        }
+      } catch (e) {
+        console.warn("Failed to fetch oauth status", e);
+      }
 
-      const res = await fetch(`${BACKEND_URL}/api/v1/admin-chat`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/chat/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmed, history })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ messages, enabled_tools: activeTools })
       });
       
       const data = await res.json();
@@ -74,7 +96,7 @@ export default function AIChat() {
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: res.ok ? data.response : 'Sorry, an error occurred while connecting to OpenAI.',
+        content: res.ok ? (data.reply || data.response) : 'Sorry, an error occurred while connecting to OpenAI.',
         timestamp: new Date(),
       };
       addMessage(targetId!, aiMsg);

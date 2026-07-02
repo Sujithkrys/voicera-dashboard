@@ -12,6 +12,7 @@ import BotConfig from "./app/pages/BotConfig";
 import Team from "./app/pages/Team";
 import AIChat from "./app/pages/AIChat";
 import AIChatHistory from "./app/pages/AIChatHistory";
+import Integrations from "./app/pages/Integrations";
 import { ChatProvider } from "./app/context/ChatContext";
 
 createRoot(document.getElementById("root")!).render(
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/bot-config" element={<BotConfig />} />
         <Route path="/team" element={<Team />} />
         <Route path="/settings" element={<Navigate to="/" replace />} />
+        <Route path="/settings/integrations" element={<Integrations />} />
       </Route>
     </Routes>
   </ChatProvider>

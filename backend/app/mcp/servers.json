@@ -1,0 +1,27 @@
+{
+  "gmail": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-gmail"],
+    "env_keys": ["GMAIL_CLIENT_ID", "GMAIL_CLIENT_SECRET", "GMAIL_REFRESH_TOKEN"]
+  },
+  "google-calendar": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-google-calendar"],
+    "env_keys": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"]
+  },
+  "google-drive": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-gdrive"],
+    "env_keys": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"]
+  },
+  "google-docs": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-google-docs"],
+    "env_keys": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"]
+  },
+  "notion": {
+    "command": "npx",
+    "args": ["-y", "@notionhq/notion-mcp-server"],
+    "env_keys": ["NOTION_API_TOKEN"]
+  }
+}

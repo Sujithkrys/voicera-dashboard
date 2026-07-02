@@ -94,4 +94,8 @@ fastapi_app.include_router(superadmin_router, prefix="/api/v1")
 from app.api.v1.routes.admin_chat import router as admin_chat_router
 fastapi_app.include_router(admin_chat_router, prefix="/api/v1")
 
+from app.api.v1.routes.chat_mcp import router as chat_mcp_router
+fastapi_app.include_router(chat_mcp_router, prefix="/api/v1")
 
+from app.api.v1.routes.oauth import router as oauth_router
+fastapi_app.include_router(oauth_router, prefix="/api/v1")

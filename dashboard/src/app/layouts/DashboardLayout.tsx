@@ -174,6 +174,14 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/settings/integrations")} className={navItem(isActive("/settings/integrations"))}>
+                  <Link to="/settings/integrations">
+                    <Sparkles className="size-4" strokeWidth={1.8} />
+                    <span>Integrations</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton 
                   onClick={() => setIsSettingsOpen(true)}
                   className={`cursor-pointer ${navItem(false)} group-data-[collapsible=icon]:!justify-center`}
