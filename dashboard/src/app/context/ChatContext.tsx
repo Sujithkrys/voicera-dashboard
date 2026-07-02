@@ -12,6 +12,7 @@ export interface ChatThread {
   title: string;
   messages: Message[];
   createdAt: Date;
+  isPinned?: boolean;
 }
 
 interface ChatContextType {
@@ -21,6 +22,7 @@ interface ChatContextType {
   createThread: (firstMessage?: string) => string;
   addMessage: (threadId: string, message: Message) => void;
   deleteThread: (id: string) => void;
+  togglePinThread: (id: string) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -114,6 +116,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const togglePinThread = (id: string) => {
+    setThreads((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, isPinned: !t.isPinned } : t))
+    );
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -123,6 +131,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         createThread,
         addMessage,
         deleteThread,
+        togglePinThread,
       }}
     >
       {children}
