@@ -43,6 +43,7 @@ class MCPServerProcess:
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
+            limit=1024 * 1024 * 10,  # 10 MB limit for large JSON payloads
             env=full_env
         )
         # Initialize MCP handshake
