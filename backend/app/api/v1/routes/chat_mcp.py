@@ -56,9 +56,20 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
         result = await server.call_tool(t_name, arguments)
         return result
 
+    system_prompt = (
+        "You are Voicera AI, a powerful assistant. "
+        "You have access to MCP tools to interact with external services. "
+        f"Currently, the user has enabled the following tools: {request.enabled_tools}. "
+        "If the user asks you to perform an action using a service (like Notion, Gmail, Calendar, Docs, or Drive) "
+        "but the corresponding tool is NOT in the enabled list, you MUST politely inform them that they "
+        "need to connect that service first by navigating to 'Settings > Integrations' in the dashboard."
+    )
+    
+    messages_with_sys = [{"role": "system", "content": system_prompt}] + request.messages
+
     try:
         reply = await run_tool_loop(
-            messages=request.messages,
+            messages=messages_with_sys,
             available_tools=grok_tools,
             tool_executor=tool_executor
         )
