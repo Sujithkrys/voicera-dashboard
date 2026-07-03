@@ -47,12 +47,21 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             server = await mcp_manager.get_or_create_session(str(user_id), tool_name, tokens)
 
             for tool in server.tools:
+                original_name = tool["name"]
+                
                 # ONLY allow these 3 tools, regardless of provider, to prevent Groq TPM limit from exploding
-                if tool["name"] not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
+                if original_name not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
                     continue
                     
+                tool_mapping = {
+                    "API-post-search": "notion_search",
+                    "API-post-page": "notion_create_page",
+                    "API-patch-block-children": "notion_append_blocks"
+                }
+                new_name = tool_mapping[original_name]
+                
                 # Simplify massive schemas to avoid Groq TPM limits
-                if tool["name"] == "API-post-search":
+                if original_name == "API-post-search":
                     tool["inputSchema"] = {
                         "type": "object",
                         "properties": {
@@ -60,7 +69,7 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                         },
                         "required": ["query"]
                     }
-                elif tool["name"] == "API-post-page":
+                elif original_name == "API-post-page":
                     tool["inputSchema"] = {
                         "type": "object",
                         "properties": {
@@ -79,7 +88,7 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                         },
                         "required": ["parent", "properties"]
                     }
-                elif tool["name"] == "API-patch-block-children":
+                elif original_name == "API-patch-block-children":
                     tool["inputSchema"] = {
                         "type": "object",
                         "properties": {
@@ -92,8 +101,10 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                         "required": ["block_id", "children"]
                     }
 
+                # Rename the tool to snake_case so Llama 3 understands it better
+                tool["name"] = new_name
                 all_mcp_tools.append(tool)
-                tool_server_map[tool["name"]] = server
+                tool_server_map[new_name] = server
 
         grok_tools = format_mcp_tools_for_grok(all_mcp_tools)
 
@@ -101,7 +112,15 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             if t_name not in tool_server_map:
                 raise ValueError(f"Unknown tool: {t_name}")
             server = tool_server_map[t_name]
-            result = await server.call_tool(t_name, arguments)
+            
+            reverse_mapping = {
+                "notion_search": "API-post-search",
+                "notion_create_page": "API-post-page",
+                "notion_append_blocks": "API-patch-block-children"
+            }
+            original_t_name = reverse_mapping.get(t_name, t_name)
+            
+            result = await server.call_tool(original_t_name, arguments)
             return result
 
         # Fetch dashboard data context
@@ -150,9 +169,9 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             "and the tool IS available, you MUST invoke the tool immediately! Do NOT just reply with text saying 'I will do it' "
             "or 'I have created it'. You must actually call the tool function.\n"
             "NOTION TOOL RULES: \n"
-            "- If you need to create a page but don't know the `parent_page_id`, you can either ask the user, or if they mention a parent page name, use `API-post-search` to find its ID first.\n"
+            "- If you need to create a page but don't know the `parent_page_id`, you can either ask the user, or if they mention a parent page name, use `notion_search` to find its ID first.\n"
             "- If no parent page is specified and you want to create a top-level page, try searching for a general workspace page or ask the user for a destination.\n"
-            "- Use `API-post-page` to create pages. Format `parent` as `{\"page_id\": \"id\"}` and `properties` with a `title`.\n"
+            "- Use `notion_create_page` to create pages. Format `parent` as `{\"page_id\": \"id\"}` and `properties` with a `title`.\n"
             f"{dashboard_context}"
         )
         # Truncate chat history to last 10 messages to prevent TPM limit errors
