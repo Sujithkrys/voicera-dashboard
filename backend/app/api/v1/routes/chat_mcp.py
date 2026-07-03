@@ -47,50 +47,50 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             server = await mcp_manager.get_or_create_session(str(user_id), tool_name, tokens)
 
             for tool in server.tools:
-                if provider == "notion":
-                    if tool["name"] not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
-                        continue
-                        
-                    # Simplify massive schemas to avoid Groq 12k TPM limits
-                    if tool["name"] == "API-post-search":
-                        tool["inputSchema"] = {
-                            "type": "object",
-                            "properties": {
-                                "query": {"type": "string"}
+                # ONLY allow these 3 tools, regardless of provider, to prevent Groq TPM limit from exploding
+                if tool["name"] not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
+                    continue
+                    
+                # Simplify massive schemas to avoid Groq TPM limits
+                if tool["name"] == "API-post-search":
+                    tool["inputSchema"] = {
+                        "type": "object",
+                        "properties": {
+                            "query": {"type": "string"}
+                        },
+                        "required": ["query"]
+                    }
+                elif tool["name"] == "API-post-page":
+                    tool["inputSchema"] = {
+                        "type": "object",
+                        "properties": {
+                            "parent": {
+                                "type": "object",
+                                "description": "e.g. {\"page_id\": \"uuid\"}"
                             },
-                            "required": ["query"]
-                        }
-                    elif tool["name"] == "API-post-page":
-                        tool["inputSchema"] = {
-                            "type": "object",
                             "properties": {
-                                "parent": {
-                                    "type": "object",
-                                    "description": "e.g. {\"page_id\": \"uuid\"}"
-                                },
-                                "properties": {
-                                    "type": "object",
-                                    "description": "Page properties, e.g. {\"title\": {\"title\": [{\"text\": {\"content\": \"My Title\"}}]}}"
-                                },
-                                "children": {
-                                    "type": "array",
-                                    "description": "Array of block objects, e.g. [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": \"Text\"}}]}}]"
-                                }
+                                "type": "object",
+                                "description": "Page properties, e.g. {\"title\": {\"title\": [{\"text\": {\"content\": \"My Title\"}}]}}"
                             },
-                            "required": ["parent", "properties"]
-                        }
-                    elif tool["name"] == "API-patch-block-children":
-                        tool["inputSchema"] = {
-                            "type": "object",
-                            "properties": {
-                                "block_id": {"type": "string"},
-                                "children": {
-                                    "type": "array",
-                                    "description": "Array of block objects to append"
-                                }
-                            },
-                            "required": ["block_id", "children"]
-                        }
+                            "children": {
+                                "type": "array",
+                                "description": "Array of block objects, e.g. [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": \"Text\"}}]}}]"
+                            }
+                        },
+                        "required": ["parent", "properties"]
+                    }
+                elif tool["name"] == "API-patch-block-children":
+                    tool["inputSchema"] = {
+                        "type": "object",
+                        "properties": {
+                            "block_id": {"type": "string"},
+                            "children": {
+                                "type": "array",
+                                "description": "Array of block objects to append"
+                            }
+                        },
+                        "required": ["block_id", "children"]
+                    }
 
                 all_mcp_tools.append(tool)
                 tool_server_map[tool["name"]] = server
