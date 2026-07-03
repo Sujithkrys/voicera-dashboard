@@ -483,7 +483,7 @@ function UsagePanel() {
   const [error, setError] = React.useState("");
 
   React.useEffect(() => {
-    import("../../../api/client").then(({ apiClient }) => {
+    import("../../api/client").then(({ apiClient }) => {
       apiClient("/usage")
         .then(setUsageStats)
         .catch(err => setError(err.message))
