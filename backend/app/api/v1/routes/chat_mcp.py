@@ -173,6 +173,7 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             "- If no parent page is specified and you want to create a top-level page, try searching for a general workspace page or ask the user for a destination.\n"
             "- Use `notion_create_page` to create pages. Format `parent` as `{\"page_id\": \"id\"}`.\n"
             "- CRITICAL: When creating a page inside another page (not a database), the ONLY property you can set is 'title'! Do NOT set 'Status' or any other properties! Use this exact format for properties: `{\"title\": {\"title\": [{\"text\": {\"content\": \"Your Title\"}}]}}`.\n"
+            "- To add content or text to an existing page, you MUST use `notion_append_blocks`. Use the page ID as `block_id`. Example children: `[{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"type\": \"text\", \"text\": {\"content\": \"Your text here\"}}]}}]`\n"
             f"{dashboard_context}"
         )
         # Truncate chat history to last 10 messages to prevent TPM limit errors
