@@ -171,7 +171,8 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             "NOTION TOOL RULES: \n"
             "- If you need to create a page but don't know the `parent_page_id`, you can either ask the user, or if they mention a parent page name, use `notion_search` to find its ID first.\n"
             "- If no parent page is specified and you want to create a top-level page, try searching for a general workspace page or ask the user for a destination.\n"
-            "- Use `notion_create_page` to create pages. Format `parent` as `{\"page_id\": \"id\"}` and `properties` with a `title`.\n"
+            "- Use `notion_create_page` to create pages. Format `parent` as `{\"page_id\": \"id\"}`.\n"
+            "- CRITICAL: When creating a page inside another page (not a database), the ONLY property you can set is 'title'! Do NOT set 'Status' or any other properties! Use this exact format for properties: `{\"title\": {\"title\": [{\"text\": {\"content\": \"Your Title\"}}]}}`.\n"
             f"{dashboard_context}"
         )
         # Truncate chat history to last 10 messages to prevent TPM limit errors
