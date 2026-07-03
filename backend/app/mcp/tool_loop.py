@@ -10,7 +10,10 @@ async def run_tool_loop(
     messages: list[dict],
     available_tools: list[dict],      # MCP tool definitions formatted for Grok
     tool_executor,                     # async callable: (tool_name, args) -> result
-    max_iterations: int = 5
+    max_iterations: int = 5,
+    client_id: str = None,
+    user_id: str = None,
+    supabase_client = None
 ) -> str:
     """
     Runs the Grok tool-call loop until the model stops requesting tools
@@ -54,6 +57,21 @@ async def run_tool_loop(
             choice = data["choices"][0]
             message = choice["message"]
             finish_reason = choice["finish_reason"]
+            
+            # Log usage
+            usage = data.get("usage")
+            if usage and supabase_client and client_id and user_id:
+                try:
+                    supabase_client.table("api_usage").insert({
+                        "client_id": client_id,
+                        "user_id": user_id,
+                        "prompt_tokens": usage.get("prompt_tokens", 0),
+                        "completion_tokens": usage.get("completion_tokens", 0),
+                        "total_tokens": usage.get("total_tokens", 0),
+                        "model": GEMINI_MODEL
+                    }).execute()
+                except Exception as e:
+                    print(f"Failed to log API usage: {e}")
 
             # Append assistant message to history
             messages.append(message)

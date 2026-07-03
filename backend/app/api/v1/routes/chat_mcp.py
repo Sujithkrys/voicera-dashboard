@@ -189,7 +189,10 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
         reply = await run_tool_loop(
             messages=messages_with_sys,
             available_tools=grok_tools,
-            tool_executor=tool_executor
+            tool_executor=tool_executor,
+            client_id=str(client_id) if client_id else None,
+            user_id=str(user_id) if user_id else None,
+            supabase_client=supabase
         )
 
         return {"reply": reply}

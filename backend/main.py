@@ -99,3 +99,6 @@ fastapi_app.include_router(chat_mcp_router, prefix="/api/v1")
 
 from app.api.v1.routes.oauth import router as oauth_router
 fastapi_app.include_router(oauth_router, prefix="/api/v1")
+
+from app.api.v1.routes.usage import router as usage_router
+fastapi_app.include_router(usage_router, prefix="/api/v1")
