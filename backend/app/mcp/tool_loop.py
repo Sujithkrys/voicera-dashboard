@@ -4,7 +4,7 @@ import os
 from typing import Any
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "llama-3.1-8b-instant"
 
 async def run_tool_loop(
     messages: list[dict],

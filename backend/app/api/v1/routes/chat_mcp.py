@@ -153,8 +153,9 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             "- Use `API-post-page` to create pages. Format `parent` as `{\"page_id\": \"id\"}` and `properties` with a `title`.\n"
             f"{dashboard_context}"
         )
-        
-        messages_with_sys = [{"role": "system", "content": system_prompt}] + request.messages
+        # Truncate chat history to last 10 messages to prevent TPM limit errors
+        recent_messages = request.messages[-10:] if len(request.messages) > 10 else request.messages
+        messages_with_sys = [{"role": "system", "content": system_prompt}] + recent_messages
 
         reply = await run_tool_loop(
             messages=messages_with_sys,
