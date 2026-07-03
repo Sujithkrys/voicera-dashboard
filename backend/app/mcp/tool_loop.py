@@ -3,8 +3,8 @@ import httpx
 import os
 from typing import Any
 
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 async def run_tool_loop(
     messages: list[dict],
@@ -18,8 +18,9 @@ async def run_tool_loop(
     
     Returns the final text response.
     """
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
     headers = {
-        "Authorization": f"Bearer {os.getenv('GROQ_API_KEY')}",
+        "Authorization": f"Bearer {gemini_api_key}",
         "Content-Type": "application/json"
     }
 
@@ -30,7 +31,7 @@ async def run_tool_loop(
             iteration += 1
 
             payload = {
-                "model": GROQ_MODEL,
+                "model": GEMINI_MODEL,
                 "messages": messages,
                 "tools": available_tools if available_tools else None,
                 "tool_choice": "auto" if available_tools else "none"
@@ -42,11 +43,11 @@ async def run_tool_loop(
                 payload.pop("tool_choice", None)
 
             try:
-                response = await client.post(GROQ_API_URL, json=payload, headers=headers)
+                response = await client.post(GEMINI_API_URL, json=payload, headers=headers)
                 response.raise_for_status()
             except httpx.HTTPStatusError as e:
                 error_body = e.response.text
-                raise ValueError(f"Groq API error: {e.response.status_code} - {error_body}")
+                raise ValueError(f"Gemini API error: {e.response.status_code} - {error_body}")
             
             data = response.json()
 
