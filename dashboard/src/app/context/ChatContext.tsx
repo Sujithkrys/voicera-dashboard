@@ -22,6 +22,7 @@ interface ChatContextType {
   createThread: (firstMessage?: string) => string;
   addMessage: (threadId: string, message: Message) => void;
   deleteThread: (id: string) => void;
+  deleteThreads: (ids: string[]) => void;
   togglePinThread: (id: string) => void;
 }
 
@@ -116,6 +117,13 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const deleteThreads = (ids: string[]) => {
+    setThreads((prev) => prev.filter((t) => !ids.includes(t.id)));
+    if (activeThreadId && ids.includes(activeThreadId)) {
+      setActiveThreadId(null);
+    }
+  };
+
   const togglePinThread = (id: string) => {
     setThreads((prev) =>
       prev.map((t) => (t.id === id ? { ...t, isPinned: !t.isPinned } : t))
@@ -131,6 +139,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         createThread,
         addMessage,
         deleteThread,
+        deleteThreads,
         togglePinThread,
       }}
     >

@@ -24,10 +24,12 @@ function formatRelativeTime(date: Date) {
 }
 
 export default function AIChatHistory() {
-  const { threads, setActiveThreadId, deleteThread, togglePinThread } = useChat();
+  const { threads, setActiveThreadId, deleteThread, deleteThreads, togglePinThread } = useChat();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,8 +53,29 @@ export default function AIChatHistory() {
   });
 
   const handleOpenThread = (id: string) => {
+    if (isSelecting) {
+      toggleSelection(id);
+      return;
+    }
     setActiveThreadId(id);
     navigate("/ai-chat");
+  };
+
+  const toggleSelection = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.size === 0) return;
+    deleteThreads(Array.from(selectedIds));
+    setIsSelecting(false);
+    setSelectedIds(new Set());
   };
 
   return (
@@ -64,22 +87,41 @@ export default function AIChatHistory() {
           <h1 className="text-[32px] text-neutral-900 font-serif" style={{ fontFamily: 'Georgia, serif' }}>Chats</h1>
           
           <div className="flex items-center gap-3">
-            <button className="h-9 px-3 flex items-center gap-2 border border-neutral-200 bg-white rounded-md text-[13px] text-neutral-600 hover:bg-neutral-50 transition-colors">
-              Filter by <span className="font-medium text-neutral-900">All</span>
-              <ChevronDown className="size-3.5 text-neutral-400" />
-            </button>
-            <button className="h-9 px-4 border border-neutral-200 bg-white rounded-md text-[13px] font-medium text-neutral-800 hover:bg-neutral-50 transition-colors">
-              Select chats
-            </button>
+            {isSelecting && selectedIds.size > 0 && (
+              <button 
+                onClick={handleDeleteSelected}
+                className="h-9 px-4 flex items-center gap-2 border border-red-200 bg-red-50 text-red-600 rounded-md text-[13px] font-medium hover:bg-red-100 transition-colors"
+              >
+                <Trash2 className="size-4" />
+                Delete ({selectedIds.size})
+              </button>
+            )}
+            
             <button 
               onClick={() => {
-                setActiveThreadId(null);
-                navigate("/ai-chat");
+                if (isSelecting) {
+                  setIsSelecting(false);
+                  setSelectedIds(new Set());
+                } else {
+                  setIsSelecting(true);
+                }
               }}
-              className="h-9 px-4 bg-black text-white text-[13px] font-medium rounded-md hover:bg-neutral-800 transition-colors shadow-sm"
+              className="h-9 px-4 border border-neutral-200 bg-white rounded-md text-[13px] font-medium text-neutral-800 hover:bg-neutral-50 transition-colors"
             >
-              New chat
+              {isSelecting ? "Cancel selection" : "Select chats"}
             </button>
+            
+            {!isSelecting && (
+              <button 
+                onClick={() => {
+                  setActiveThreadId(null);
+                  navigate("/ai-chat");
+                }}
+                className="h-9 px-4 bg-black text-white text-[13px] font-medium rounded-md hover:bg-neutral-800 transition-colors shadow-sm"
+              >
+                New chat
+              </button>
+            )}
           </div>
         </div>
 
@@ -124,7 +166,17 @@ export default function AIChatHistory() {
                   className="group relative flex items-center justify-between py-4 border-b border-neutral-200 last:border-0 hover:bg-black/[0.02] cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
                 >
                   <div className="flex items-center gap-3 pr-4 truncate">
-                    {thread.isPinned && <Pin className="size-3.5 text-neutral-400 shrink-0 fill-neutral-400" />}
+                    {isSelecting && (
+                      <div className="flex items-center justify-center size-5 shrink-0">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(thread.id)}
+                          onChange={() => {}} // handled by parent div click
+                          className="size-4 rounded border-neutral-300 text-black focus:ring-black cursor-pointer"
+                        />
+                      </div>
+                    )}
+                    {thread.isPinned && !isSelecting && <Pin className="size-3.5 text-neutral-400 shrink-0 fill-neutral-400" />}
                     <h3 className="text-[14px] text-neutral-800 font-medium truncate">
                       {thread.title}
                     </h3>
