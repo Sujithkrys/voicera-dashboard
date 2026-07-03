@@ -20,6 +20,7 @@ import {
   Plus,
   PanelLeftClose,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -53,6 +54,14 @@ export function AppSidebar() {
   const isActive = (path: string) =>
     location.pathname === path ||
     (path === "/" && location.pathname === "/overview");
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("voicera_token");
+    localStorage.removeItem("voicera_name");
+    localStorage.removeItem("voicera_email");
+    navigate("/login");
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r border-neutral-200 bg-white">
@@ -197,13 +206,20 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t border-neutral-100 p-3 group-data-[collapsible=icon]:p-2">
-        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-neutral-50 cursor-pointer transition-colors group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center">
-          <div className="size-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center font-medium text-xs shrink-0">
+        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-neutral-50 transition-colors group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center">
+          <div className="size-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center font-medium text-xs shrink-0 cursor-pointer">
             {localStorage.getItem("voicera_name")?.[0]?.toUpperCase() || "U"}
           </div>
-          <span className="text-[13px] font-medium text-neutral-700 truncate group-data-[collapsible=icon]:hidden">
+          <span className="text-[13px] font-medium text-neutral-700 truncate group-data-[collapsible=icon]:hidden flex-1 cursor-pointer">
             {localStorage.getItem("voicera_name") || "User"}
           </span>
+          <button 
+            onClick={handleLogout} 
+            className="text-neutral-400 hover:text-red-500 transition-colors group-data-[collapsible=icon]:hidden p-1.5 rounded-md hover:bg-red-50 ml-auto" 
+            title="Logout"
+          >
+            <LogOut className="size-4" strokeWidth={1.8} />
+          </button>
         </div>
       </SidebarFooter>
       <SettingsModal open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
