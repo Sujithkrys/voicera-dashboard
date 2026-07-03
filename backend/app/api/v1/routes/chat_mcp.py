@@ -133,6 +133,8 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                 "\n---------------------------------\n"
                 "Use this data if the user asks for 'today's analysis', 'what happened today', 'call resolutions', etc."
             )
+            if len(dashboard_context) > 2000:
+                dashboard_context = dashboard_context[:2000] + "... [TRUNCATED]"
         except Exception as e:
             print(f"Error fetching dashboard context: {e}")
             dashboard_context = ""
@@ -155,6 +157,12 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
         )
         # Truncate chat history to last 10 messages to prevent TPM limit errors
         recent_messages = request.messages[-10:] if len(request.messages) > 10 else request.messages
+        
+        # Hard limit message length to prevent users from copy-pasting massive logs
+        for msg in recent_messages:
+            if isinstance(msg.get("content"), str) and len(msg["content"]) > 4000:
+                msg["content"] = msg["content"][:4000] + "... [TRUNCATED BY SYSTEM TO PREVENT RATE LIMITS]"
+                
         messages_with_sys = [{"role": "system", "content": system_prompt}] + recent_messages
 
         reply = await run_tool_loop(
