@@ -12,7 +12,7 @@ interface SettingsProps {
 }
 
 export default function Settings({ open, onOpenChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<"profile" | "api" | "billing" | "integrations" | "notifications" | "security">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "api" | "billing" | "integrations" | "notifications" | "security" | "usage">("profile");
 
   const navItem = (tab: string) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
@@ -44,6 +44,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           </button>
           <button onClick={() => setActiveTab("billing")} className={navItem("billing")}>
             <CreditCard className="h-4 w-4" strokeWidth={1.8} /> Billing
+          </button>
+          <button onClick={() => setActiveTab("usage")} className={navItem("usage")}>
+            <Zap className="h-4 w-4" strokeWidth={1.8} /> Usage
           </button>
           <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
             <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
@@ -374,6 +377,18 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
             </div>
           )}
 
+          {/* ───── Usage ───── */}
+          {activeTab === "usage" && (
+            <div className="space-y-5">
+              <div className="border border-neutral-200 rounded-lg p-5">
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-[14px] font-semibold text-neutral-900">AI Token Usage</h2>
+                </div>
+                <UsagePanel />
+              </div>
+            </div>
+          )}
+
           {/* ───── Integrations ───── */}
           {activeTab === "integrations" && (
             <div className="space-y-5">
@@ -461,3 +476,45 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
     </Dialog>
   );
 }
+
+function UsagePanel() {
+  const [usageStats, setUsageStats] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
+
+  React.useEffect(() => {
+    import("../../../api/client").then(({ apiClient }) => {
+      apiClient("/usage")
+        .then(setUsageStats)
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+    });
+  }, []);
+
+  if (loading) return <div className="text-[13px] text-neutral-500">Loading usage statistics...</div>;
+  if (error) return <div className="text-[13px] text-red-500">Error loading stats: {error}</div>;
+  if (!usageStats) return null;
+
+  const pct = Math.min((usageStats.total_tokens / usageStats.monthly_limit) * 100, 100).toFixed(1);
+
+  return (
+    <>
+      {[
+        { label: "Input Tokens (Prompt)", used: usageStats.prompt_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.prompt_tokens / usageStats.monthly_limit) * 100, color: "bg-blue-500" },
+        { label: "Output Tokens (Completion)", used: usageStats.completion_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.completion_tokens / usageStats.monthly_limit) * 100, color: "bg-purple-500" },
+        { label: "Total AI Tokens", used: usageStats.total_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.total_tokens / usageStats.monthly_limit) * 100, color: "bg-neutral-900" },
+      ].map((item, i) => (
+        <div key={i} className="mb-5 last:mb-0">
+          <div className="flex justify-between items-center mb-1.5">
+            <span className="text-[13px] text-neutral-700">{item.label}</span>
+            <span className="text-[13px] font-medium text-neutral-900">{item.used} <span className="text-neutral-400 font-normal">/ {item.total}</span></span>
+          </div>
+          <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+            <div className={`h-full rounded-full ${item.color}`} style={{ width: `${Math.max(item.pct, 0.5)}%` }} />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
