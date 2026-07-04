@@ -309,9 +309,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">Generate Key</Button>
               </div>
               {[
-                { name: "Deepgram API Key", tag: "Speech-to-Text", value: "sk-deepgram-••••••••••••••••••••••••" },
                 { name: "Voicera Widget Key", tag: "Frontend Auth", value: "vwk_live_84kx9f2m4nv93nx1••••••••" },
-                { name: "Webhook Secret", tag: "Server Validation", value: "whsec_29fj49d03kd92kdl••••••••" },
               ].map((key, i) => (
                 <div key={i} className="p-5 border-b border-neutral-50 last:border-0 hover:bg-neutral-50 transition-colors">
                   <div className="flex justify-between items-center mb-2">
