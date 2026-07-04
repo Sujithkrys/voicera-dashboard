@@ -3,8 +3,9 @@ import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut, Mail, Calendar, FileText, Database, BookOpen } from "lucide-react";
+import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut, Mail, Calendar, FileText, Database, BookOpen, Monitor, Moon, Sun, Palette } from "lucide-react";
 import { Switch } from "../components/ui/switch";
+import { useTheme } from "../context/ThemeContext";
 
 interface SettingsProps {
   open: boolean;
@@ -12,7 +13,7 @@ interface SettingsProps {
 }
 
 export default function Settings({ open, onOpenChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<"profile" | "api" | "billing" | "integrations" | "notifications" | "security" | "usage">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "api" | "billing" | "integrations" | "notifications" | "security" | "usage">("profile");
 
   const navItem = (tab: string) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
@@ -30,8 +31,11 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <div className="w-[240px] shrink-0 border-r border-neutral-100 bg-[#FDFCFB] p-6 space-y-6 flex flex-col">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-neutral-400 uppercase ml-1">Settings</div>
             <div className="space-y-1 flex-1">
-              <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
+          <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
             <User className="h-4 w-4" strokeWidth={1.8} /> Profile
+          </button>
+          <button onClick={() => setActiveTab("appearance")} className={navItem("appearance")}>
+            <Palette className="h-4 w-4" strokeWidth={1.8} /> Appearance
           </button>
           <button onClick={() => setActiveTab("notifications")} className={navItem("notifications")}>
             <Bell className="h-4 w-4" strokeWidth={1.8} /> Notifications
@@ -58,7 +62,18 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <div className="flex-1 overflow-y-auto p-10 bg-white">
             <div className="max-w-2xl space-y-8">
 
-              {/* ───── Profile ───── */}
+          {/* ───── Appearance ───── */}
+          {activeTab === "appearance" && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-[15px] font-semibold text-neutral-900">Appearance</h2>
+                <p className="text-[13px] text-neutral-500 mt-1">Customize how Voicera looks on your device.</p>
+              </div>
+              <AppearancePanel />
+            </div>
+          )}
+
+          {/* ───── Profile ───── */}
           {activeTab === "profile" && (
             <>
               <div className="border border-neutral-200 rounded-lg p-6 space-y-6">
@@ -556,3 +571,72 @@ function IntegrationItem({ icon, title, description, active }: { icon: React.Rea
   );
 }
 
+function AppearancePanel() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <div className="space-y-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button
+          onClick={() => setTheme("light")}
+          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
+            theme === "light"
+              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
+              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+          }`}
+        >
+          <div className="h-8 w-8 rounded-full bg-white border shadow-sm flex items-center justify-center mb-4">
+            <Sun className="h-4 w-4 text-neutral-900" />
+          </div>
+          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">Light</span>
+          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Light theme for daytime.</span>
+          {theme === "light" && (
+            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
+          )}
+        </button>
+
+        <button
+          onClick={() => setTheme("dark")}
+          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
+            theme === "dark"
+              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
+              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+          }`}
+        >
+          <div className="h-8 w-8 rounded-full bg-neutral-900 flex items-center justify-center mb-4">
+            <Moon className="h-4 w-4 text-white" />
+          </div>
+          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">Dark</span>
+          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Dark theme for night.</span>
+          {theme === "dark" && (
+            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
+          )}
+        </button>
+
+        <button
+          onClick={() => setTheme("system")}
+          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
+            theme === "system"
+              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
+              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+          }`}
+        >
+          <div className="h-8 w-8 rounded-full bg-neutral-100 dark:bg-neutral-800 border flex items-center justify-center mb-4">
+            <Monitor className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
+          </div>
+          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">System</span>
+          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Matches your device.</span>
+          {theme === "system" && (
+            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -13,26 +13,29 @@ import Team from "./app/pages/Team";
 import AIChat from "./app/pages/AIChat";
 import AIChatHistory from "./app/pages/AIChatHistory";
 import { ChatProvider } from "./app/context/ChatContext";
+import { ThemeProvider } from "./app/context/ThemeContext";
 
 createRoot(document.getElementById("root")!).render(
-  <BrowserRouter>
+  <ThemeProvider defaultTheme="system" storageKey="voicera-theme">
     <ChatProvider>
-      <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route element={<DashboardLayout />}>
-        <Route path="/" element={<Overview />} />
-        <Route path="/overview" element={<Navigate to="/" replace />} />
-        <Route path="/call-logs" element={<CallLogs />} />
-        <Route path="/tickets" element={<Tickets />} />
-        <Route path="/scheduled-calls" element={<ScheduledCalls />} />
-        <Route path="/ai-chat" element={<AIChat />} />
-        <Route path="/ai-chat/history" element={<AIChatHistory />} />
-        <Route path="/knowledge-base" element={<KnowledgeBase />} />
-        <Route path="/bot-config" element={<BotConfig />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/settings" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
-  </ChatProvider>
-</BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/" element={<Overview />} />
+            <Route path="/overview" element={<Navigate to="/" replace />} />
+            <Route path="/call-logs" element={<CallLogs />} />
+            <Route path="/tickets" element={<Tickets />} />
+            <Route path="/scheduled-calls" element={<ScheduledCalls />} />
+            <Route path="/ai-chat" element={<AIChat />} />
+            <Route path="/ai-chat/history" element={<AIChatHistory />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/bot-config" element={<BotConfig />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/settings" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ChatProvider>
+  </ThemeProvider>
 );
