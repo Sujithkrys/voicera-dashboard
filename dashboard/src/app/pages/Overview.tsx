@@ -93,10 +93,10 @@ const recentCalls = [
 ];
 
 const issueBreakdown = [
-  { label: "Technical", pct: 72, color: "#8b5cf6" },
-  { label: "Billing", pct: 51, color: "#3b82f6" },
-  { label: "Access", pct: 38, color: "#22c55e" },
-  { label: "Other", pct: 15, color: "#f43f5e" },
+  { label: "Technical", pct: 72, color: "#4B96FF" },
+  { label: "Billing", pct: 51, color: "#4B96FF" },
+  { label: "Access", pct: 38, color: "#4B96FF" },
+  { label: "Other", pct: 15, color: "#4B96FF" },
 ];
 
 function MetricChart({ metric }: { metric: Metric }) {
