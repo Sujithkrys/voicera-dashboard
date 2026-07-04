@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut } from "lucide-react";
+import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut, Mail, Calendar, FileText, Database, BookOpen } from "lucide-react";
 import { Switch } from "../components/ui/switch";
 
 interface SettingsProps {
@@ -390,80 +390,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {/* ───── Integrations ───── */}
           {activeTab === "integrations" && (
             <div className="space-y-5">
-              <div className="border border-neutral-200 rounded-lg overflow-hidden">
-                <div className="p-4 border-b border-neutral-100 bg-neutral-50">
-                  <h2 className="text-[14px] font-semibold text-neutral-900">CRM Integrations</h2>
-                  <p className="text-[12px] text-neutral-400 mt-0.5">Connect Voicera with your existing tools.</p>
-                </div>
-                {[
-                  { name: "HubSpot", desc: "Sync contacts and log support calls to deals automatically.", color: "bg-orange-50 text-orange-500", connected: true },
-                  { name: "Salesforce", desc: "Enterprise-grade sync for cases and accounts.", color: "bg-blue-50 text-blue-500", connected: true },
-                ].map((item, i) => (
-                  <div key={i} className="p-5 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-neutral-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-md ${item.color} flex items-center justify-center`}><Zap className="h-4 w-4" /></div>
-                      <div>
-                        <div className="text-[13px] font-medium text-neutral-900">{item.name}</div>
-                        <div className="text-[12px] text-neutral-500">{item.desc}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {item.connected && <span className="text-[11px] font-medium text-emerald-600 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Connected</span>}
-                      <Switch defaultChecked />
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="border border-neutral-200 rounded-lg overflow-hidden">
-                <div className="p-4 border-b border-neutral-100 bg-neutral-50">
-                  <h2 className="text-[14px] font-semibold text-neutral-900">Support Platforms</h2>
-                </div>
-                {[
-                  { name: "Zendesk", desc: "Automatically create tickets from support calls.", color: "bg-emerald-50 text-emerald-500", connected: false },
-                  { name: "Intercom", desc: "Route live chat conversations to Voicera agents.", color: "bg-blue-50 text-blue-500", connected: false },
-                  { name: "Freshdesk", desc: "Sync call transcripts and resolutions.", color: "bg-teal-50 text-teal-500", connected: false },
-                ].map((item, i) => (
-                  <div key={i} className="p-5 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-neutral-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-md ${item.color} flex items-center justify-center`}><Zap className="h-4 w-4" /></div>
-                      <div>
-                        <div className="text-[13px] font-medium text-neutral-900">{item.name}</div>
-                        <div className="text-[12px] text-neutral-500">{item.desc}</div>
-                      </div>
-                    </div>
-                    <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">Connect</Button>
-                  </div>
-                ))}
-              </div>
-              <div className="border border-neutral-200 rounded-lg overflow-hidden">
-                <div className="p-4 border-b border-neutral-100 bg-neutral-50">
-                  <h2 className="text-[14px] font-semibold text-neutral-900">Communication</h2>
-                </div>
-                {[
-                  { name: "Slack", desc: "Get call summaries and alerts in Slack channels.", color: "bg-purple-50 text-purple-500", connected: true },
-                  { name: "Microsoft Teams", desc: "Receive notifications and escalation alerts.", color: "bg-indigo-50 text-indigo-500", connected: false },
-                ].map((item, i) => (
-                  <div key={i} className="p-5 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-neutral-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-md ${item.color} flex items-center justify-center`}><Zap className="h-4 w-4" /></div>
-                      <div>
-                        <div className="text-[13px] font-medium text-neutral-900">{item.name}</div>
-                        <div className="text-[12px] text-neutral-500">{item.desc}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {item.connected ? (
-                        <>
-                          <span className="text-[11px] font-medium text-emerald-600 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> Connected</span>
-                          <Switch defaultChecked />
-                        </>
-                      ) : (
-                        <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">Connect</Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <IntegrationsPanel />
             </div>
           )}
 
@@ -513,6 +440,119 @@ function UsagePanel() {
         </div>
       ))}
     </>
+  );
+}
+
+function IntegrationsPanel() {
+  const token = localStorage.getItem("voicera_token");
+  const [status, setStatus] = React.useState<Record<string, boolean>>({});
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetchStatus();
+  }, []);
+
+  const fetchStatus = async () => {
+    try {
+      const response = await fetch("https://voicera-dashboard-production.up.railway.app/api/v1/oauth/status", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setStatus(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch integration status", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConnectGoogle = () => {
+    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/google/authorize?token=${token}`;
+  };
+
+  const handleConnectNotion = () => {
+    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/notion/authorize?token=${token}`;
+  };
+
+  const googleConnected = status["gmail"] || status["google-calendar"] || status["google-drive"] || status["google-docs"];
+  const notionConnected = status["notion"];
+
+  return (
+    <>
+      <div className="border border-neutral-200 rounded-lg overflow-hidden">
+        <div className="p-4 border-b border-neutral-100 bg-neutral-50 flex items-center justify-between">
+          <div>
+            <h2 className="text-[14px] font-semibold text-neutral-900">Google Workspace</h2>
+            <p className="text-[12px] text-neutral-400 mt-0.5">Connect once to enable Mail, Calendar, Drive, and Docs.</p>
+          </div>
+          {googleConnected ? (
+            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Connected
+            </div>
+          ) : (
+            <Button onClick={handleConnectGoogle} className="bg-blue-600 hover:bg-blue-700 text-white h-8 text-[13px] font-medium rounded-md">
+              Connect Google
+            </Button>
+          )}
+        </div>
+        <div className="divide-y divide-neutral-100">
+          <IntegrationItem icon={<Mail className="w-4 h-4 text-red-500" />} title="Gmail" description="Allow AI to read and send emails on your behalf." active={!!status["gmail"]} />
+          <IntegrationItem icon={<Calendar className="w-4 h-4 text-teal-500" />} title="Google Calendar" description="Manage your schedule and automate event creation." active={!!status["google-calendar"]} />
+          <IntegrationItem icon={<Database className="w-4 h-4 text-blue-500" />} title="Google Drive" description="Search and summarize files in your drive." active={!!status["google-drive"]} />
+          <IntegrationItem icon={<FileText className="w-4 h-4 text-blue-600" />} title="Google Docs" description="Generate and edit documents automatically." active={!!status["google-docs"]} />
+        </div>
+      </div>
+
+      <div className="border border-neutral-200 rounded-lg overflow-hidden mt-5">
+        <div className="p-4 border-b border-neutral-100 bg-neutral-50 flex items-center justify-between">
+          <div>
+            <h2 className="text-[14px] font-semibold text-neutral-900">Notion</h2>
+            <p className="text-[12px] text-neutral-400 mt-0.5">Connect to your workspace to sync databases and pages.</p>
+          </div>
+          {notionConnected ? (
+            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Connected
+            </div>
+          ) : (
+            <Button onClick={handleConnectNotion} className="bg-neutral-900 hover:bg-neutral-800 text-white h-8 text-[13px] font-medium rounded-md">
+              Connect Notion
+            </Button>
+          )}
+        </div>
+        <div className="divide-y divide-neutral-100">
+          <IntegrationItem icon={<BookOpen className="w-4 h-4 text-neutral-800" />} title="Notion Workspace" description="Allow AI to update your daily analysis logs and read notes." active={!!status["notion"]} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function IntegrationItem({ icon, title, description, active }: { icon: React.ReactNode, title: string, description: string, active: boolean }) {
+  return (
+    <div className="p-4 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <div className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200 flex items-center justify-center shrink-0">
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-[13px] font-medium text-neutral-900">{title}</h3>
+          <p className="text-[12px] text-neutral-500">{description}</p>
+        </div>
+      </div>
+      <div className="flex items-center">
+        {active ? (
+          <span className="text-[12px] font-medium text-green-600 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
+          </span>
+        ) : (
+          <span className="text-[12px] font-medium text-neutral-400">Inactive</span>
+        )}
+      </div>
+    </div>
   );
 }
 
