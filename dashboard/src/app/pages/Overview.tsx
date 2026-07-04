@@ -182,7 +182,7 @@ export default function Overview() {
     <div className="p-6 space-y-6">
       {/* Metrics row */}
       <div
-        className="border-b border-neutral-100 pb-6"
+        className="border-b border-border pb-6"
         style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0 }}
       >
         {metrics.map((m, i) => (
@@ -231,12 +231,12 @@ export default function Overview() {
 
       {/* Chart + Issue breakdown */}
       <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 border border-neutral-200 rounded-lg p-5">
+        <div className="col-span-2 border border-border rounded-lg p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[14px] font-semibold text-neutral-900">
+            <h3 className="text-[14px] font-semibold text-foreground">
               Call volume
             </h3>
-            <span className="text-[12px] text-neutral-400">Last 7 days</span>
+            <span className="text-[12px] text-muted-foreground">Last 7 days</span>
           </div>
           <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -280,22 +280,22 @@ export default function Overview() {
           </div>
         </div>
 
-        <div className="border border-neutral-200 rounded-lg p-5">
-          <h3 className="text-[14px] font-semibold text-neutral-900 mb-4">
+        <div className="border border-border rounded-lg p-5">
+          <h3 className="text-[14px] font-semibold text-foreground mb-4">
             Issue breakdown
           </h3>
           <div className="space-y-4">
             {issueBreakdown.map((issue, i) => (
               <div key={i}>
                 <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-[13px] text-neutral-600">
+                  <span className="text-[13px] text-muted-foreground">
                     {issue.label}
                   </span>
-                  <span className="text-[13px] font-medium text-neutral-900">
+                  <span className="text-[13px] font-medium text-foreground">
                     {issue.pct}%
                   </span>
                 </div>
-                <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full"
                     style={{

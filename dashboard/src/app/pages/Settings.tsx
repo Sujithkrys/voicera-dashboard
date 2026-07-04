@@ -18,18 +18,18 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
   const navItem = (tab: string) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
       activeTab === tab
-        ? "bg-neutral-100 text-neutral-900"
-        : "text-neutral-500 hover:text-neutral-700 hover:bg-transparent"
+        ? "bg-secondary text-foreground"
+        : "text-muted-foreground hover:text-foreground hover:bg-transparent"
     }`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[1000px] sm:max-w-[1000px] w-[95vw] h-[85vh] p-0 overflow-hidden flex gap-0 border-none rounded-2xl shadow-2xl bg-white [&>button]:top-4 [&>button]:right-4">
+      <DialogContent className="max-w-[1000px] sm:max-w-[1000px] w-[95vw] h-[85vh] p-0 overflow-hidden flex gap-0 border-none rounded-2xl shadow-2xl bg-background [&>button]:top-4 [&>button]:right-4">
         <DialogTitle className="sr-only">Settings</DialogTitle>
         <div className="flex h-full w-full">
           {/* Nav Sidebar */}
-          <div className="w-[240px] shrink-0 border-r border-neutral-100 bg-[#FDFCFB] p-6 space-y-6 flex flex-col">
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-neutral-400 uppercase ml-1">Settings</div>
+          <div className="w-[240px] shrink-0 border-r border-border bg-[#FDFCFB] p-6 space-y-6 flex flex-col">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase ml-1">Settings</div>
             <div className="space-y-1 flex-1">
           <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
             <User className="h-4 w-4" strokeWidth={1.8} /> Profile
@@ -59,15 +59,15 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 overflow-y-auto p-10 bg-white">
+          <div className="flex-1 overflow-y-auto p-10 bg-background">
             <div className="max-w-2xl space-y-8">
 
           {/* ───── Appearance ───── */}
           {activeTab === "appearance" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-[15px] font-semibold text-neutral-900">Appearance</h2>
-                <p className="text-[13px] text-neutral-500 mt-1">Customize how Voicera looks on your device.</p>
+                <h2 className="text-[15px] font-semibold text-foreground">Appearance</h2>
+                <p className="text-[13px] text-muted-foreground mt-1">Customize how Voicera looks on your device.</p>
               </div>
               <AppearancePanel />
             </div>
@@ -76,36 +76,36 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {/* ───── Profile ───── */}
           {activeTab === "profile" && (
             <>
-              <div className="border border-neutral-200 rounded-lg p-6 space-y-6">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Profile Settings</h2>
-                <div className="flex items-center gap-5 pb-5 border-b border-neutral-100">
-                  <div className="h-16 w-16 rounded-full bg-neutral-200 flex items-center justify-center text-[20px] font-semibold text-neutral-600">AS</div>
+              <div className="border border-border rounded-lg p-6 space-y-6">
+                <h2 className="text-[14px] font-semibold text-foreground">Profile Settings</h2>
+                <div className="flex items-center gap-5 pb-5 border-b border-border">
+                  <div className="h-16 w-16 rounded-full bg-neutral-200 flex items-center justify-center text-[20px] font-semibold text-muted-foreground">AS</div>
                   <div>
-                    <Button variant="outline" size="sm" className="h-8 text-[13px] rounded-md border-neutral-200 mb-1">Change Avatar</Button>
-                    <p className="text-[11px] text-neutral-400">JPG, GIF or PNG. Max 800K</p>
+                    <Button variant="outline" size="sm" className="h-8 text-[13px] rounded-md border-border mb-1">Change Avatar</Button>
+                    <p className="text-[11px] text-muted-foreground">JPG, GIF or PNG. Max 800K</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">First Name</label>
-                    <Input defaultValue="Alex" className="h-9 text-[13px] border-neutral-200 rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">First Name</label>
+                    <Input defaultValue="Alex" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Last Name</label>
-                    <Input defaultValue="Smith" className="h-9 text-[13px] border-neutral-200 rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Last Name</label>
+                    <Input defaultValue="Smith" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Email</label>
-                    <Input defaultValue="alex@acmecorp.com" className="h-9 text-[13px] border-neutral-200 rounded-md" type="email" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Email</label>
+                    <Input defaultValue="alex@acmecorp.com" className="h-9 text-[13px] border-border rounded-md" type="email" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Phone</label>
-                    <Input defaultValue="+1 (555) 012-3456" className="h-9 text-[13px] border-neutral-200 rounded-md" type="tel" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Phone</label>
+                    <Input defaultValue="+1 (555) 012-3456" className="h-9 text-[13px] border-border rounded-md" type="tel" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Role</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Role</label>
                     <Select defaultValue="admin">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="admin" className="text-[13px]">Administrator</SelectItem>
                         <SelectItem value="specialist" className="text-[13px]">Specialist</SelectItem>
@@ -114,9 +114,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Department</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Department</label>
                     <Select defaultValue="all">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="all" className="text-[13px]">All Departments</SelectItem>
                         <SelectItem value="technical" className="text-[13px]">Technical</SelectItem>
@@ -127,18 +127,18 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                   </div>
                 </div>
                 <div className="flex justify-end pt-2">
-                  <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md px-5">Save Changes</Button>
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">Save Changes</Button>
                 </div>
               </div>
 
               {/* Preferences */}
-              <div className="border border-neutral-200 rounded-lg p-6 space-y-5">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Preferences</h2>
+              <div className="border border-border rounded-lg p-6 space-y-5">
+                <h2 className="text-[14px] font-semibold text-foreground">Preferences</h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Language</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Language</label>
                     <Select defaultValue="en">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="en" className="text-[13px]">English</SelectItem>
                         <SelectItem value="es" className="text-[13px]">Español</SelectItem>
@@ -149,9 +149,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Timezone</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Timezone</label>
                     <Select defaultValue="ist">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="ist" className="text-[13px]">IST (UTC+5:30)</SelectItem>
                         <SelectItem value="est" className="text-[13px]">EST (UTC-5)</SelectItem>
@@ -162,9 +162,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Date Format</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Date Format</label>
                     <Select defaultValue="dmy">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="dmy" className="text-[13px]">DD/MM/YYYY</SelectItem>
                         <SelectItem value="mdy" className="text-[13px]">MM/DD/YYYY</SelectItem>
@@ -173,9 +173,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     </Select>
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Theme</label>
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Theme</label>
                     <Select defaultValue="light">
-                      <SelectTrigger className="h-9 text-[13px] border-neutral-200 rounded-md"><SelectValue /></SelectTrigger>
+                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
                       <SelectContent className="rounded-md">
                         <SelectItem value="light" className="text-[13px]">Light</SelectItem>
                         <SelectItem value="dark" className="text-[13px]">Dark</SelectItem>
@@ -190,10 +190,10 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
 
           {/* ───── Notifications ───── */}
           {activeTab === "notifications" && (
-            <div className="border border-neutral-200 rounded-lg overflow-hidden">
-              <div className="p-5 border-b border-neutral-100">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Notification Preferences</h2>
-                <p className="text-[12px] text-neutral-400 mt-0.5">Choose how and when you get notified.</p>
+            <div className="border border-border rounded-lg overflow-hidden">
+              <div className="p-5 border-b border-border">
+                <h2 className="text-[14px] font-semibold text-foreground">Notification Preferences</h2>
+                <p className="text-[12px] text-muted-foreground mt-0.5">Choose how and when you get notified.</p>
               </div>
               {[
                 { label: "New call received", desc: "Get notified when a new customer call comes in.", email: true, push: true },
@@ -205,18 +205,18 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 { label: "Usage limit warning", desc: "Alert when you reach 80% of plan limits.", email: true, push: true },
                 { label: "System maintenance", desc: "Scheduled downtime and update notices.", email: true, push: false },
               ].map((item, i) => (
-                <div key={i} className="px-5 py-4 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-neutral-50 transition-colors">
+                <div key={i} className="px-5 py-4 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-muted transition-colors">
                   <div className="flex-1 mr-8">
-                    <div className="text-[13px] font-medium text-neutral-900">{item.label}</div>
-                    <div className="text-[12px] text-neutral-400 mt-0.5">{item.desc}</div>
+                    <div className="text-[13px] font-medium text-foreground">{item.label}</div>
+                    <div className="text-[12px] text-muted-foreground mt-0.5">{item.desc}</div>
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
                     <div className="flex flex-col items-center gap-1">
-                      {i === 0 && <span className="text-[10px] text-neutral-400 uppercase tracking-wider">Email</span>}
+                      {i === 0 && <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Email</span>}
                       <Switch defaultChecked={item.email} />
                     </div>
                     <div className="flex flex-col items-center gap-1">
-                      {i === 0 && <span className="text-[10px] text-neutral-400 uppercase tracking-wider">Push</span>}
+                      {i === 0 && <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Push</span>}
                       <Switch defaultChecked={item.push} />
                     </div>
                   </div>
@@ -228,39 +228,39 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {/* ───── Security ───── */}
           {activeTab === "security" && (
             <>
-              <div className="border border-neutral-200 rounded-lg p-6 space-y-5">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Change Password</h2>
+              <div className="border border-border rounded-lg p-6 space-y-5">
+                <h2 className="text-[14px] font-semibold text-foreground">Change Password</h2>
                 <div className="space-y-4 max-w-md">
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Current Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-neutral-200 rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Current Password</label>
+                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">New Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-neutral-200 rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">New Password</label>
+                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
-                    <label className="text-[12px] font-medium text-neutral-500 uppercase tracking-wider mb-1.5 block">Confirm New Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-neutral-200 rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Confirm New Password</label>
+                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
-                  <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md px-5">Update Password</Button>
+                  <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">Update Password</Button>
                 </div>
               </div>
 
-              <div className="border border-neutral-200 rounded-lg p-6 space-y-4">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Two-Factor Authentication</h2>
-                <p className="text-[13px] text-neutral-500">Add an extra layer of security to your account by requiring a verification code on login.</p>
-                <div className="flex items-center justify-between bg-neutral-50 border border-neutral-100 rounded-md p-4">
+              <div className="border border-border rounded-lg p-6 space-y-4">
+                <h2 className="text-[14px] font-semibold text-foreground">Two-Factor Authentication</h2>
+                <p className="text-[13px] text-muted-foreground">Add an extra layer of security to your account by requiring a verification code on login.</p>
+                <div className="flex items-center justify-between bg-muted border border-border rounded-md p-4">
                   <div>
-                    <div className="text-[13px] font-medium text-neutral-900">2FA is currently disabled</div>
-                    <div className="text-[12px] text-neutral-400 mt-0.5">Recommended for all admin accounts</div>
+                    <div className="text-[13px] font-medium text-foreground">2FA is currently disabled</div>
+                    <div className="text-[12px] text-muted-foreground mt-0.5">Recommended for all admin accounts</div>
                   </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-neutral-200 rounded-md">Enable 2FA</Button>
+                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">Enable 2FA</Button>
                 </div>
               </div>
 
-              <div className="border border-neutral-200 rounded-lg p-6 space-y-4">
-                <h2 className="text-[14px] font-semibold text-neutral-900">Active Sessions</h2>
+              <div className="border border-border rounded-lg p-6 space-y-4">
+                <h2 className="text-[14px] font-semibold text-foreground">Active Sessions</h2>
                 {[
                   { device: "Chrome on Windows", location: "Mumbai, India", current: true, time: "Now" },
                   { device: "Safari on iPhone", location: "Mumbai, India", current: false, time: "2 hours ago" },
@@ -270,11 +270,11 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${session.current ? "bg-emerald-500" : "bg-neutral-300"}`} />
                       <div>
-                        <div className="text-[13px] font-medium text-neutral-900">
+                        <div className="text-[13px] font-medium text-foreground">
                           {session.device}
                           {session.current && <span className="ml-2 text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Current</span>}
                         </div>
-                        <div className="text-[12px] text-neutral-400">{session.location} · {session.time}</div>
+                        <div className="text-[12px] text-muted-foreground">{session.location} · {session.time}</div>
                       </div>
                     </div>
                     {!session.current && (
@@ -289,8 +289,8 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 <h2 className="text-[14px] font-semibold text-red-600">Danger Zone</h2>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[13px] font-medium text-neutral-900">Delete Account</div>
-                    <div className="text-[12px] text-neutral-500">Permanently delete your account and all data. This action cannot be undone.</div>
+                    <div className="text-[13px] font-medium text-foreground">Delete Account</div>
+                    <div className="text-[12px] text-muted-foreground">Permanently delete your account and all data. This action cannot be undone.</div>
                   </div>
                   <Button variant="outline" className="h-8 text-[13px] font-medium border-red-300 text-red-600 hover:bg-red-50 rounded-md">
                     <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Delete
@@ -298,17 +298,17 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[13px] font-medium text-neutral-900">Export Data</div>
-                    <div className="text-[12px] text-neutral-500">Download all your data as a JSON file.</div>
+                    <div className="text-[13px] font-medium text-foreground">Export Data</div>
+                    <div className="text-[12px] text-muted-foreground">Download all your data as a JSON file.</div>
                   </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-neutral-200 rounded-md">Export</Button>
+                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">Export</Button>
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[13px] font-medium text-neutral-900">Sign out everywhere</div>
-                    <div className="text-[12px] text-neutral-500">Log out from all devices and sessions.</div>
+                    <div className="text-[13px] font-medium text-foreground">Sign out everywhere</div>
+                    <div className="text-[12px] text-muted-foreground">Log out from all devices and sessions.</div>
                   </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-neutral-200 rounded-md">
+                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">
                     <LogOut className="h-3.5 w-3.5 mr-1.5" /> Sign Out All
                   </Button>
                 </div>
@@ -318,23 +318,23 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
 
           {/* ───── API Keys ───── */}
           {activeTab === "api" && (
-            <div className="border border-neutral-200 rounded-lg overflow-hidden">
-              <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
-                <h2 className="text-[14px] font-semibold text-neutral-900">API Keys</h2>
-                <Button className="bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">Generate Key</Button>
+            <div className="border border-border rounded-lg overflow-hidden">
+              <div className="p-5 border-b border-border flex items-center justify-between">
+                <h2 className="text-[14px] font-semibold text-foreground">API Keys</h2>
+                <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md">Generate Key</Button>
               </div>
               {[
                 { name: "Voicera Widget Key", tag: "Frontend Auth", value: "vwk_live_84kx9f2m4nv93nx1••••••••" },
               ].map((key, i) => (
-                <div key={i} className="p-5 border-b border-neutral-50 last:border-0 hover:bg-neutral-50 transition-colors">
+                <div key={i} className="p-5 border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-[13px] font-medium text-neutral-900">{key.name}</span>
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">{key.tag}</span>
+                    <span className="text-[13px] font-medium text-foreground">{key.name}</span>
+                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{key.tag}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="font-mono text-[12px] bg-neutral-50 px-3 py-2 rounded-md border border-neutral-200 flex-1 text-neutral-500">{key.value}</div>
-                    <button className="p-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-400"><Eye className="h-3.5 w-3.5" /></button>
-                    <button className="p-2 rounded-md border border-neutral-200 hover:bg-neutral-50 text-neutral-400"><Copy className="h-3.5 w-3.5" /></button>
+                    <div className="font-mono text-[12px] bg-muted px-3 py-2 rounded-md border border-border flex-1 text-muted-foreground">{key.value}</div>
+                    <button className="p-2 rounded-md border border-border hover:bg-muted text-muted-foreground"><Eye className="h-3.5 w-3.5" /></button>
+                    <button className="p-2 rounded-md border border-border hover:bg-muted text-muted-foreground"><Copy className="h-3.5 w-3.5" /></button>
                   </div>
                 </div>
               ))}
@@ -345,28 +345,28 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {activeTab === "billing" && (
             <div className="space-y-5">
               <div className="grid grid-cols-2 gap-5">
-                <div className="bg-neutral-900 text-white rounded-lg p-5 relative overflow-hidden">
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-neutral-400 mb-1">Current Plan</div>
+                <div className="bg-primary text-primary-foreground rounded-lg p-5 relative overflow-hidden">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-1">Current Plan</div>
                   <div className="text-[32px] font-semibold tracking-tight mb-0.5">Pro</div>
-                  <p className="text-[13px] text-neutral-400 mb-5">$99/month, billed annually</p>
-                  <Button className="w-full bg-white text-neutral-900 hover:bg-neutral-100 h-8 text-[13px] font-medium rounded-md">Manage Subscription</Button>
+                  <p className="text-[13px] text-muted-foreground mb-5">$99/month, billed annually</p>
+                  <Button className="w-full bg-background text-foreground hover:bg-secondary h-8 text-[13px] font-medium rounded-md">Manage Subscription</Button>
                 </div>
-                <div className="border border-neutral-200 rounded-lg p-5">
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-neutral-400 mb-3">Payment Method</div>
-                  <div className="flex items-center gap-3 bg-neutral-50 p-3 rounded-md border border-neutral-100 mb-4">
-                    <div className="w-10 h-7 bg-white border border-neutral-200 rounded flex items-center justify-center font-bold text-neutral-800 text-[10px] italic">VISA</div>
+                <div className="border border-border rounded-lg p-5">
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-3">Payment Method</div>
+                  <div className="flex items-center gap-3 bg-muted p-3 rounded-md border border-border mb-4">
+                    <div className="w-10 h-7 bg-background border border-border rounded flex items-center justify-center font-bold text-foreground text-[10px] italic">VISA</div>
                     <div>
-                      <div className="text-[13px] font-medium text-neutral-900">•••• 4242</div>
-                      <div className="text-[11px] text-neutral-400">Expires 12/25</div>
+                      <div className="text-[13px] font-medium text-foreground">•••• 4242</div>
+                      <div className="text-[11px] text-muted-foreground">Expires 12/25</div>
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full h-8 text-[13px] font-medium border-neutral-200 rounded-md">Update</Button>
+                  <Button variant="outline" className="w-full h-8 text-[13px] font-medium border-border rounded-md">Update</Button>
                 </div>
               </div>
-              <div className="border border-neutral-200 rounded-lg p-5">
+              <div className="border border-border rounded-lg p-5">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[14px] font-semibold text-neutral-900">Usage</h2>
-                  <button className="text-[12px] font-medium text-neutral-500 hover:text-neutral-700 flex items-center gap-1">
+                  <h2 className="text-[14px] font-semibold text-foreground">Usage</h2>
+                  <button className="text-[12px] font-medium text-muted-foreground hover:text-foreground flex items-center gap-1">
                     View History <ChevronRight className="h-3 w-3" />
                   </button>
                 </div>
@@ -378,10 +378,10 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 ].map((item, i) => (
                   <div key={i} className="mb-5 last:mb-0">
                     <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-[13px] text-neutral-700">{item.label}</span>
-                      <span className="text-[13px] font-medium text-neutral-900">{item.used} <span className="text-neutral-400 font-normal">/ {item.total}</span></span>
+                      <span className="text-[13px] text-foreground">{item.label}</span>
+                      <span className="text-[13px] font-medium text-foreground">{item.used} <span className="text-muted-foreground font-normal">/ {item.total}</span></span>
                     </div>
-                    <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.pct}%` }} />
                     </div>
                   </div>
@@ -393,9 +393,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {/* ───── Usage ───── */}
           {activeTab === "usage" && (
             <div className="space-y-5">
-              <div className="border border-neutral-200 rounded-lg p-5">
+              <div className="border border-border rounded-lg p-5">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[14px] font-semibold text-neutral-900">AI Token Usage</h2>
+                  <h2 className="text-[14px] font-semibold text-foreground">AI Token Usage</h2>
                 </div>
                 <UsagePanel />
               </div>
@@ -431,7 +431,7 @@ function UsagePanel() {
     });
   }, []);
 
-  if (loading) return <div className="text-[13px] text-neutral-500">Loading usage statistics...</div>;
+  if (loading) return <div className="text-[13px] text-muted-foreground">Loading usage statistics...</div>;
   if (error) return <div className="text-[13px] text-red-500">Error loading stats: {error}</div>;
   if (!usageStats) return null;
 
@@ -442,14 +442,14 @@ function UsagePanel() {
       {[
         { label: "Input Tokens (Prompt)", used: usageStats.prompt_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.prompt_tokens / usageStats.monthly_limit) * 100, color: "bg-blue-500" },
         { label: "Output Tokens (Completion)", used: usageStats.completion_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.completion_tokens / usageStats.monthly_limit) * 100, color: "bg-purple-500" },
-        { label: "Total AI Tokens", used: usageStats.total_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.total_tokens / usageStats.monthly_limit) * 100, color: "bg-neutral-900" },
+        { label: "Total AI Tokens", used: usageStats.total_tokens.toLocaleString(), total: usageStats.monthly_limit.toLocaleString(), pct: (usageStats.total_tokens / usageStats.monthly_limit) * 100, color: "bg-primary" },
       ].map((item, i) => (
         <div key={i} className="mb-5 last:mb-0">
           <div className="flex justify-between items-center mb-1.5">
-            <span className="text-[13px] text-neutral-700">{item.label}</span>
-            <span className="text-[13px] font-medium text-neutral-900">{item.used} <span className="text-neutral-400 font-normal">/ {item.total}</span></span>
+            <span className="text-[13px] text-foreground">{item.label}</span>
+            <span className="text-[13px] font-medium text-foreground">{item.used} <span className="text-muted-foreground font-normal">/ {item.total}</span></span>
           </div>
-          <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
             <div className={`h-full rounded-full ${item.color}`} style={{ width: `${Math.max(item.pct, 0.5)}%` }} />
           </div>
         </div>
@@ -498,18 +498,18 @@ function IntegrationsPanel() {
 
   return (
     <>
-      <div className="border border-neutral-200 rounded-lg overflow-hidden">
-        <div className="p-4 border-b border-neutral-100 bg-neutral-50 flex items-center justify-between">
+      <div className="border border-border rounded-lg overflow-hidden">
+        <div className="p-4 border-b border-border bg-muted flex items-center justify-between">
           <div>
-            <h2 className="text-[14px] font-semibold text-neutral-900">Google Workspace</h2>
-            <p className="text-[12px] text-neutral-400 mt-0.5">Connect once to enable Mail, Calendar, Drive, and Docs.</p>
+            <h2 className="text-[14px] font-semibold text-foreground">Google Workspace</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Connect once to enable Mail, Calendar, Drive, and Docs.</p>
           </div>
           {googleConnected ? (
             <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
               <CheckCircle2 className="w-3.5 h-3.5" /> Connected
             </div>
           ) : (
-            <Button onClick={handleConnectGoogle} className="bg-blue-600 hover:bg-blue-700 text-white h-8 text-[13px] font-medium rounded-md">
+            <Button onClick={handleConnectGoogle} className="bg-blue-600 hover:bg-blue-700 text-primary-foreground h-8 text-[13px] font-medium rounded-md">
               Connect Google
             </Button>
           )}
@@ -522,24 +522,24 @@ function IntegrationsPanel() {
         </div>
       </div>
 
-      <div className="border border-neutral-200 rounded-lg overflow-hidden mt-5">
-        <div className="p-4 border-b border-neutral-100 bg-neutral-50 flex items-center justify-between">
+      <div className="border border-border rounded-lg overflow-hidden mt-5">
+        <div className="p-4 border-b border-border bg-muted flex items-center justify-between">
           <div>
-            <h2 className="text-[14px] font-semibold text-neutral-900">Notion</h2>
-            <p className="text-[12px] text-neutral-400 mt-0.5">Connect to your workspace to sync databases and pages.</p>
+            <h2 className="text-[14px] font-semibold text-foreground">Notion</h2>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Connect to your workspace to sync databases and pages.</p>
           </div>
           {notionConnected ? (
             <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
               <CheckCircle2 className="w-3.5 h-3.5" /> Connected
             </div>
           ) : (
-            <Button onClick={handleConnectNotion} className="bg-neutral-900 hover:bg-neutral-800 text-white h-8 text-[13px] font-medium rounded-md">
+            <Button onClick={handleConnectNotion} className="bg-primary hover:bg-primary text-primary-foreground h-8 text-[13px] font-medium rounded-md">
               Connect Notion
             </Button>
           )}
         </div>
         <div className="divide-y divide-neutral-100">
-          <IntegrationItem icon={<BookOpen className="w-4 h-4 text-neutral-800" />} title="Notion Workspace" description="Allow AI to update your daily analysis logs and read notes." active={!!status["notion"]} />
+          <IntegrationItem icon={<BookOpen className="w-4 h-4 text-foreground" />} title="Notion Workspace" description="Allow AI to update your daily analysis logs and read notes." active={!!status["notion"]} />
         </div>
       </div>
     </>
@@ -550,12 +550,12 @@ function IntegrationItem({ icon, title, description, active }: { icon: React.Rea
   return (
     <div className="p-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <div className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200 flex items-center justify-center shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-muted border border-border flex items-center justify-center shrink-0">
           {icon}
         </div>
         <div>
-          <h3 className="text-[13px] font-medium text-neutral-900">{title}</h3>
-          <p className="text-[12px] text-neutral-500">{description}</p>
+          <h3 className="text-[13px] font-medium text-foreground">{title}</h3>
+          <p className="text-[12px] text-muted-foreground">{description}</p>
         </div>
       </div>
       <div className="flex items-center">
@@ -564,7 +564,7 @@ function IntegrationItem({ icon, title, description, active }: { icon: React.Rea
             <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
           </span>
         ) : (
-          <span className="text-[12px] font-medium text-neutral-400">Inactive</span>
+          <span className="text-[12px] font-medium text-muted-foreground">Inactive</span>
         )}
       </div>
     </div>
@@ -581,17 +581,17 @@ function AppearancePanel() {
           onClick={() => setTheme("light")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
             theme === "light"
-              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
-              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
+              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
           }`}
         >
-          <div className="h-8 w-8 rounded-full bg-white border shadow-sm flex items-center justify-center mb-4">
-            <Sun className="h-4 w-4 text-neutral-900" />
+          <div className="h-8 w-8 rounded-full bg-background border shadow-sm flex items-center justify-center mb-4">
+            <Sun className="h-4 w-4 text-foreground" />
           </div>
-          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">Light</span>
-          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Light theme for daytime.</span>
+          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">Light</span>
+          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Light theme for daytime.</span>
           {theme === "light" && (
-            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
               <CheckCircle2 className="h-5 w-5" />
             </div>
           )}
@@ -601,17 +601,17 @@ function AppearancePanel() {
           onClick={() => setTheme("dark")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
             theme === "dark"
-              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
-              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
+              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
           }`}
         >
-          <div className="h-8 w-8 rounded-full bg-neutral-900 flex items-center justify-center mb-4">
-            <Moon className="h-4 w-4 text-white" />
+          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center mb-4">
+            <Moon className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">Dark</span>
-          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Dark theme for night.</span>
+          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">Dark</span>
+          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Dark theme for night.</span>
           {theme === "dark" && (
-            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
               <CheckCircle2 className="h-5 w-5" />
             </div>
           )}
@@ -621,17 +621,17 @@ function AppearancePanel() {
           onClick={() => setTheme("system")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
             theme === "system"
-              ? "border-neutral-900 bg-neutral-50 dark:border-white dark:bg-neutral-800"
-              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-800"
+              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
+              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
           }`}
         >
-          <div className="h-8 w-8 rounded-full bg-neutral-100 dark:bg-neutral-800 border flex items-center justify-center mb-4">
-            <Monitor className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
+          <div className="h-8 w-8 rounded-full bg-secondary dark:bg-primary border flex items-center justify-center mb-4">
+            <Monitor className="h-4 w-4 text-foreground dark:text-neutral-300" />
           </div>
-          <span className="font-semibold text-[14px] text-neutral-900 dark:text-white">System</span>
-          <span className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1">Matches your device.</span>
+          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">System</span>
+          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Matches your device.</span>
           {theme === "system" && (
-            <div className="absolute top-4 right-4 text-neutral-900 dark:text-white">
+            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
               <CheckCircle2 className="h-5 w-5" />
             </div>
           )}

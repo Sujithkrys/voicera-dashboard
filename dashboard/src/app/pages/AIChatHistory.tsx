@@ -84,7 +84,7 @@ export default function AIChatHistory() {
         
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-[32px] text-neutral-900 font-serif" style={{ fontFamily: 'Georgia, serif' }}>Chats</h1>
+          <h1 className="text-[32px] text-foreground font-serif" style={{ fontFamily: 'Georgia, serif' }}>Chats</h1>
           
           <div className="flex items-center gap-3">
             {isSelecting && selectedIds.size > 0 && (
@@ -106,7 +106,7 @@ export default function AIChatHistory() {
                   setIsSelecting(true);
                 }
               }}
-              className="h-9 px-4 border border-neutral-200 bg-white rounded-md text-[13px] font-medium text-neutral-800 hover:bg-neutral-50 transition-colors"
+              className="h-9 px-4 border border-border bg-background rounded-md text-[13px] font-medium text-foreground hover:bg-muted transition-colors"
             >
               {isSelecting ? "Cancel selection" : "Select chats"}
             </button>
@@ -117,7 +117,7 @@ export default function AIChatHistory() {
                   setActiveThreadId(null);
                   navigate("/ai-chat");
                 }}
-                className="h-9 px-4 bg-black text-white text-[13px] font-medium rounded-md hover:bg-neutral-800 transition-colors shadow-sm"
+                className="h-9 px-4 bg-black text-primary-foreground text-[13px] font-medium rounded-md hover:bg-primary transition-colors shadow-sm"
               >
                 New chat
               </button>
@@ -127,23 +127,23 @@ export default function AIChatHistory() {
 
         {/* Search */}
         <div className="relative mb-8">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-neutral-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <input 
             type="text"
             placeholder="Search chats..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 pl-10 pr-4 bg-white border border-[#4B96FF] rounded-lg text-[14px] outline-none focus:ring-2 focus:ring-[#4B96FF]/20 transition-all placeholder:text-neutral-400"
+            className="w-full h-11 pl-10 pr-4 bg-background border border-[#4B96FF] rounded-lg text-[14px] outline-none focus:ring-2 focus:ring-[#4B96FF]/20 transition-all placeholder:text-muted-foreground"
           />
         </div>
 
         {/* List */}
         <div>
           {filteredThreads.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-neutral-200 rounded-xl">
+            <div className="text-center py-20 bg-background border border-border rounded-xl">
               <MessageSquare className="size-10 text-neutral-300 mx-auto mb-4" />
-              <h3 className="text-[15px] font-medium text-neutral-900 mb-1">No chats found</h3>
-              <p className="text-[13px] text-neutral-500 max-w-sm mx-auto mb-6">
+              <h3 className="text-[15px] font-medium text-foreground mb-1">No chats found</h3>
+              <p className="text-[13px] text-muted-foreground max-w-sm mx-auto mb-6">
                 Try searching for something else or start a new conversation.
               </p>
               <button
@@ -151,7 +151,7 @@ export default function AIChatHistory() {
                   setActiveThreadId(null);
                   navigate("/ai-chat");
                 }}
-                className="h-9 px-4 bg-black text-white text-[13px] font-medium rounded-md hover:bg-neutral-800 transition-colors inline-flex items-center gap-2"
+                className="h-9 px-4 bg-black text-primary-foreground text-[13px] font-medium rounded-md hover:bg-primary transition-colors inline-flex items-center gap-2"
               >
                 New chat
                 <ArrowRight className="size-3.5" />
@@ -163,7 +163,7 @@ export default function AIChatHistory() {
                 <div 
                   key={thread.id}
                   onClick={() => handleOpenThread(thread.id)}
-                  className="group relative flex items-center justify-between py-4 border-b border-neutral-200 last:border-0 hover:bg-black/[0.02] cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
+                  className="group relative flex items-center justify-between py-4 border-b border-border last:border-0 hover:bg-black/[0.02] cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
                 >
                   <div className="flex items-center gap-3 pr-4 truncate">
                     {isSelecting && (
@@ -172,17 +172,17 @@ export default function AIChatHistory() {
                           type="checkbox"
                           checked={selectedIds.has(thread.id)}
                           onChange={() => {}} // handled by parent div click
-                          className="size-4 rounded border-neutral-300 text-black focus:ring-black cursor-pointer"
+                          className="size-4 rounded border-border text-foreground focus:ring-black cursor-pointer"
                         />
                       </div>
                     )}
-                    {thread.isPinned && !isSelecting && <Pin className="size-3.5 text-neutral-400 shrink-0 fill-neutral-400" />}
-                    <h3 className="text-[14px] text-neutral-800 font-medium truncate">
+                    {thread.isPinned && !isSelecting && <Pin className="size-3.5 text-muted-foreground shrink-0 fill-neutral-400" />}
+                    <h3 className="text-[14px] text-foreground font-medium truncate">
                       {thread.title}
                     </h3>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-[13px] text-neutral-400 whitespace-nowrap">
+                    <span className="text-[13px] text-muted-foreground whitespace-nowrap">
                       {formatRelativeTime(thread.createdAt)}
                     </span>
                     <button
@@ -190,20 +190,20 @@ export default function AIChatHistory() {
                         e.stopPropagation();
                         setOpenDropdownId(openDropdownId === thread.id ? null : thread.id);
                       }}
-                      className="p-1 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-200/50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1 text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
                     >
                       <MoreHorizontal className="size-4" />
                     </button>
                     
                     {openDropdownId === thread.id && (
-                      <div className="absolute right-8 top-10 w-36 bg-white border border-neutral-200 shadow-lg rounded-lg py-1 z-10">
+                      <div className="absolute right-8 top-10 w-36 bg-background border border-border shadow-lg rounded-lg py-1 z-10">
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             togglePinThread(thread.id);
                             setOpenDropdownId(null);
                           }}
-                          className="w-full text-left px-4 py-2 text-[13px] text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-[13px] text-foreground hover:bg-muted flex items-center gap-2"
                         >
                           <Pin className="size-3.5" />
                           {thread.isPinned ? "Unpin" : "Pin"} chat

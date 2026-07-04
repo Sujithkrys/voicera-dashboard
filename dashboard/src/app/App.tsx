@@ -182,7 +182,7 @@ function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b px-4 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-primary-foreground shadow-lg shadow-indigo-500/20">
             <Activity className="size-4" />
           </div>
           <span className="font-semibold text-base">Voicera</span>
@@ -258,7 +258,7 @@ function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center gap-3">
-          <div className="size-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+          <div className="size-8 rounded-lg bg-indigo-600 text-primary-foreground flex items-center justify-center font-bold text-xs">
             {localStorage.getItem('voicera_name')?.[0]?.toUpperCase() || 'U'}
           </div>
           <div className="flex-1 overflow-hidden">
@@ -318,7 +318,7 @@ export default function App() {
             {/* Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {metrics.map((metric, idx) => (
-                <Card key={idx} className="bg-white shadow-sm border-0">
+                <Card key={idx} className="bg-background shadow-sm border-0">
                   <CardContent className="pt-6 pb-4 px-4">
                     <div className="space-y-3">
                       <div className="flex items-center gap-1">
@@ -381,7 +381,7 @@ export default function App() {
             </div>
 
             {/* Table */}
-            <div className="border rounded-lg bg-white shadow-sm">
+            <div className="border rounded-lg bg-background shadow-sm">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -402,7 +402,7 @@ export default function App() {
                 </TableHeader>
                 <TableBody>
                   {recentCalls.map((call) => (
-                    <TableRow key={call.id} className="cursor-pointer hover:bg-slate-50">
+                    <TableRow key={call.id} className="cursor-pointer hover:bg-muted">
                       <TableCell>
                         <Checkbox
                           checked={selectedRows.includes(call.id)}
@@ -421,7 +421,7 @@ export default function App() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="bg-slate-50 font-normal">
+                        <Badge variant="outline" className="bg-muted font-normal">
                           {call.issue}
                         </Badge>
                       </TableCell>

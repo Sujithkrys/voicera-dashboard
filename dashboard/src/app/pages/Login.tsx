@@ -187,17 +187,17 @@ export default function Login() {
   return (
     <div className="min-h-screen w-full flex bg-muted/40">
       {/* Left Brand Pane */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 bg-zinc-950 text-white relative overflow-hidden">
+      <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 bg-zinc-950 text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
         
         <div className="z-10">
-          <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-white/10 -ml-4 mb-8" onClick={() => navigate('/')}>
+          <Button variant="ghost" className="text-zinc-400 hover:text-primary-foreground hover:bg-background/10 -ml-4 mb-8" onClick={() => navigate('/')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back home
           </Button>
           
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-600 text-primary-foreground shadow-lg shadow-indigo-500/20">
               <Activity className="w-5 h-5" />
             </div>
             <span className="font-bold text-2xl tracking-tight">Voicera</span>

@@ -67,7 +67,7 @@ export default function CallLogs() {
       case "resolved": return "bg-emerald-50 text-emerald-700";
       case "escalated": return "bg-red-50 text-red-600";
       case "active": return "bg-amber-50 text-amber-700";
-      default: return "bg-neutral-100 text-neutral-600";
+      default: return "bg-secondary text-muted-foreground";
     }
   };
 
@@ -75,13 +75,13 @@ export default function CallLogs() {
     <div className="p-6 space-y-5 h-full flex flex-col relative overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-[18px] font-semibold text-neutral-900">
+        <h1 className="text-[18px] font-semibold text-foreground">
           Call Logs
         </h1>
         <Button
           variant="outline"
           size="sm"
-          className="h-8 text-[13px] font-medium border-neutral-200 text-neutral-600 rounded-md"
+          className="h-8 text-[13px] font-medium border-border text-muted-foreground rounded-md"
         >
           <Download className="mr-1.5 h-3.5 w-3.5" />
           Export
@@ -91,79 +91,79 @@ export default function CallLogs() {
       {/* Filters */}
       <div className="flex items-center gap-2">
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
           <Input
             placeholder="Search..."
-            className="pl-8 h-8 text-[13px] border-neutral-200 rounded-md bg-white"
+            className="pl-8 h-8 text-[13px] border-border rounded-md bg-background"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <button className="h-8 px-3 text-[13px] font-medium text-neutral-600 border border-neutral-200 rounded-md hover:bg-neutral-50 flex items-center gap-1.5">
+        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5">
           Channel <ChevronDown className="h-3 w-3" />
         </button>
-        <button className="h-8 px-3 text-[13px] font-medium text-neutral-600 border border-neutral-200 rounded-md hover:bg-neutral-50 flex items-center gap-1.5">
+        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5">
           Status <ChevronDown className="h-3 w-3" />
         </button>
-        <button className="h-8 px-3 text-[13px] font-medium text-neutral-600 border border-neutral-200 rounded-md hover:bg-neutral-50 flex items-center gap-1.5 ml-auto">
+        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5 ml-auto">
           Last 7 days <ChevronDown className="h-3 w-3" />
         </button>
       </div>
 
       {/* Table */}
-      <div className="border border-neutral-200 rounded-lg overflow-auto flex-1">
+      <div className="border border-border rounded-lg overflow-auto flex-1">
         <table className="w-full">
-          <thead className="sticky top-0 bg-white z-10">
-            <tr className="border-b border-neutral-100">
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Caller</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Issue</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Channel</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Duration</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Status</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Ticket</th>
-              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-neutral-400 uppercase tracking-wider">Date</th>
+          <thead className="sticky top-0 bg-background z-10">
+            <tr className="border-b border-border">
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Caller</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Issue</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Channel</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Duration</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Ticket</th>
+              <th className="text-left py-2.5 px-4 text-[12px] font-medium text-muted-foreground uppercase tracking-wider">Date</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={7} className="text-center py-10 text-[13px] text-neutral-400">Loading...</td>
+                <td colSpan={7} className="text-center py-10 text-[13px] text-muted-foreground">Loading...</td>
               </tr>
             ) : (
               calls.map((call) => (
                 <tr
                   key={call.id}
-                  className="border-b border-neutral-50 last:border-0 hover:bg-neutral-50 transition-colors cursor-pointer group"
+                  className="border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors cursor-pointer group"
                   onClick={() => setSelectedCall(call)}
                 >
                   <td className="py-2.5 px-4">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-full bg-neutral-100 flex items-center justify-center text-[11px] font-medium text-neutral-600">
+                      <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[11px] font-medium text-muted-foreground">
                         {call.name[0]}
                       </div>
                       <div>
-                        <div className="text-[13px] font-medium text-neutral-900">{call.name}</div>
-                        <div className="text-[11px] text-neutral-400">{call.email}</div>
+                        <div className="text-[13px] font-medium text-foreground">{call.name}</div>
+                        <div className="text-[11px] text-muted-foreground">{call.email}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-2.5 px-4 text-[13px] text-neutral-600">{call.issue}</td>
+                  <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{call.issue}</td>
                   <td className="py-2.5 px-4">
-                    <span className="text-[13px] text-neutral-600 flex items-center gap-1">
-                      {call.channel === "Voice" ? <Phone className="h-3 w-3 text-neutral-400" /> : <MessageSquare className="h-3 w-3 text-neutral-400" />}
+                    <span className="text-[13px] text-muted-foreground flex items-center gap-1">
+                      {call.channel === "Voice" ? <Phone className="h-3 w-3 text-muted-foreground" /> : <MessageSquare className="h-3 w-3 text-muted-foreground" />}
                       {call.channel}
                     </span>
                   </td>
-                  <td className="py-2.5 px-4 text-[13px] text-neutral-600">{call.duration}</td>
+                  <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{call.duration}</td>
                   <td className="py-2.5 px-4">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${statusStyle(call.status)}`}>
                       {call.status.charAt(0).toUpperCase() + call.status.slice(1)}
                     </span>
                   </td>
                   <td className="py-2.5 px-4">
-                    <span className="font-mono text-[12px] text-neutral-500">{call.ticket}</span>
+                    <span className="font-mono text-[12px] text-muted-foreground">{call.ticket}</span>
                   </td>
-                  <td className="py-2.5 px-4 text-[13px] text-neutral-500">{call.date}</td>
+                  <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{call.date}</td>
                 </tr>
               ))
             )}
@@ -172,20 +172,20 @@ export default function CallLogs() {
       </div>
 
       {/* Slide-out Detail Panel */}
-      <div className={`absolute top-0 right-0 bottom-0 w-[420px] bg-white border-l border-neutral-200 transition-transform duration-200 z-50 flex flex-col ${selectedCall ? "translate-x-0" : "translate-x-full"}`}>
+      <div className={`absolute top-0 right-0 bottom-0 w-[420px] bg-background border-l border-border transition-transform duration-200 z-50 flex flex-col ${selectedCall ? "translate-x-0" : "translate-x-full"}`}>
         {selectedCall && (
           <>
-            <div className="p-5 border-b border-neutral-100 flex items-center justify-between">
+            <div className="p-5 border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center text-[13px] font-medium text-neutral-700">
+                <div className="w-9 h-9 rounded-full bg-secondary flex items-center justify-center text-[13px] font-medium text-foreground">
                   {selectedCall.name[0]}
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-semibold text-neutral-900">{selectedCall.name}</h3>
-                  <p className="text-[12px] text-neutral-500">{selectedCall.email}</p>
+                  <h3 className="text-[15px] font-semibold text-foreground">{selectedCall.name}</h3>
+                  <p className="text-[12px] text-muted-foreground">{selectedCall.email}</p>
                 </div>
               </div>
-              <button className="p-1 rounded hover:bg-neutral-100 text-neutral-400" onClick={() => setSelectedCall(null)}>
+              <button className="p-1 rounded hover:bg-secondary text-muted-foreground" onClick={() => setSelectedCall(null)}>
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -198,47 +198,47 @@ export default function CallLogs() {
                   { label: "Ticket", value: selectedCall.ticket },
                   { label: "Status", value: selectedCall.status },
                 ].map((item, i) => (
-                  <div key={i} className="border border-neutral-100 rounded-md p-3">
-                    <div className="text-[11px] text-neutral-400 uppercase tracking-wider mb-1">{item.label}</div>
-                    <div className="text-[13px] font-medium text-neutral-900 capitalize">{item.value}</div>
+                  <div key={i} className="border border-border rounded-md p-3">
+                    <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">{item.label}</div>
+                    <div className="text-[13px] font-medium text-foreground capitalize">{item.value}</div>
                   </div>
                 ))}
               </div>
 
-              <h4 className="text-[13px] font-semibold text-neutral-900 mb-3">Transcript</h4>
+              <h4 className="text-[13px] font-semibold text-foreground mb-3">Transcript</h4>
               <div className="space-y-3">
                 <div>
-                  <div className="text-[11px] text-neutral-400 mb-1">Agent</div>
-                  <div className="bg-neutral-50 text-[13px] text-neutral-700 p-3 rounded-md leading-relaxed">
+                  <div className="text-[11px] text-muted-foreground mb-1">Agent</div>
+                  <div className="bg-muted text-[13px] text-foreground p-3 rounded-md leading-relaxed">
                     Hi! Thank you for calling Voicera support. How can I help you today?
                   </div>
                 </div>
                 <div>
-                  <div className="text-[11px] text-neutral-400 mb-1 text-right">User</div>
-                  <div className="bg-neutral-900 text-white text-[13px] p-3 rounded-md leading-relaxed ml-6">
+                  <div className="text-[11px] text-muted-foreground mb-1 text-right">User</div>
+                  <div className="bg-primary text-primary-foreground text-[13px] p-3 rounded-md leading-relaxed ml-6">
                     Hi, I'm having trouble logging into my dashboard. It keeps saying invalid credentials.
                   </div>
                 </div>
                 <div>
-                  <div className="text-[11px] text-neutral-400 mb-1">Agent</div>
-                  <div className="bg-neutral-50 text-[13px] text-neutral-700 p-3 rounded-md leading-relaxed">
+                  <div className="text-[11px] text-muted-foreground mb-1">Agent</div>
+                  <div className="bg-muted text-[13px] text-foreground p-3 rounded-md leading-relaxed">
                     I can certainly help with that. Let me pull up your account. Try logging in using an incognito window.
                   </div>
                 </div>
                 <div>
-                  <div className="text-[11px] text-neutral-400 mb-1 text-right">User</div>
-                  <div className="bg-neutral-900 text-white text-[13px] p-3 rounded-md leading-relaxed ml-6">
+                  <div className="text-[11px] text-muted-foreground mb-1 text-right">User</div>
+                  <div className="bg-primary text-primary-foreground text-[13px] p-3 rounded-md leading-relaxed ml-6">
                     That works perfectly. Thank you!
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 border-t border-neutral-100 flex gap-2">
-              <Button className="flex-1 bg-neutral-900 text-white hover:bg-neutral-800 h-8 text-[13px] font-medium rounded-md">
+            <div className="p-4 border-t border-border flex gap-2">
+              <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md">
                 View Session
               </Button>
-              <Button variant="outline" className="flex-1 h-8 text-[13px] font-medium border-neutral-200 text-neutral-700 rounded-md">
+              <Button variant="outline" className="flex-1 h-8 text-[13px] font-medium border-border text-foreground rounded-md">
                 View Ticket
               </Button>
             </div>

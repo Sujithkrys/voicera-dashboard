@@ -41,8 +41,8 @@ import { useChat } from "../context/ChatContext";
 const navItem = (isActive: boolean) =>
   `h-8 rounded-md text-[13px] transition-colors ${
     isActive
-      ? "bg-neutral-100 text-neutral-900 font-medium"
-      : "text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 font-normal"
+      ? "bg-secondary text-foreground font-medium"
+      : "text-muted-foreground hover:text-foreground hover:bg-muted font-normal"
   }`;
 
 export function AppSidebar() {
@@ -64,19 +64,19 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-neutral-200 bg-white">
+    <Sidebar collapsible="icon" className="border-r border-border bg-background">
       <SidebarHeader 
-        className="px-4 py-4 border-b border-neutral-100 flex-row items-center justify-between group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 cursor-pointer"
+        className="px-4 py-4 border-b border-border flex-row items-center justify-between group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 cursor-pointer"
         onClick={() => state === "collapsed" && toggleSidebar()}
       >
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-neutral-900 text-white shrink-0">
+          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary text-primary-foreground shrink-0">
             <Activity className="size-3.5" strokeWidth={2} />
           </div>
-          <span className="font-semibold text-[15px] text-neutral-900 group-data-[collapsible=icon]:hidden">
+          <span className="font-semibold text-[15px] text-foreground group-data-[collapsible=icon]:hidden">
             Voicera
           </span>
-          <svg className="ml-1 w-3 h-3 text-neutral-400 group-data-[collapsible=icon]:hidden" viewBox="0 0 12 12" fill="none">
+          <svg className="ml-1 w-3 h-3 text-muted-foreground group-data-[collapsible=icon]:hidden" viewBox="0 0 12 12" fill="none">
             <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
@@ -155,7 +155,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-2.5 text-[11px] font-medium uppercase tracking-wider text-neutral-400 mb-1">
+          <SidebarGroupLabel className="px-2.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-1">
             Configuration
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -198,17 +198,17 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t border-neutral-100 p-3 group-data-[collapsible=icon]:p-2">
-        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-neutral-50 transition-colors group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center">
-          <div className="size-7 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center font-medium text-xs shrink-0 cursor-pointer">
+      <SidebarFooter className="border-t border-border p-3 group-data-[collapsible=icon]:p-2">
+        <div className="flex items-center gap-2.5 p-2 rounded-md hover:bg-muted transition-colors group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center">
+          <div className="size-7 rounded-full bg-neutral-200 text-muted-foreground flex items-center justify-center font-medium text-xs shrink-0 cursor-pointer">
             {localStorage.getItem("voicera_name")?.[0]?.toUpperCase() || "U"}
           </div>
-          <span className="text-[13px] font-medium text-neutral-700 truncate group-data-[collapsible=icon]:hidden flex-1 cursor-pointer">
+          <span className="text-[13px] font-medium text-foreground truncate group-data-[collapsible=icon]:hidden flex-1 cursor-pointer">
             {localStorage.getItem("voicera_name") || "User"}
           </span>
           <button 
             onClick={handleLogout} 
-            className="text-neutral-400 hover:text-red-500 transition-colors group-data-[collapsible=icon]:hidden p-1.5 rounded-md hover:bg-red-50 ml-auto" 
+            className="text-muted-foreground hover:text-red-500 transition-colors group-data-[collapsible=icon]:hidden p-1.5 rounded-md hover:bg-red-50 ml-auto" 
             title="Logout"
           >
             <LogOut className="size-4" strokeWidth={1.8} />
@@ -225,7 +225,7 @@ function SidebarTrigger() {
   return (
     <button
       onClick={toggleSidebar}
-      className="w-8 h-8 flex items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
+      className="w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-muted-foreground transition-colors"
       title="Close Sidebar"
     >
       <PanelLeftClose className="size-4.5" strokeWidth={1.8} />
@@ -235,7 +235,7 @@ function SidebarTrigger() {
 
 function MainContent() {
   return (
-    <main className="flex-1 overflow-auto bg-white relative flex flex-col min-w-0">
+    <main className="flex-1 overflow-auto bg-background relative flex flex-col min-w-0">
       <Outlet />
     </main>
   );
@@ -253,7 +253,7 @@ export default function DashboardLayout() {
 
   return (
     <SidebarProvider style={{ "--sidebar-width": "220px" } as React.CSSProperties}>
-      <div className="flex min-h-screen w-full bg-white relative">
+      <div className="flex min-h-screen w-full bg-background relative">
         <AppSidebar />
         <MainContent />
       </div>

@@ -75,7 +75,7 @@ export function AIChatBox() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="border border-neutral-200 rounded-xl overflow-hidden bg-white">
+    <div className="border border-border rounded-xl overflow-hidden bg-background">
       {/* Chat body */}
       <div
         className="overflow-y-auto transition-all duration-300"
@@ -84,13 +84,13 @@ export function AIChatBox() {
         {!hasMessages ? (
           /* Empty state — greeting */
           <div className="flex flex-col items-center justify-center py-10 px-6">
-            <div className="w-10 h-10 rounded-xl bg-neutral-900 flex items-center justify-center mb-4">
-              <Sparkles className="size-5 text-white" strokeWidth={1.8} />
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center mb-4">
+              <Sparkles className="size-5 text-primary-foreground" strokeWidth={1.8} />
             </div>
-            <h3 className="text-[16px] font-semibold text-neutral-900 mb-1">
+            <h3 className="text-[16px] font-semibold text-foreground mb-1">
               Voicera AI Assistant
             </h3>
-            <p className="text-[13px] text-neutral-400 mb-6 text-center max-w-md">
+            <p className="text-[13px] text-muted-foreground mb-6 text-center max-w-md">
               Ask me anything about your calls, metrics, or get help configuring your bot.
             </p>
             <div className="flex flex-wrap justify-center gap-2">
@@ -98,7 +98,7 @@ export function AIChatBox() {
                 <button
                   key={i}
                   onClick={() => handleChipClick(chip)}
-                  className="px-3.5 py-2 text-[12px] font-medium text-neutral-600 bg-neutral-50 border border-neutral-200 rounded-lg hover:bg-neutral-100 hover:border-neutral-300 transition-all cursor-pointer"
+                  className="px-3.5 py-2 text-[12px] font-medium text-muted-foreground bg-muted border border-border rounded-lg hover:bg-secondary hover:border-border transition-all cursor-pointer"
                 >
                   {chip}
                 </button>
@@ -117,8 +117,8 @@ export function AIChatBox() {
                 <div
                   className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
                     msg.role === "assistant"
-                      ? "bg-neutral-900 text-white"
-                      : "bg-neutral-200 text-neutral-600"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-neutral-200 text-muted-foreground"
                   }`}
                 >
                   {msg.role === "assistant" ? (
@@ -131,8 +131,8 @@ export function AIChatBox() {
                 <div
                   className={`max-w-[75%] px-4 py-2.5 rounded-xl text-[13px] leading-relaxed ${
                     msg.role === "user"
-                      ? "bg-neutral-900 text-white rounded-tr-sm"
-                      : "bg-neutral-50 text-neutral-800 border border-neutral-100 rounded-tl-sm"
+                      ? "bg-primary text-primary-foreground rounded-tr-sm"
+                      : "bg-muted text-foreground border border-border rounded-tl-sm"
                   }`}
                 >
                   {msg.content}
@@ -142,10 +142,10 @@ export function AIChatBox() {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex gap-3">
-                <div className="w-7 h-7 rounded-lg bg-neutral-900 text-white flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-primary text-primary-foreground flex items-center justify-center shrink-0">
                   <Sparkles className="size-3.5" strokeWidth={2} />
                 </div>
-                <div className="bg-neutral-50 border border-neutral-100 rounded-xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
+                <div className="bg-muted border border-border rounded-xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
                   <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
                   <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -158,8 +158,8 @@ export function AIChatBox() {
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-neutral-100 px-4 py-3">
-        <div className="flex items-end gap-2 bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-2.5 focus-within:border-neutral-400 focus-within:bg-white transition-colors">
+      <div className="border-t border-border px-4 py-3">
+        <div className="flex items-end gap-2 bg-muted border border-border rounded-xl px-4 py-2.5 focus-within:border-neutral-400 focus-within:bg-background transition-colors">
           <textarea
             ref={inputRef}
             value={input}
@@ -167,7 +167,7 @@ export function AIChatBox() {
             onKeyDown={handleKeyDown}
             placeholder="Ask Voicera AI anything..."
             rows={1}
-            className="flex-1 bg-transparent text-[13px] text-neutral-900 placeholder:text-neutral-400 outline-none resize-none leading-relaxed min-h-[20px] max-h-[100px]"
+            className="flex-1 bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground outline-none resize-none leading-relaxed min-h-[20px] max-h-[100px]"
             style={{ scrollbarWidth: "none" }}
           />
           <button
@@ -175,14 +175,14 @@ export function AIChatBox() {
             disabled={!input.trim() || isTyping}
             className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${
               input.trim() && !isTyping
-                ? "bg-neutral-900 text-white hover:bg-neutral-800 cursor-pointer"
-                : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
+                ? "bg-primary text-primary-foreground hover:bg-primary cursor-pointer"
+                : "bg-neutral-200 text-muted-foreground cursor-not-allowed"
             }`}
           >
             <Send className="size-3.5" strokeWidth={2} />
           </button>
         </div>
-        <p className="text-[11px] text-neutral-400 mt-2 text-center">
+        <p className="text-[11px] text-muted-foreground mt-2 text-center">
           AI responses are simulated. Press Enter to send, Shift+Enter for new line.
         </p>
       </div>
