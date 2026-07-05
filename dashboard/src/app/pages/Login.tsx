@@ -252,7 +252,7 @@ export default function Login() {
   return (
     <div className="h-screen w-full flex bg-background overflow-hidden">
       {/* Left Brand Pane */}
-      <div className="hidden lg:flex flex-col justify-between w-[45%] max-w-[600px] p-10 bg-zinc-950 text-white relative border-r border-border/10">
+      <div className="hidden lg:flex flex-col justify-between w-1/2 p-10 bg-zinc-950 text-white relative border-r border-border/10">
         {/* Subtle grid pattern background */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%221%22 fill-rule=%22evenodd%22%3E%3Ccircle cx=%222%22 cy=%222%22 r=%221%22/%3E%3C/g%3E%3C/svg%3E")' }}></div>
 
@@ -271,8 +271,7 @@ export default function Login() {
         </div>
 
         <div className="z-10 max-w-sm mt-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white/5 text-zinc-300 text-[11px] font-medium tracking-wide mb-6">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+          <div className="inline-flex items-center px-3 py-1 rounded bg-white/5 border border-white/10 text-zinc-300 text-[11px] font-medium tracking-wide mb-6">
             Start free, no card
           </div>
           <h1 className="text-3xl font-medium tracking-tight leading-snug mb-4 text-zinc-100">
