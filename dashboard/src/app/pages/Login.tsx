@@ -250,63 +250,58 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen w-full flex bg-muted/40">
+    <div className="h-screen w-full flex bg-background overflow-hidden">
       {/* Left Brand Pane */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 p-12 relative overflow-hidden bg-black text-white">
-        {/* Ambient mesh gradient backgrounds */}
-        <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-[#8a4cfc] rounded-full mix-blend-screen filter blur-[120px] opacity-40 animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-[#bd9dff] rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-pulse" style={{ animationDuration: '10s' }} />
-        <div className="absolute top-[20%] right-[10%] w-[40%] h-[40%] bg-blue-500 rounded-full mix-blend-screen filter blur-[120px] opacity-20" />
-        
-        {/* Grain overlay for premium feel */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}></div>
+      <div className="hidden lg:flex flex-col justify-between w-[45%] max-w-[600px] p-10 bg-zinc-950 text-white relative border-r border-border/10">
+        {/* Subtle grid pattern background */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%221%22 fill-rule=%22evenodd%22%3E%3Ccircle cx=%222%22 cy=%222%22 r=%221%22/%3E%3C/g%3E%3C/svg%3E")' }}></div>
 
-        <div className="z-10 relative">
-          <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-white/10 -ml-4 mb-8 transition-colors rounded-full px-4" onClick={() => navigate('/')}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
+        <div className="z-10">
+          <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-white/5 -ml-3 mb-6 h-8 px-3 text-xs" onClick={() => navigate('/')}>
+            <ArrowLeft className="mr-2 h-3 w-3" />
             Back home
           </Button>
           
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-[#8a4cfc] to-[#bd9dff] text-white shadow-[0_0_20px_rgba(138,76,252,0.4)]">
-              <Activity className="w-6 h-6" />
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-white">
+              <Activity className="w-4.5 h-4.5" />
             </div>
-            <span className="font-extrabold text-3xl tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">Voicera</span>
+            <span className="font-semibold text-lg tracking-tight">Voicera</span>
           </div>
         </div>
 
-        <div className="z-10 relative max-w-lg mt-24 mb-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/90 text-xs font-bold uppercase tracking-widest mb-8 backdrop-blur-md shadow-xl">
-            <div className="w-2 h-2 rounded-full bg-[#bd9dff] animate-pulse shadow-[0_0_10px_rgba(189,157,255,0.8)]" />
+        <div className="z-10 max-w-sm mt-auto mb-16">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white/5 text-zinc-300 text-[11px] font-medium tracking-wide mb-6">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
             Start free, no card
           </div>
-          <h1 className="text-[3.5rem] font-extrabold tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-3xl font-medium tracking-tight leading-snug mb-4 text-zinc-100">
             500 free minutes.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#bd9dff] to-cyan-300">
+            <span className="text-zinc-500">
               Live in under an hour.
             </span>
           </h1>
-          <p className="text-lg text-zinc-300 leading-relaxed mb-12 font-medium max-w-md">
+          <p className="text-sm text-zinc-400 leading-relaxed mb-8">
             Trusted by support teams at fintechs, marketplaces, and SaaS leaders. No credit card required to start.
           </p>
           
-          <div className="flex gap-16">
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Setup time</span>
-              <span className="text-3xl font-bold text-white flex items-baseline gap-1">
-                ~12 <span className="text-lg font-medium text-zinc-500">min</span>
+          <div className="flex gap-10 border-t border-white/10 pt-6">
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Setup time</span>
+              <span className="text-xl font-semibold text-zinc-200 flex items-baseline gap-1">
+                ~12 <span className="text-xs font-normal text-zinc-500">min</span>
               </span>
             </div>
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Free credits</span>
-              <span className="text-3xl font-bold text-white flex items-baseline gap-1">
-                500 <span className="text-lg font-medium text-zinc-500">min</span>
+            <div className="flex flex-col gap-1">
+              <span className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Free credits</span>
+              <span className="text-xl font-semibold text-zinc-200 flex items-baseline gap-1">
+                500 <span className="text-xs font-normal text-zinc-500">min</span>
               </span>
             </div>
           </div>
         </div>
         
-        <div className="z-10 relative text-sm font-medium text-zinc-500 flex justify-between items-center w-full">
+        <div className="z-10 text-[11px] text-zinc-500 flex justify-between items-center w-full">
           <span>© {new Date().getFullYear()} Voicera Inc.</span>
           <div className="flex gap-4">
             <span className="hover:text-zinc-300 cursor-pointer transition-colors">Privacy</span>
@@ -315,16 +310,17 @@ export default function Login() {
         </div>
       </div>
 
+
       {/* Right Form Pane */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold tracking-tight mb-2">
+      <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
+        <div className="w-full max-w-sm">
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold tracking-tight mb-1.5">
               {activeTab === 'signUp' ? 'Create an account' : 
                activeTab === 'signIn' ? 'Welcome back' : 
                activeTab === 'reset' ? 'Reset password' : 'Set new password'}
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {activeTab === 'signUp' ? 'Get started in a couple of minutes.' : 
                activeTab === 'signIn' ? 'Sign in to access your dashboard.' : 
                activeTab === 'reset' ? "We'll send a recovery link to your inbox." : 'Choose a strong secure password for your account.'}
@@ -376,7 +372,7 @@ export default function Login() {
             </form>
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="signIn">Sign In</TabsTrigger>
                 <TabsTrigger value="signUp">Sign Up</TabsTrigger>
               </TabsList>
