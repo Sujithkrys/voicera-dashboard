@@ -12,7 +12,7 @@ from app.services.email_service import email_service
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/signup")
-async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
+async def signup(request: SignupRequest, req: Request, db: AsyncSession = Depends(get_db)):
     # 1. Check if email already exists
     check_query = text("SELECT id FROM users WHERE email = :email")
     result = await db.execute(check_query, {"email": request.company_email})
@@ -58,7 +58,7 @@ async def signup(request: SignupRequest, db: AsyncSession = Depends(get_db)):
         await db.commit()
 
         # 6. Send Activation Email via Brevo
-        activation_link = f"https://voicera-dashboard-production.up.railway.app/api/v1/auth/activate?token={activation_token}"
+        activation_link = f"{req.url.scheme}://{req.url.netloc}/api/v1/auth/activate?token={activation_token}"
         from app.services.email_service import email_service
         try:
             await email_service.send_activation_email(
@@ -83,6 +83,8 @@ from fastapi.responses import RedirectResponse
 
 @router.get("/activate")
 async def activate_account(token: str, db: AsyncSession = Depends(get_db)):
+    from app.core.config import settings
+    frontend_url = settings.FRONTEND_URL.rstrip('/')
     try:
         if not token:
             raise HTTPException(status_code=400, detail="Token is required")
@@ -97,7 +99,7 @@ async def activate_account(token: str, db: AsyncSession = Depends(get_db)):
         user = result.fetchone()
         
         if not user:
-            return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?error=activation_failed")
+            return RedirectResponse(f"{frontend_url}/login?error=activation_failed")
         
         # Activate user and remove token
         update_query = text("""
@@ -108,12 +110,12 @@ async def activate_account(token: str, db: AsyncSession = Depends(get_db)):
         await db.execute(update_query, {"id": user.id})
         await db.commit()
         
-        return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?activated=true")
+        return RedirectResponse(f"{frontend_url}/login?activated=true")
         
     except Exception as e:
         await db.rollback()
         print(f"Activation error: {e}")
-        return RedirectResponse("https://voicera-dashboard.thalathotysujith.workers.dev/login?error=activation_failed")
+        return RedirectResponse(f"{frontend_url}/login?error=activation_failed")
 
 @router.post("/login", response_model=AuthResponse)
 async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):

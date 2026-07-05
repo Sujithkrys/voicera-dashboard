@@ -10,6 +10,7 @@ import {
 import { Button } from "../components/ui/button";
 import { Sparkline, MiniBars, DottedTrack, TickBar } from "../components/charts";
 import { apiClient } from "../../api/client";
+import { format, subDays, isSameDay } from "date-fns";
 
 type ChartKind = "sparkline" | "minibars" | "dotted" | "tickbar";
 
@@ -74,30 +75,7 @@ const defaultMetrics: Metric[] = [
   },
 ];
 
-const callVolumeData = [
-  { name: "Mon", calls: 842 },
-  { name: "Tue", calls: 1120 },
-  { name: "Wed", calls: 1400 },
-  { name: "Thu", calls: 940 },
-  { name: "Fri", calls: 1280 },
-  { name: "Sat", calls: 1150 },
-  { name: "Sun", calls: 900 },
-];
 
-const recentCalls = [
-  { name: "Priya Sharma", issue: "Technical Issue", duration: "3m 12s", status: "resolved", time: "10:32 AM" },
-  { name: "Marco Diaz", issue: "Billing", duration: "1m 48s", status: "escalated", time: "9:18 AM" },
-  { name: "Sofia Kim", issue: "Account Access", duration: "2m 05s", status: "resolved", time: "8:45 AM" },
-  { name: "Ravi Patel", issue: "Feature Help", duration: "4m 22s", status: "resolved", time: "6:14 PM" },
-  { name: "Laura Chen", issue: "Technical Issue", duration: "0m 55s", status: "active", time: "3:30 PM" },
-];
-
-const issueBreakdown = [
-  { label: "Technical", pct: 72, color: "#4B96FF" },
-  { label: "Billing", pct: 51, color: "#4B96FF" },
-  { label: "Access", pct: 38, color: "#4B96FF" },
-  { label: "Other", pct: 15, color: "#4B96FF" },
-];
 
 function MetricChart({ metric }: { metric: Metric }) {
   switch (metric.chartKind) {
@@ -132,6 +110,8 @@ function MetricChart({ metric }: { metric: Metric }) {
 
 export default function Overview() {
   const [metrics, setMetrics] = useState<Metric[]>(defaultMetrics);
+  const [callVolumeData, setCallVolumeData] = useState<{name: string, calls: number}[]>([]);
+  const [issueBreakdown, setIssueBreakdown] = useState<{label: string, pct: number, color: string}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -168,6 +148,43 @@ export default function Overview() {
             { ...prev[3], value: `${resRate}%`, chartPct: resRate / 100 },
             prev[4],
           ]);
+
+          // Compute call volume
+          const volumeData = [];
+          for (let i = 6; i >= 0; i--) {
+            const d = subDays(new Date(), i);
+            const count = sessions.filter((s: any) => s.created_at && isSameDay(new Date(s.created_at), d)).length;
+            volumeData.push({ name: format(d, "EEE"), calls: count });
+          }
+          setCallVolumeData(volumeData);
+
+          // Compute issue breakdown
+          const issues: Record<string, number> = {};
+          let total = 0;
+          sessions.forEach((s: any) => {
+            const issueType = s.metadata?.issue || "Other";
+            issues[issueType] = (issues[issueType] || 0) + 1;
+            total++;
+          });
+          
+          if (total > 0) {
+            const breakdown = Object.entries(issues).map(([label, count]) => ({
+              label: label.length > 15 ? label.substring(0, 15) + '...' : label,
+              pct: Math.round((count / total) * 100),
+              color: "#4B96FF"
+            })).sort((a, b) => b.pct - a.pct).slice(0, 4);
+            setIssueBreakdown(breakdown);
+          } else {
+            setIssueBreakdown([]);
+          }
+        } else {
+          // Empty state for new users
+          const emptyVolume = [];
+          for (let i = 6; i >= 0; i--) {
+            emptyVolume.push({ name: format(subDays(new Date(), i), "EEE"), calls: 0 });
+          }
+          setCallVolumeData(emptyVolume);
+          setIssueBreakdown([]);
         }
       } catch (err) {
         console.error("Failed to load overview data", err);
