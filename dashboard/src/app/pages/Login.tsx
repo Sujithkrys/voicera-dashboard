@@ -311,7 +311,7 @@ export default function Login() {
 
 
       {/* Right Form Pane */}
-      <div className="flex-1 flex items-center justify-center p-6 overflow-y-auto">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 overflow-y-auto">
         <div className="w-full max-w-sm">
           <div className="mb-6">
             <h2 className="text-2xl font-semibold tracking-tight mb-1.5">
