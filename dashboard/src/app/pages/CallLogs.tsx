@@ -42,17 +42,7 @@ export default function CallLogs() {
             s.ticket_id ||
             `TKT-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
         }));
-        setCalls(
-          formattedCalls.length > 0
-            ? formattedCalls
-            : [
-                { id: "1", name: "Priya Sharma", email: "priya@example.com", issue: "Technical Issue", channel: "Voice", duration: "3m 12s", status: "resolved", date: "Apr 21, 10:32 AM", ticket: "TKT-A8F2X" },
-                { id: "2", name: "Marco Diaz", email: "marco@example.com", issue: "Billing", channel: "Chat", duration: "1m 48s", status: "escalated", date: "Apr 21, 9:18 AM", ticket: "TKT-B3K9P" },
-                { id: "3", name: "Sofia Kim", email: "sofia@example.com", issue: "Account Access", channel: "Voice", duration: "2m 05s", status: "resolved", date: "Apr 21, 8:45 AM", ticket: "TKT-C7M1L" },
-                { id: "4", name: "Ravi Patel", email: "ravi@example.com", issue: "Feature Help", channel: "Voice", duration: "4m 22s", status: "resolved", date: "Apr 20, 6:14 PM", ticket: "TKT-D4Q8R" },
-                { id: "5", name: "Laura Chen", email: "laura@example.com", issue: "Technical Issue", channel: "Voice", duration: "0m 55s", status: "active", date: "Apr 20, 3:30 PM", ticket: "TKT-E2N5T" },
-              ]
-        );
+        setCalls(formattedCalls);
       } catch (err) {
         console.error("Failed to load calls", err);
       } finally {
@@ -129,6 +119,10 @@ export default function CallLogs() {
               <tr>
                 <td colSpan={7} className="text-center py-10 text-[13px] text-muted-foreground">Loading...</td>
               </tr>
+            ) : calls.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="text-center py-10 text-[13px] text-muted-foreground">No call logs found.</td>
+              </tr>
             ) : (
               calls.map((call) => (
                 <tr
@@ -139,7 +133,7 @@ export default function CallLogs() {
                   <td className="py-2.5 px-4">
                     <div className="flex items-center gap-2.5">
                       <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[11px] font-medium text-muted-foreground">
-                        {call.name[0]}
+                        {call.name && call.name.length > 0 ? call.name[0] : "?"}
                       </div>
                       <div>
                         <div className="text-[13px] font-medium text-foreground">{call.name}</div>
@@ -157,7 +151,7 @@ export default function CallLogs() {
                   <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{call.duration}</td>
                   <td className="py-2.5 px-4">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${statusStyle(call.status)}`}>
-                      {call.status.charAt(0).toUpperCase() + call.status.slice(1)}
+                      {call.status ? call.status.charAt(0).toUpperCase() + call.status.slice(1) : ""}
                     </span>
                   </td>
                   <td className="py-2.5 px-4">

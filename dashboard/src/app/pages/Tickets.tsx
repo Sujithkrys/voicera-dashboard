@@ -1,21 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { apiClient } from "../../api/client";
 import { Button } from "../components/ui/button";
 import { LayoutList, Kanban, ChevronRight } from "lucide-react";
 
-const mockTickets = [
-  { id: "TKT-A8F2X", title: "Login issue after password reset", name: "Priya Sharma", issue: "Technical Issue", status: "open", date: "Apr 21", duration: "3m 12s call" },
-  { id: "TKT-B3K9P", title: "Double charge on invoice #4821", name: "Marco Diaz", issue: "Billing", status: "open", date: "Apr 21", duration: "1m 48s call" },
-  { id: "TKT-G9H7V", title: "Account suspended without warning", name: "Nina Okafor", issue: "Account Access", status: "open", date: "Apr 19", duration: "1m 18s call" },
-  { id: "TKT-E2N5T", title: "API rate limit errors in production", name: "Laura Chen", issue: "Technical Issue", status: "in-progress", date: "Apr 20", duration: "0m 55s call" },
-  { id: "TKT-D4Q8R", title: "How to set up webhook integrations", name: "Ravi Patel", issue: "Feature Help", status: "in-progress", date: "Apr 20", duration: "4m 22s call" },
-  { id: "TKT-C7M1L", title: "2FA not working, locked out", name: "Sofia Kim", issue: "Account Access", status: "resolved", date: "Apr 21", duration: "2m 05s call" },
-  { id: "TKT-F6W3Z", title: "Subscription renewal failed", name: "James Wilson", issue: "Billing", status: "resolved", date: "Apr 20", duration: "2m 41s call" },
-];
-
 export default function Tickets() {
-  const [tickets] = useState(mockTickets);
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
   const [activeTab, setActiveTab] = useState<"all" | "open" | "in-progress" | "resolved">("all");
+
+  useEffect(() => {
+    async function fetchTickets() {
+      try {
+        const res = await apiClient("/sessions");
+        const formattedTickets = (res.sessions || []).map((s: any) => ({
+          id: s.ticket_id || `TKT-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+          title: s.metadata?.title || s.metadata?.issue_type || "Support Request",
+          name: s.customer?.name || "Unknown",
+          issue: s.metadata?.issue_type || "Technical Issue",
+          status: s.status === "active" ? "in-progress" : (s.status === "resolved" || s.status === "completed" ? "resolved" : "open"),
+          date: new Date(s.created_at).toLocaleString("en-US", { month: "short", day: "numeric" }),
+          duration: s.metadata?.duration ? `${Math.floor(s.metadata.duration / 60)}m ${s.metadata.duration % 60}s call` : "",
+        }));
+        setTickets(formattedTickets);
+      } catch (err) {
+        console.error("Failed to load tickets", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTickets();
+  }, []);
 
   const statusStyle = (status: string) => {
     switch (status) {
@@ -92,25 +107,35 @@ export default function Tickets() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTickets.map((ticket) => (
-                  <tr key={ticket.id} className="border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors cursor-pointer">
-                    <td className="py-2.5 px-4 font-mono text-[12px] text-muted-foreground">{ticket.id}</td>
-                    <td className="py-2.5 px-4 text-[13px] font-medium text-foreground">{ticket.title}</td>
-                    <td className="py-2.5 px-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] font-medium text-muted-foreground">{ticket.name[0]}</div>
-                        <span className="text-[13px] text-muted-foreground">{ticket.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{ticket.issue}</td>
-                    <td className="py-2.5 px-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${statusStyle(ticket.status)}`}>
-                        {ticket.status.replace("-", " ").replace(/^\w/, (c) => c.toUpperCase())}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{ticket.date}</td>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-[13px] text-muted-foreground">Loading...</td>
                   </tr>
-                ))}
+                ) : filteredTickets.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 text-[13px] text-muted-foreground">No tickets found.</td>
+                  </tr>
+                ) : (
+                  filteredTickets.map((ticket) => (
+                    <tr key={ticket.id} className="border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors cursor-pointer">
+                      <td className="py-2.5 px-4 font-mono text-[12px] text-muted-foreground">{ticket.id}</td>
+                      <td className="py-2.5 px-4 text-[13px] font-medium text-foreground">{ticket.title}</td>
+                      <td className="py-2.5 px-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-[10px] font-medium text-muted-foreground">{ticket.name && ticket.name.length > 0 ? ticket.name[0] : "?"}</div>
+                          <span className="text-[13px] text-muted-foreground">{ticket.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{ticket.issue}</td>
+                      <td className="py-2.5 px-4">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${statusStyle(ticket.status)}`}>
+                          {ticket.status.replace("-", " ").replace(/^\w/, (c: string) => c.toUpperCase())}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{ticket.date}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -129,18 +154,24 @@ export default function Tickets() {
                   <span className="text-[12px] text-muted-foreground">{colTickets.length}</span>
                 </div>
                 <div className="flex-1 overflow-y-auto space-y-2 bg-muted rounded-lg p-2.5">
-                  {colTickets.map((ticket) => (
-                    <div key={ticket.id} className="bg-background rounded-md border border-border p-3 hover:border-border transition-colors cursor-pointer">
-                      <div className="text-[13px] font-medium text-foreground mb-1.5">{ticket.title}</div>
-                      <div className="text-[12px] text-muted-foreground mb-2.5">{ticket.name} · {ticket.issue}</div>
-                      <div className="flex items-center justify-between">
-                        <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${statusStyle(ticket.status)}`}>
-                          {ticket.issue}
-                        </span>
-                        <span className="text-[11px] text-muted-foreground">{ticket.date}</span>
+                  {isLoading ? (
+                    <div className="text-center py-10 text-[13px] text-muted-foreground">Loading...</div>
+                  ) : colTickets.length === 0 ? (
+                    <div className="text-center py-10 text-[13px] text-muted-foreground">No tickets in this column.</div>
+                  ) : (
+                    colTickets.map((ticket) => (
+                      <div key={ticket.id} className="bg-background rounded-md border border-border p-3 hover:border-border transition-colors cursor-pointer">
+                        <div className="text-[13px] font-medium text-foreground mb-1.5">{ticket.title}</div>
+                        <div className="text-[12px] text-muted-foreground mb-2.5">{ticket.name} · {ticket.issue}</div>
+                        <div className="flex items-center justify-between">
+                          <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${statusStyle(ticket.status)}`}>
+                            {ticket.issue}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground">{ticket.date}</span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
             );
