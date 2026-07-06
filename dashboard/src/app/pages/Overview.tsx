@@ -179,6 +179,13 @@ export default function Overview() {
           }
         } else {
           // Empty state for new users
+          setMetrics([
+            { ...defaultMetrics[0], value: "0", change: "", chartData: new Array(20).fill(0) },
+            { ...defaultMetrics[1], value: "0", change: "", chartData: new Array(20).fill(0) },
+            { ...defaultMetrics[2], value: "0", change: "", chartData: new Array(8).fill(0) },
+            { ...defaultMetrics[3], value: "0%", chartPct: 0 },
+            { ...defaultMetrics[4], value: "0:00", chartPct: 0 },
+          ]);
           const emptyVolume = [];
           for (let i = 6; i >= 0; i--) {
             emptyVolume.push({ name: format(subDays(new Date(), i), "EEE"), calls: 0 });
@@ -302,7 +309,7 @@ export default function Overview() {
             Issue breakdown
           </h3>
           <div className="space-y-4">
-            {issueBreakdown.map((issue, i) => (
+            {issueBreakdown.length > 0 ? issueBreakdown.map((issue, i) => (
               <div key={i}>
                 <div className="flex justify-between items-center mb-1.5">
                   <span className="text-[13px] text-muted-foreground">
@@ -322,7 +329,11 @@ export default function Overview() {
                   />
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="flex items-center justify-center h-[150px] text-[13px] text-muted-foreground">
+                No issue data available yet.
+              </div>
+            )}
           </div>
         </div>
       </div>
