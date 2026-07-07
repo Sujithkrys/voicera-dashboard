@@ -252,9 +252,18 @@ export default function Login() {
   return (
     <div className="h-screen w-full flex bg-background overflow-hidden">
       {/* Left Brand Pane */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 p-10 bg-zinc-950 text-white relative border-r border-border/10">
+      <div 
+        className="hidden lg:flex flex-col justify-between w-1/2 p-10 text-white relative border-r border-border/10 bg-zinc-950"
+        style={{ 
+          backgroundImage: 'url("/wallpaper.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {/* Professional gradient overlay for text readability against any wallpaper */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/20 to-black/90 z-0"></div>
         {/* Subtle grid pattern background */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%221%22 fill-rule=%22evenodd%22%3E%3Ccircle cx=%222%22 cy=%222%22 r=%221%22/%3E%3C/g%3E%3C/svg%3E")' }}></div>
+        <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%221%22 fill-rule=%22evenodd%22%3E%3Ccircle cx=%222%22 cy=%222%22 r=%221%22/%3E%3C/g%3E%3C/svg%3E")' }}></div>
 
         <div className="z-10">
           <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-white/5 -ml-3 mb-6 h-8 px-3 text-xs" onClick={() => navigate('/')}>
@@ -270,31 +279,31 @@ export default function Login() {
           </div>
         </div>
 
-        <div className="z-10 max-w-sm mt-auto mb-16">
-          <div className="inline-flex items-center px-3 py-1 rounded bg-white/5 border border-white/10 text-zinc-300 text-[11px] font-medium tracking-wide mb-6">
+        <div className="z-10 max-w-md mt-auto mb-16 p-8 rounded-2xl bg-black/20 backdrop-blur-md border border-white/10 shadow-2xl">
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/10 text-white text-[11px] font-medium tracking-wide mb-6 backdrop-blur-sm">
             Start free, no card
           </div>
-          <h1 className="text-3xl font-medium tracking-tight leading-snug mb-4 text-zinc-100">
+          <h1 className="text-3xl font-medium tracking-tight leading-snug mb-4 text-white drop-shadow-md">
             500 free minutes.<br />
-            <span className="text-zinc-500">
+            <span className="text-zinc-300">
               Live in under an hour.
             </span>
           </h1>
-          <p className="text-sm text-zinc-400 leading-relaxed mb-8">
+          <p className="text-sm text-zinc-300 leading-relaxed mb-8 drop-shadow-sm">
             Trusted by support teams at fintechs, marketplaces, and SaaS leaders. No credit card required to start.
           </p>
           
           <div className="flex gap-10 border-t border-white/10 pt-6">
             <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Setup time</span>
-              <span className="text-xl font-semibold text-zinc-200 flex items-baseline gap-1">
-                ~12 <span className="text-xs font-normal text-zinc-500">min</span>
+              <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider drop-shadow-sm">Setup time</span>
+              <span className="text-xl font-semibold text-white flex items-baseline gap-1 drop-shadow-md">
+                ~12 <span className="text-xs font-normal text-zinc-400">min</span>
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">Free credits</span>
-              <span className="text-xl font-semibold text-zinc-200 flex items-baseline gap-1">
-                500 <span className="text-xs font-normal text-zinc-500">min</span>
+              <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider drop-shadow-sm">Free credits</span>
+              <span className="text-xl font-semibold text-white flex items-baseline gap-1 drop-shadow-md">
+                500 <span className="text-xs font-normal text-zinc-400">min</span>
               </span>
             </div>
           </div>
