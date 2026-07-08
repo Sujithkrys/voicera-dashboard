@@ -8,7 +8,7 @@ class EmbeddingService:
             api_key=settings.GEMINI_API_KEY or "dummy_key",
             base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
         )
-        self.model = "text-embedding-004"
+        self.model = "gemini-embedding-2"
 
     def generate_embedding(self, text: str) -> List[float]:
         """Generate a 768-dimensional embedding using Gemini."""
@@ -17,7 +17,8 @@ class EmbeddingService:
             
         response = self.client.embeddings.create(
             input=[text.replace("\n", " ")],
-            model=self.model
+            model=self.model,
+            dimensions=768
         )
         return response.data[0].embedding
 
@@ -36,7 +37,8 @@ class EmbeddingService:
             
             response = self.client.embeddings.create(
                 input=batch,
-                model=self.model
+                model=self.model,
+                dimensions=768
             )
             all_embeddings.extend([item.embedding for item in response.data])
             
