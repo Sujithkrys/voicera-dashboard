@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     RESEND_API_KEY: Optional[str] = None
     
     FRONTEND_URL: Optional[str] = None
+    FIRECRAWL_API_KEY: Optional[str] = None
     
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""

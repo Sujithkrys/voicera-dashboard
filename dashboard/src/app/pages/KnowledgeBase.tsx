@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { apiClient } from "../../api/client";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Search, Plus, FileText, Link as LinkIcon, Trash2, CheckCircle2, AlertCircle, RefreshCw, UploadCloud } from "lucide-react";
@@ -14,7 +15,27 @@ export default function KnowledgeBase() {
   const [activeTab, setActiveTab] = useState<"documents" | "add" | "gaps" | "test">("documents");
   const [documents] = useState(mockDocs);
   const [searchQuery, setSearchQuery] = useState("");
+  const [crawlUrl, setCrawlUrl] = useState("");
+  const [isCrawling, setIsCrawling] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCrawl = async () => {
+    if (!crawlUrl) return;
+    try {
+      setIsCrawling(true);
+      await apiClient('/kb/crawl', {
+        method: 'POST',
+        body: JSON.stringify({ url: crawlUrl, max_pages: 10 }),
+      });
+      alert('Website crawled successfully!');
+      setCrawlUrl("");
+      // Add logic to refresh documents list if necessary
+    } catch (err: any) {
+      alert(`Error crawling website: ${err.message}`);
+    } finally {
+      setIsCrawling(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -146,8 +167,19 @@ export default function KnowledgeBase() {
               </div>
             </div>
             <div className="mt-auto flex gap-2">
-              <Input placeholder="https://..." className="h-8 text-[13px] border-border rounded-md flex-1" />
-              <Button className="h-8 bg-primary text-primary-foreground text-[13px] font-medium rounded-md px-4">Add</Button>
+              <Input 
+                placeholder="https://..." 
+                className="h-8 text-[13px] border-border rounded-md flex-1"
+                value={crawlUrl}
+                onChange={(e) => setCrawlUrl(e.target.value)}
+              />
+              <Button 
+                className="h-8 bg-primary text-primary-foreground text-[13px] font-medium rounded-md px-4"
+                onClick={handleCrawl}
+                disabled={isCrawling || !crawlUrl}
+              >
+                {isCrawling ? <RefreshCw className="h-4 w-4 animate-spin" /> : "Add"}
+              </Button>
             </div>
           </div>
         </div>
