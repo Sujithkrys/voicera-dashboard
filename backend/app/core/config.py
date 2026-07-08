@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     
     FRONTEND_URL: Optional[str] = None
     FIRECRAWL_API_KEY: Optional[str] = None
+    GEMINI_API_KEY: Optional[str] = None
     
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""

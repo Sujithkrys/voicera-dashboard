@@ -80,7 +80,7 @@ CREATE TABLE kb_chunks (
     client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
     document_id UUID REFERENCES kb_documents(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
-    embedding VECTOR(1536),
+    embedding VECTOR(768),
     metadata JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );

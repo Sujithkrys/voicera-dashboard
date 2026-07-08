@@ -4,13 +4,16 @@ from app.core.config import settings
 
 class EmbeddingService:
     def __init__(self):
-        self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
-        self.model = "text-embedding-3-small"
+        self.client = OpenAI(
+            api_key=settings.GEMINI_API_KEY or "dummy_key",
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+        )
+        self.model = "text-embedding-004"
 
     def generate_embedding(self, text: str) -> List[float]:
-        """Generate a 1536-dimensional embedding using OpenAI."""
+        """Generate a 768-dimensional embedding using Gemini."""
         if not text:
-            return [0.0] * 1536
+            return [0.0] * 768
             
         response = self.client.embeddings.create(
             input=[text.replace("\n", " ")],
