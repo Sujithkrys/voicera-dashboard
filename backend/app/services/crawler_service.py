@@ -3,7 +3,6 @@ from typing import List, Dict
 import os
 from app.core.config import settings
 
-# Attempt to import Firecrawl; if not available, we can fail gracefully or raise an error
 try:
     from firecrawl import AsyncFirecrawlApp
 except ImportError:
@@ -31,28 +30,42 @@ async def crawl_website(base_url: str, max_pages: int = 10) -> List[Dict[str, st
                 "scrapeOptions": {
                     "formats": ["markdown"]
                 }
-            },
-            poll_interval=2  # Poll every 2 seconds
+            }
         )
         
-        # crawl_result typically contains a list of crawled pages in 'data'
-        if isinstance(crawl_result, dict) and "data" in crawl_result:
-            pages = crawl_result["data"]
-            for page in pages:
-                if "markdown" in page:
-                    results.append({
-                        "url": page.get("metadata", {}).get("sourceURL", base_url),
-                        "content": page["markdown"],
-                        "title": page.get("metadata", {}).get("title", base_url)
-                    })
-        elif isinstance(crawl_result, list):
-            for page in crawl_result:
-                if "markdown" in page:
-                    results.append({
-                        "url": page.get("metadata", {}).get("sourceURL", base_url),
-                        "content": page["markdown"],
-                        "title": page.get("metadata", {}).get("title", base_url)
-                    })
+        crawl_id = crawl_result.id
+        
+        # Poll for completion
+        while True:
+            status = await app.check_crawl_status(crawl_id)
+            if status.status == 'completed':
+                pages = status.data
+                break
+            elif status.status in ['failed', 'cancelled']:
+                raise Exception(f"Crawl failed with status: {status.status}")
+                
+            await asyncio.sleep(3)
+            
+        for page in pages:
+            # Handle both dict and object access depending on SDK version
+            if isinstance(page, dict):
+                markdown = page.get("markdown")
+                metadata = page.get("metadata", {})
+                title = metadata.get("title", base_url)
+                source_url = metadata.get("sourceURL", base_url)
+            else:
+                markdown = getattr(page, "markdown", None)
+                metadata = getattr(page, "metadata", None)
+                title = getattr(metadata, "title", base_url) if metadata else base_url
+                source_url = getattr(metadata, "sourceURL", base_url) if metadata else base_url
+                
+            if markdown:
+                results.append({
+                    "url": source_url,
+                    "content": markdown,
+                    "title": title
+                })
+                
     except Exception as e:
         print(f"Firecrawl error: {e}")
         raise e
