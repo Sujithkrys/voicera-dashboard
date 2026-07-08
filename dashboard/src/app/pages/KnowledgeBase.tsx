@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Search, Plus, FileText, Link as LinkIcon, Trash2, CheckCircle2, AlertCircle, RefreshCw, UploadCloud } from "lucide-react";
@@ -14,6 +14,14 @@ export default function KnowledgeBase() {
   const [activeTab, setActiveTab] = useState<"documents" | "add" | "gaps" | "test">("documents");
   const [documents] = useState(mockDocs);
   const [searchQuery, setSearchQuery] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      console.log("Selected files:", e.target.files);
+      // Implementation for file upload goes here
+    }
+  };
 
   const tabs = [
     { key: "documents", label: "Documents" },
@@ -109,7 +117,18 @@ export default function KnowledgeBase() {
 
       {activeTab === "add" && (
         <div className="grid grid-cols-2 gap-4">
-          <div className="border border-dashed border-border rounded-lg p-8 flex flex-col items-center justify-center text-center hover:border-neutral-400 hover:bg-muted transition-colors cursor-pointer group min-h-[200px]">
+          <div 
+            className="border border-dashed border-border rounded-lg p-8 flex flex-col items-center justify-center text-center hover:border-neutral-400 hover:bg-muted transition-colors cursor-pointer group min-h-[200px]"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept=".pdf,.docx,.txt"
+              multiple
+              onChange={handleFileChange}
+            />
             <UploadCloud className="h-8 w-8 text-neutral-300 group-hover:text-muted-foreground mb-3 transition-colors" />
             <h3 className="text-[14px] font-semibold text-foreground mb-1">Upload Files</h3>
             <p className="text-[12px] text-muted-foreground max-w-[240px]">
