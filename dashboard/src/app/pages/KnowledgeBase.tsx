@@ -1,23 +1,41 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { apiClient } from "../../api/client";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Search, Plus, FileText, Link as LinkIcon, Trash2, CheckCircle2, AlertCircle, RefreshCw, UploadCloud } from "lucide-react";
 
-const mockDocs = [
-  { id: "1", name: "Product_Documentation_v2.pdf", type: "pdf", size: "2.4 MB", status: "synced", date: "Oct 24, 2023" },
-  { id: "2", name: "https://acme.com/pricing", type: "url", size: "12 KB", status: "synced", date: "Oct 23, 2023" },
-  { id: "3", name: "Q3_Support_Guidelines.docx", type: "docx", size: "845 KB", status: "syncing", date: "Oct 23, 2023" },
-  { id: "4", name: "https://acme.com/help/billing", type: "url", size: "18 KB", status: "error", date: "Oct 21, 2023" },
-];
-
 export default function KnowledgeBase() {
   const [activeTab, setActiveTab] = useState<"documents" | "add" | "gaps" | "test">("documents");
-  const [documents] = useState(mockDocs);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [isLoadingDocs, setIsLoadingDocs] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [crawlUrl, setCrawlUrl] = useState("");
   const [isCrawling, setIsCrawling] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchDocuments = async () => {
+    setIsLoadingDocs(true);
+    try {
+      const res = await apiClient('/kb/documents');
+      const docs = res.documents.map((d: any) => ({
+        id: d.id,
+        name: d.file_name,
+        type: d.file_type,
+        size: `${d.chunk_count} chunks`,
+        status: d.status === 'ready' ? 'synced' : (d.status === 'failed' ? 'error' : 'syncing'),
+        date: new Date(d.created_at).toLocaleDateString()
+      }));
+      setDocuments(docs);
+    } catch (err: any) {
+      console.error("Failed to fetch documents:", err);
+    } finally {
+      setIsLoadingDocs(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
 
   const handleCrawl = async () => {
     if (!crawlUrl) return;
@@ -29,7 +47,8 @@ export default function KnowledgeBase() {
       });
       alert('Website crawled successfully!');
       setCrawlUrl("");
-      // Add logic to refresh documents list if necessary
+      setActiveTab("documents");
+      fetchDocuments();
     } catch (err: any) {
       alert(`Error crawling website: ${err.message}`);
     } finally {
