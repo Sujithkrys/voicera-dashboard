@@ -2,12 +2,17 @@ import React, { useState, useRef, useEffect } from "react";
 import { apiClient } from "../../api/client";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { Search, Plus, FileText, Link as LinkIcon, Trash2, CheckCircle2, AlertCircle, RefreshCw, UploadCloud } from "lucide-react";
+import { Search, Plus, FileText, Link as LinkIcon, Trash2, CheckCircle2, AlertCircle, RefreshCw, UploadCloud, X, ExternalLink } from "lucide-react";
 
 export default function KnowledgeBase() {
   const [activeTab, setActiveTab] = useState<"documents" | "add" | "gaps" | "test">("documents");
   const [documents, setDocuments] = useState<any[]>([]);
   const [isLoadingDocs, setIsLoadingDocs] = useState(false);
+  
+  // Document Viewer State
+  const [viewDocId, setViewDocId] = useState<string | null>(null);
+  const [viewDocContent, setViewDocContent] = useState<{name: string, content: string, url: string} | null>(null);
+  const [isFetchingDoc, setIsFetchingDoc] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [crawlUrl, setCrawlUrl] = useState("");
   const [isCrawling, setIsCrawling] = useState(false);
@@ -37,6 +42,25 @@ export default function KnowledgeBase() {
   useEffect(() => {
     fetchDocuments();
   }, []);
+
+  const handleViewDocument = async (docId: string) => {
+    setViewDocId(docId);
+    setIsFetchingDoc(true);
+    try {
+      const res = await apiClient(`/kb/documents/${docId}/content`);
+      setViewDocContent({
+        name: res.file_name,
+        content: res.content,
+        url: res.file_url
+      });
+    } catch (err) {
+      console.error("Failed to load document content:", err);
+      alert("Failed to load document content.");
+      setViewDocId(null);
+    } finally {
+      setIsFetchingDoc(false);
+    }
+  };
 
   const handleCrawl = async () => {
     if (!crawlUrl) return;
@@ -133,13 +157,12 @@ export default function KnowledgeBase() {
                         <div className={`w-7 h-7 rounded flex items-center justify-center ${doc.type === "url" ? "bg-blue-50 text-blue-500" : "bg-secondary text-muted-foreground"}`}>
                           {doc.type === "url" ? <LinkIcon className="h-3.5 w-3.5" /> : <FileText className="h-3.5 w-3.5" />}
                         </div>
-                        {doc.url ? (
-                          <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-[13px] font-medium text-foreground hover:text-blue-600 hover:underline">
-                            {doc.name}
-                          </a>
-                        ) : (
-                          <span className="text-[13px] font-medium text-foreground">{doc.name}</span>
-                        )}
+                        <button 
+                          onClick={() => handleViewDocument(doc.id)} 
+                          className="text-[13px] font-medium text-foreground hover:text-blue-600 hover:underline text-left cursor-pointer"
+                        >
+                          {doc.name}
+                        </button>
                       </div>
                     </td>
                     <td className="py-2.5 px-4">
@@ -206,6 +229,45 @@ export default function KnowledgeBase() {
               >
                 {isCrawling ? <RefreshCw className="h-4 w-4 animate-spin" /> : "Add"}
               </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Document Viewer Modal */}
+      {viewDocId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="bg-background border border-border rounded-xl shadow-lg w-[800px] max-w-[90vw] h-[80vh] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-semibold text-foreground">Document Content</h2>
+                {isFetchingDoc && <RefreshCw className="h-4 w-4 animate-spin text-muted-foreground" />}
+              </div>
+              <div className="flex items-center gap-2">
+                {viewDocContent?.url && (
+                  <a href={viewDocContent.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium text-foreground bg-muted hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-md transition-colors">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Open Source File
+                  </a>
+                )}
+                <button onClick={() => setViewDocId(null)} className="p-1.5 rounded-md text-muted-foreground hover:bg-muted transition-colors">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 p-6 overflow-y-auto">
+              {viewDocContent ? (
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <h3 className="text-lg font-medium mb-4">{viewDocContent.name}</h3>
+                  <div className="whitespace-pre-wrap font-mono text-[13px] text-muted-foreground bg-muted/50 p-4 rounded-lg border border-border">
+                    {viewDocContent.content || "No content extracted."}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground text-[14px]">
+                  Loading document text...
+                </div>
+              )}
             </div>
           </div>
         </div>

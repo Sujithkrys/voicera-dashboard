@@ -231,6 +231,45 @@ async def delete_document(
     return {"message": "Document deleted successfully"}
 
 
+@router.get("/documents/{document_id}/content")
+async def get_document_content(
+    document_id: str,
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if "user" in current_user:
+        client_id = current_user["user"]["client_id"]
+    else:
+        client_id = current_user.get("client_id")
+        
+    # Verify ownership
+    doc_query = text("SELECT id, file_name, file_url FROM kb_documents WHERE id = :id AND client_id = :client_id")
+    doc_res = await db.execute(doc_query, {"id": document_id, "client_id": client_id})
+    doc_row = doc_res.fetchone()
+    
+    if not doc_row:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    # Get chunks ordered by their index
+    chunks_query = text("""
+        SELECT content 
+        FROM kb_chunks 
+        WHERE document_id = :document_id 
+        ORDER BY (metadata->>'chunk_index')::int ASC
+    """)
+    chunks_res = await db.execute(chunks_query, {"document_id": document_id})
+    chunks = [row.content for row in chunks_res.fetchall()]
+    
+    full_text = "\n\n".join(chunks)
+    
+    return {
+        "document_id": document_id,
+        "file_name": doc_row.file_name,
+        "file_url": doc_row.file_url,
+        "content": full_text
+    }
+
+
 class SearchRequest(BaseModel):
     query: str
     limit: int = 5
