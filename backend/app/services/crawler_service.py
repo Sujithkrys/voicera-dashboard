@@ -28,7 +28,8 @@ async def crawl_website(base_url: str, max_pages: int = 10) -> List[Dict[str, st
             params={
                 "limit": max_pages,
                 "scrapeOptions": {
-                    "formats": ["markdown"]
+                    "formats": ["markdown"],
+                    "onlyMainContent": True
                 }
             }
         )
