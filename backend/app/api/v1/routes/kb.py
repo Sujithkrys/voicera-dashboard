@@ -296,6 +296,92 @@ async def search_kb(
     return {"results": chunks}
 
 
+from fastapi import BackgroundTasks
+
+async def background_crawl_and_embed(url: str, max_pages: int, client_id: str, placeholder_id: str):
+    from app.services.crawler_service import crawl_website
+    from app.core.database import async_session
+    
+    print(f"Starting background crawl for {url}")
+    pages = []
+    try:
+        pages = await crawl_website(url, max_pages=max_pages)
+    except Exception as e:
+        print(f"Background crawl failed: {e}")
+        async with async_session() as db:
+            fail_query = text("UPDATE kb_documents SET status = 'failed' WHERE id = :id")
+            await db.execute(fail_query, {"id": placeholder_id})
+            await db.commit()
+        return
+        
+    if not pages:
+        print(f"No content found for {url}")
+        async with async_session() as db:
+            fail_query = text("UPDATE kb_documents SET status = 'failed' WHERE id = :id")
+            await db.execute(fail_query, {"id": placeholder_id})
+            await db.commit()
+        return
+        
+    async with async_session() as db:
+        try:
+            # Delete placeholder
+            del_query = text("DELETE FROM kb_documents WHERE id = :id")
+            await db.execute(del_query, {"id": placeholder_id})
+            await db.commit()
+            
+            for page in pages:
+                page_content = page["content"]
+                page_url = page["url"]
+                page_title = page.get("title", page_url)
+                
+                if not page_content or len(page_content.strip()) < 50:
+                    continue
+                    
+                chunks = chunk_text(page_content)
+                if not chunks:
+                    continue
+                    
+                # Insert document
+                doc_query = text("""
+                    INSERT INTO kb_documents (client_id, file_name, file_type, file_url, status, chunk_count)
+                    VALUES (:client_id, :file_name, 'url', :file_url, 'processing', :chunk_count)
+                    RETURNING id
+                """)
+                doc_res = await db.execute(doc_query, {
+                    "client_id": client_id,
+                    "file_name": page_title[:255],
+                    "file_url": page_url,
+                    "chunk_count": len(chunks)
+                })
+                document_id = doc_res.scalar()
+                await db.commit()
+                
+                # Embeddings
+                embeddings = await embedding_service.async_generate_batch_embeddings(chunks)
+                
+                chunk_query = text("""
+                    INSERT INTO kb_chunks (client_id, document_id, content, embedding, metadata)
+                    VALUES (:client_id, :document_id, :content, :embedding, :metadata)
+                """)
+                
+                for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+                    await db.execute(chunk_query, {
+                        "client_id": client_id,
+                        "document_id": document_id,
+                        "content": chunk,
+                        "embedding": str(embedding),
+                        "metadata": json.dumps({"chunk_index": i, "source_url": page_url})
+                    })
+                
+                update_query = text("UPDATE kb_documents SET status = 'ready' WHERE id = :id")
+                await db.execute(update_query, {"id": document_id})
+                await db.commit()
+                
+        except Exception as e:
+            print(f"Background embedding failed: {e}")
+            await db.rollback()
+
+
 class CrawlRequest(BaseModel):
     url: str
     max_pages: int = 10
@@ -303,91 +389,39 @@ class CrawlRequest(BaseModel):
 @router.post("/crawl")
 async def crawl_website_endpoint(
     request: CrawlRequest,
+    background_tasks: BackgroundTasks,
     current_user: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db)
 ):
-    from app.services.crawler_service import crawl_website
-    
     if "user" in current_user:
         client_id = current_user["user"]["client_id"]
     else:
         client_id = current_user.get("client_id")
     
-    # Crawl the website
-    try:
-        pages = await crawl_website(request.url, max_pages=request.max_pages)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Crawl failed: {str(e)}")
+    # Insert placeholder document so user sees it immediately
+    doc_query = text("""
+        INSERT INTO kb_documents (client_id, file_name, file_type, file_url, status, chunk_count)
+        VALUES (:client_id, :file_name, 'url', :file_url, 'processing', 0)
+        RETURNING id
+    """)
+    doc_res = await db.execute(doc_query, {
+        "client_id": client_id,
+        "file_name": request.url,
+        "file_url": request.url
+    })
+    placeholder_id = doc_res.scalar()
+    await db.commit()
     
-    if not pages:
-        raise HTTPException(status_code=400, detail="No content found at the given URL.")
-    
-    total_chunks = 0
-    document_ids = []
-    
-    try:
-        for page in pages:
-            page_content = page["content"]
-            page_url = page["url"]
-            page_title = page.get("title", page_url)
-            
-            if not page_content or len(page_content.strip()) < 50:
-                continue
-            
-            # Chunk the text
-            chunks = chunk_text(page_content)
-            if not chunks:
-                continue
-            
-            # Insert into kb_documents
-            doc_query = text("""
-                INSERT INTO kb_documents (client_id, file_name, file_type, file_url, status, chunk_count)
-                VALUES (:client_id, :file_name, 'url', :file_url, 'processing', :chunk_count)
-                RETURNING id
-            """)
-            doc_res = await db.execute(doc_query, {
-                "client_id": client_id,
-                "file_name": page_title[:255],
-                "file_url": page_url,
-                "chunk_count": len(chunks)
-            })
-            document_id = doc_res.scalar()
-            document_ids.append(str(document_id))
-            
-            # Generate embeddings
-            embeddings = await embedding_service.async_generate_batch_embeddings(chunks)
-            
-            chunk_query = text("""
-                INSERT INTO kb_chunks (client_id, document_id, content, embedding, metadata)
-                VALUES (:client_id, :document_id, :content, :embedding, :metadata)
-            """)
-            
-            for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
-                await db.execute(chunk_query, {
-                    "client_id": client_id,
-                    "document_id": document_id,
-                    "content": chunk,
-                    "embedding": str(embedding),
-                    "metadata": json.dumps({"chunk_index": i, "source_url": page_url})
-                })
-            
-            total_chunks += len(chunks)
-            
-            # Update document status to ready
-            update_query = text("UPDATE kb_documents SET status = 'ready' WHERE id = :id")
-            await db.execute(update_query, {"id": document_id})
-        
-        await db.commit()
-        
-    except Exception as e:
-        await db.rollback()
-        raise HTTPException(status_code=500, detail=f"Failed to process crawled content: {str(e)}")
+    background_tasks.add_task(
+        background_crawl_and_embed, 
+        request.url, 
+        request.max_pages, 
+        str(client_id), 
+        str(placeholder_id)
+    )
     
     return {
         "message": "success",
-        "pages_crawled": len(pages),
-        "documents_created": len(document_ids),
-        "total_chunks": total_chunks,
-        "document_ids": document_ids
+        "document_id": str(placeholder_id)
     }
 
