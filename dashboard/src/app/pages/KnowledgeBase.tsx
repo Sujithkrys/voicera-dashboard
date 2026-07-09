@@ -21,6 +21,7 @@ export default function KnowledgeBase() {
         id: d.id,
         name: d.file_name,
         type: d.file_type,
+        url: d.file_url,
         size: `${d.chunk_count} chunks`,
         status: d.status === 'ready' ? 'synced' : (d.status === 'failed' ? 'error' : 'syncing'),
         date: new Date(d.created_at).toLocaleDateString()
@@ -132,7 +133,13 @@ export default function KnowledgeBase() {
                         <div className={`w-7 h-7 rounded flex items-center justify-center ${doc.type === "url" ? "bg-blue-50 text-blue-500" : "bg-secondary text-muted-foreground"}`}>
                           {doc.type === "url" ? <LinkIcon className="h-3.5 w-3.5" /> : <FileText className="h-3.5 w-3.5" />}
                         </div>
-                        <span className="text-[13px] font-medium text-foreground">{doc.name}</span>
+                        {doc.url ? (
+                          <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-[13px] font-medium text-foreground hover:text-blue-600 hover:underline">
+                            {doc.name}
+                          </a>
+                        ) : (
+                          <span className="text-[13px] font-medium text-foreground">{doc.name}</span>
+                        )}
                       </div>
                     </td>
                     <td className="py-2.5 px-4">
