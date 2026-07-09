@@ -132,7 +132,7 @@ async def upload_document(
     
     # Generate embeddings and store chunks
     try:
-        embeddings = embedding_service.generate_batch_embeddings(chunks)
+        embeddings = await embedding_service.async_generate_batch_embeddings(chunks)
         
         chunk_query = text("""
             INSERT INTO kb_chunks (client_id, document_id, content, embedding, metadata)
@@ -355,7 +355,7 @@ async def crawl_website_endpoint(
             document_ids.append(str(document_id))
             
             # Generate embeddings
-            embeddings = embedding_service.generate_batch_embeddings(chunks)
+            embeddings = await embedding_service.async_generate_batch_embeddings(chunks)
             
             chunk_query = text("""
                 INSERT INTO kb_chunks (client_id, document_id, content, embedding, metadata)
