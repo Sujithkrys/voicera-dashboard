@@ -62,6 +62,22 @@ export default function KnowledgeBase() {
     }
   };
 
+  const handleDeleteDocument = async (docId: string, docName: string) => {
+    if (!window.confirm(`Are you sure you want to delete "${docName}"? This action cannot be undone.`)) {
+      return;
+    }
+    
+    try {
+      await apiClient(`/kb/documents/${docId}`, {
+        method: 'DELETE'
+      });
+      fetchDocuments();
+    } catch (err: any) {
+      console.error("Failed to delete document:", err);
+      alert(`Failed to delete document: ${err.message}`);
+    }
+  };
+
   const handleCrawl = async () => {
     if (!crawlUrl) return;
     try {
@@ -173,7 +189,10 @@ export default function KnowledgeBase() {
                     <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{doc.size}</td>
                     <td className="py-2.5 px-4 text-[13px] text-muted-foreground">{doc.date}</td>
                     <td className="py-2.5 px-4">
-                      <button className="p-1 rounded hover:bg-red-50 text-neutral-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all">
+                      <button 
+                        onClick={() => handleDeleteDocument(doc.id, doc.name)}
+                        className="p-1 rounded hover:bg-red-50 text-neutral-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                      >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </td>
