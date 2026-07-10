@@ -158,10 +158,13 @@ IMPORTANT RULES:
 6. Never mention GPT, OpenAI or Claude.
 7. If truly no relevant information exists in the knowledge base, offer to connect with a specialist."""
 
-        # Step 8: Call OpenAI
-        oai = OpenAI(api_key=settings.OPENAI_API_KEY)
+        # Step 8: Call Gemini using OpenAI compatible endpoint
+        oai = OpenAI(
+            api_key=settings.GEMINI_API_KEY,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+        )
         response = oai.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gemini-2.5-flash",
             messages=[
                 {"role": "system", "content": system_prompt},
                 *(chat_request.conversation_history[-6:] if chat_request.conversation_history else []),
