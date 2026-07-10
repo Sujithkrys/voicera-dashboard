@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "voicera-dashboard",
+  "compatibility_date": "2026-07-10",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "dashboard"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

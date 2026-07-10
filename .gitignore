@@ -11,3 +11,10 @@ landing/config.js
 *.pyc
 .DS_Store
 .gemini/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
