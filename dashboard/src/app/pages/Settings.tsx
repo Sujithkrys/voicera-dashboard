@@ -346,46 +346,29 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
             <div className="space-y-5">
               <div className="grid grid-cols-2 gap-5">
                 <div className="bg-primary text-primary-foreground rounded-lg p-5 relative overflow-hidden">
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-1">Current Plan</div>
-                  <div className="text-[32px] font-semibold tracking-tight mb-0.5">Pro</div>
-                  <p className="text-[13px] text-muted-foreground mb-5">$99/month, billed annually</p>
-                  <Button className="w-full bg-background text-foreground hover:bg-secondary h-8 text-[13px] font-medium rounded-md">Manage Subscription</Button>
+                  <div className="text-[11px] font-medium uppercase tracking-wider text-primary-foreground/70 mb-1">Current Plan</div>
+                  <div className="text-[32px] font-semibold tracking-tight mb-0.5">Beta Access</div>
+                  <p className="text-[13px] text-primary-foreground/80 mb-5">Free during early access period</p>
+                  <Button disabled className="w-full bg-background/20 text-primary-foreground h-8 text-[13px] font-medium rounded-md cursor-not-allowed">Active</Button>
                 </div>
-                <div className="border border-border rounded-lg p-5">
+                <div className="border border-border rounded-lg p-5 flex flex-col">
                   <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-3">Payment Method</div>
-                  <div className="flex items-center gap-3 bg-muted p-3 rounded-md border border-border mb-4">
-                    <div className="w-10 h-7 bg-background border border-border rounded flex items-center justify-center font-bold text-foreground text-[10px] italic">VISA</div>
+                  <div className="flex-1 flex items-center justify-center text-center p-4">
                     <div>
-                      <div className="text-[13px] font-medium text-foreground">•••• 4242</div>
-                      <div className="text-[11px] text-muted-foreground">Expires 12/25</div>
+                      <p className="text-[13px] font-medium text-foreground">No payment required</p>
+                      <p className="text-[12px] text-muted-foreground mt-1">You won't be charged during the beta phase.</p>
                     </div>
                   </div>
-                  <Button variant="outline" className="w-full h-8 text-[13px] font-medium border-border rounded-md">Update</Button>
                 </div>
               </div>
               <div className="border border-border rounded-lg p-5">
                 <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[14px] font-semibold text-foreground">Usage</h2>
-                  <button className="text-[12px] font-medium text-muted-foreground hover:text-foreground flex items-center gap-1">
-                    View History <ChevronRight className="h-3 w-3" />
-                  </button>
+                  <h2 className="text-[14px] font-semibold text-foreground">Usage Overview</h2>
                 </div>
-                {[
-                  { label: "Voice Minutes", used: "4,821", total: "10,000", pct: 48, color: "bg-neutral-700" },
-                  { label: "Support Tickets", used: "842", total: "2,000", pct: 42, color: "bg-neutral-500" },
-                  { label: "Knowledge Base Docs", used: "47", total: "100", pct: 47, color: "bg-neutral-400" },
-                  { label: "Automations", used: "95%", total: "of limit", pct: 95, color: "bg-red-500" },
-                ].map((item, i) => (
-                  <div key={i} className="mb-5 last:mb-0">
-                    <div className="flex justify-between items-center mb-1.5">
-                      <span className="text-[13px] text-foreground">{item.label}</span>
-                      <span className="text-[13px] font-medium text-foreground">{item.used} <span className="text-muted-foreground font-normal">/ {item.total}</span></span>
-                    </div>
-                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                      <div className={`h-full rounded-full ${item.color}`} style={{ width: `${item.pct}%` }} />
-                    </div>
-                  </div>
-                ))}
+                <div className="text-[13px] text-muted-foreground bg-muted p-4 rounded-md">
+                  <p className="mb-2 text-foreground font-medium">Unmetered Usage</p>
+                  <p>Your account currently has unmetered access to core features. Check the <strong>Usage</strong> tab for detailed AI token metrics.</p>
+                </div>
               </div>
             </div>
           )}
