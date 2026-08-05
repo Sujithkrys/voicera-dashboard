@@ -1,206 +1,152 @@
 import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
+  BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis,
+  CartesianGrid, ResponsiveContainer, Tooltip,
 } from "recharts";
-import { Button } from "../components/ui/button";
-import { Sparkline, MiniBars, DottedTrack, TickBar } from "../components/charts";
 import { apiClient } from "../../api/client";
 import { format, subDays, isSameDay } from "date-fns";
 
-type ChartKind = "sparkline" | "minibars" | "dotted" | "tickbar";
-
-interface Metric {
-  label: string;
-  value: string;
-  change: string;
-  /** Show a trend arrow (↗) next to the label — only for cumulative metrics */
-  trending: boolean;
-  chartKind: ChartKind;
-  /** Numeric data for sparkline / minibars charts */
-  chartData: number[];
-  /** 0-1 fraction for dotted track / tick bar charts */
-  chartPct: number;
+function StatCard({ label, value, delta }: { label: string; value: string; delta?: string }) {
+  return (
+    <Card className="bg-muted/40 border-0">
+      <CardContent className="p-4">
+        <p className="text-sm text-muted-foreground mb-1.5">{label}</p>
+        <p className="text-2xl font-medium flex items-center">
+          {value}
+          {delta && <span className="text-sm font-normal text-muted-foreground ml-2">{delta}</span>}
+        </p>
+      </CardContent>
+    </Card>
+  );
 }
 
-const defaultMetrics: Metric[] = [
-  {
-    label: "Total calls",
-    value: "4,821",
-    change: "+12%",
-    trending: true,
-    chartKind: "sparkline",
-    chartData: [32, 38, 45, 40, 55, 60, 52, 64, 58, 70, 66, 74, 80, 78, 85, 82, 90, 88, 95, 98],
-    chartPct: 0,
-  },
-  {
-    label: "Active sessions",
-    value: "856",
-    change: "+14%",
-    trending: true,
-    chartKind: "sparkline",
-    chartData: [40, 42, 48, 44, 50, 55, 53, 56, 58, 60, 57, 62, 65, 63, 68, 70, 72, 74, 78, 82],
-    chartPct: 0,
-  },
-  {
-    label: "Escalations",
-    value: "80",
-    change: "-8%",
-    trending: false,
-    chartKind: "minibars",
-    chartData: [12, 18, 8, 15, 10, 22, 14, 9],
-    chartPct: 0,
-  },
-  {
-    label: "Resolution rate",
-    value: "92%",
-    change: "Normal",
-    trending: false,
-    chartKind: "tickbar",
-    chartData: [],
-    chartPct: 0.92,
-  },
-  {
-    label: "Avg handle time",
-    value: "2:44",
-    change: "",
-    trending: false,
-    chartKind: "dotted",
-    chartData: [],
-    chartPct: 0.45,
-  },
-];
+const ISSUE_COLORS: Record<string, string> = {
+  "Order status": "#2a78d6",
+  "Stock query": "#eb6834",
+  "Return policy": "#1baf7a",
+  "Voicemail": "#eda100",
+  "Dropped off": "#e87ba4",
+  "Escalated": "#008300",
+  "Out of scope": "#4a3aa7"
+};
 
-
-
-function MetricChart({ metric }: { metric: Metric }) {
-  switch (metric.chartKind) {
-    case "sparkline":
-      return (
-        <div className="w-full" style={{ maxWidth: 140 }}>
-          <Sparkline data={metric.chartData} width={140} height={24} className="w-full" />
-        </div>
-      );
-    case "minibars":
-      return (
-        <div className="w-full" style={{ maxWidth: 140 }}>
-          <MiniBars data={metric.chartData} width={140} height={24} className="w-full" />
-        </div>
-      );
-    case "dotted":
-      return (
-        <div className="w-full" style={{ maxWidth: 140 }}>
-          <DottedTrack value={metric.chartPct} width={140} height={18} className="w-full" />
-        </div>
-      );
-    case "tickbar":
-      return (
-        <div className="w-full" style={{ maxWidth: 140 }}>
-          <TickBar value={metric.chartPct} segments={32} width={140} height={18} className="w-full" />
-        </div>
-      );
-    default:
-      return null;
-  }
-}
+const DEFAULT_COLORS = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7"];
 
 export default function Overview() {
-  const [metrics, setMetrics] = useState<Metric[]>(defaultMetrics);
-  const [callVolumeData, setCallVolumeData] = useState<{name: string, calls: number}[]>([]);
-  const [issueBreakdown, setIssueBreakdown] = useState<{label: string, pct: number, color: string}[]>([]);
-  const [connectionHealth, setConnectionHealth] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [callVolumeData, setCallVolumeData] = useState<any[]>([]);
+  const [issueBreakdownData, setIssueBreakdownData] = useState<any[]>([]);
+  const [stats, setStats] = useState({
+    totalCalls: "0",
+    resolutionRate: "0%",
+    escalations: "0",
+    avgHandleTime: "0:00"
+  });
+
+  const [connectionHealth, setConnectionHealth] = useState<any>(null);
+  const [recoveryStats, setRecoveryStats] = useState<any>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const sessionsRes = await apiClient("/sessions");
-        const sessions = sessionsRes.sessions || [];
+        const [sessionsRes, healthRes, recoveryRes] = await Promise.allSettled([
+          apiClient("/sessions"),
+          apiClient("/samvaad/connection-health"),
+          apiClient("/recovery/stats")
+        ]);
 
-        if (sessions.length > 0) {
-          const callMinutes =
-            sessions.reduce(
-              (acc: number, s: any) => acc + (s.metadata?.duration || 0),
-              0
-            ) / 60;
-          const resolved = sessions.filter(
-            (s: any) => s.status === "resolved" || s.status === "completed"
+        // Handle Connection Health
+        if (healthRes.status === "fulfilled") {
+          setConnectionHealth(healthRes.value);
+        }
+
+        // Handle Recovery Stats
+        if (recoveryRes.status === "fulfilled") {
+          setRecoveryStats(recoveryRes.value);
+        }
+
+        // Handle Sessions
+        if (sessionsRes.status === "fulfilled") {
+          const sessions = sessionsRes.value.sessions || [];
+          
+          // 1. StatRow logic (7 days)
+          const sevenDaysAgo = subDays(new Date(), 7);
+          const recentSessions = sessions.filter((s: any) => 
+            s.created_at && new Date(s.created_at) >= sevenDaysAgo
+          );
+
+          const totalCalls = recentSessions.length;
+          
+          const inboundSessions = recentSessions.filter((s: any) => s.call_type !== "outbound");
+          const resolvedInbound = inboundSessions.filter((s: any) => 
+            s.call_disposition?.toLowerCase().includes("resolved") || s.status === "resolved" || s.status === "completed"
+          );
+          
+          const resolutionRate = inboundSessions.length > 0 
+            ? Math.round((resolvedInbound.length / inboundSessions.length) * 100)
+            : 0;
+            
+          const escalations = recentSessions.filter((s: any) => 
+            s.call_disposition?.toLowerCase().includes("escalated") || s.status === "escalated"
           ).length;
-          const resRate = Math.round((resolved / sessions.length) * 100);
 
-          setMetrics((prev) => [
-            { ...prev[0], value: Math.round(callMinutes).toLocaleString() },
-            {
-              ...prev[1],
-              value: sessions
-                .filter((s: any) => s.status === "active")
-                .length.toString(),
-            },
-            {
-              ...prev[2],
-              value: sessions
-                .filter((s: any) => s.status === "escalated")
-                .length.toString(),
-            },
-            { ...prev[3], value: `${resRate}%`, chartPct: resRate / 100 },
-            prev[4],
-          ]);
+          let totalDuration = 0;
+          let durationCount = 0;
+          recentSessions.forEach((s: any) => {
+            if (s.metadata?.duration) {
+              totalDuration += s.metadata.duration;
+              durationCount++;
+            }
+          });
+          const avgSeconds = durationCount > 0 ? Math.round(totalDuration / durationCount) : 0;
+          const avgHandleTime = `${Math.floor(avgSeconds / 60)}:${(avgSeconds % 60).toString().padStart(2, '0')}`;
 
-          // Compute call volume
+          setStats({
+            totalCalls: totalCalls.toString(),
+            resolutionRate: `${resolutionRate}%`,
+            escalations: escalations.toString(),
+            avgHandleTime
+          });
+
+          // 2. Call Volume Chart logic (last 7 days)
           const volumeData = [];
           for (let i = 6; i >= 0; i--) {
             const d = subDays(new Date(), i);
-            const count = sessions.filter((s: any) => s.created_at && isSameDay(new Date(s.created_at), d)).length;
-            volumeData.push({ name: format(d, "EEE"), calls: count });
+            const daySessions = sessions.filter((s: any) => s.created_at && isSameDay(new Date(s.created_at), d));
+            const inbound = daySessions.filter((s: any) => s.call_type !== "outbound").length;
+            const outbound = daySessions.filter((s: any) => s.call_type === "outbound").length;
+            
+            volumeData.push({
+              day: format(d, "EEE"),
+              inbound,
+              outbound
+            });
           }
           setCallVolumeData(volumeData);
 
-          // Compute issue breakdown
+          // 3. Issue Breakdown Chart logic (inbound, 7 days)
           const issues: Record<string, number> = {};
-          let total = 0;
-          sessions.forEach((s: any) => {
-            const issueType = s.metadata?.issue || "Other";
-            issues[issueType] = (issues[issueType] || 0) + 1;
-            total++;
+          inboundSessions.forEach((s: any) => {
+            let disp = s.call_disposition || "Other";
+            disp = disp.replace(/_/g, " ");
+            disp = disp.charAt(0).toUpperCase() + disp.slice(1);
+            issues[disp] = (issues[disp] || 0) + 1;
           });
-          
-          if (total > 0) {
-            const breakdown = Object.entries(issues).map(([label, count]) => ({
-              label: label.length > 15 ? label.substring(0, 15) + '...' : label,
-              pct: Math.round((count / total) * 100),
-              color: "#4B96FF"
-            })).sort((a, b) => b.pct - a.pct).slice(0, 4);
-            setIssueBreakdown(breakdown);
-          } else {
-            setIssueBreakdown([]);
-          }
-        } else {
-          // Empty state for new users
-          setMetrics([
-            { ...defaultMetrics[0], value: "0", change: "", chartData: new Array(20).fill(0) },
-            { ...defaultMetrics[1], value: "0", change: "", chartData: new Array(20).fill(0) },
-            { ...defaultMetrics[2], value: "0", change: "", chartData: new Array(8).fill(0) },
-            { ...defaultMetrics[3], value: "0%", chartPct: 0 },
-            { ...defaultMetrics[4], value: "0:00", chartPct: 0 },
-          ]);
-          const emptyVolume = [];
-          for (let i = 6; i >= 0; i--) {
-            emptyVolume.push({ name: format(subDays(new Date(), i), "EEE"), calls: 0 });
-          }
-          setCallVolumeData(emptyVolume);
-          setIssueBreakdown([]);
+
+          const breakdown = Object.entries(issues)
+            .map(([name, value], i) => ({
+              name,
+              value,
+              color: ISSUE_COLORS[name] || DEFAULT_COLORS[i % DEFAULT_COLORS.length]
+            }))
+            .sort((a, b) => b.value - a.value);
+            
+          setIssueBreakdownData(breakdown);
         }
 
-        try {
-          const healthRes = await apiClient("/samvaad/connection-health");
-          setConnectionHealth(healthRes);
-        } catch (e) {
-          console.error("Failed to load connection health", e);
-        }
       } catch (err) {
         console.error("Failed to load overview data", err);
       } finally {
@@ -210,184 +156,164 @@ export default function Overview() {
     fetchData();
   }, []);
 
+  const renderConnectionHealth = () => {
+    if (isLoading) return <div className="text-sm text-muted-foreground">Loading...</div>;
+    
+    const tokenStatus = connectionHealth?.shopify_token_status || "expired";
+    const badgeVariant = tokenStatus === "valid" ? "active" : tokenStatus === "expiring_soon" ? "secondary" : "destructive";
+    
+    let lastWebhookText = "Never";
+    if (connectionHealth?.shopify_webhook_last_received_at) {
+      const date = new Date(connectionHealth.shopify_webhook_last_received_at);
+      const diffMins = Math.round((new Date().getTime() - date.getTime()) / 60000);
+      if (diffMins < 60) {
+        lastWebhookText = `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+      } else {
+        const diffHours = Math.round(diffMins / 60);
+        if (diffHours < 24) lastWebhookText = `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+        else {
+          const diffDays = Math.round(diffHours / 24);
+          lastWebhookText = `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+        }
+      }
+    }
+
+    return (
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Shopify token</span>
+          <Badge variant={badgeVariant as any} className="capitalize">
+            {tokenStatus.replace("_", " ")}
+          </Badge>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Last webhook</span>
+          <span className="text-sm">{lastWebhookText}</span>
+        </div>
+      </div>
+    );
+  };
+
+  const renderRecoverySnapshot = () => {
+    if (isLoading) return <div className="text-sm text-muted-foreground">Loading...</div>;
+    
+    const triggered = recoveryStats?.total_triggered || 0;
+    const converted = recoveryStats?.converted_count || 0;
+    const rate = recoveryStats?.conversion_rate ? Math.round(recoveryStats.conversion_rate) : 0;
+
+    return (
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Calls triggered</span>
+          <span className="text-sm font-medium">{triggered}</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">Converted</span>
+          <span className="text-sm font-medium">{converted} ({rate}%)</span>
+        </div>
+        <a href="/recovery-stats" className="text-xs text-primary block pt-1 hover:underline">
+          View recovery stats
+        </a>
+      </div>
+    );
+  };
+
   return (
     <div className="p-6 space-y-6">
-      {/* Metrics row */}
-      <div
-        className="border-b border-border pb-6"
-        style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 0 }}
-      >
-        {metrics.map((m, i) => (
-          <div key={i} className="min-w-0">
-            {/* Label + optional trend arrow */}
-            <div className="flex items-center gap-1 mb-1">
-              <span style={{ fontSize: 13, color: "#374151", fontWeight: 500 }}>
-                {m.label}
-              </span>
-              {m.trending && (
-                <span style={{ fontSize: 11, color: "#6b7280", lineHeight: 1 }}>↗</span>
-              )}
-            </div>
-            {/* Big value + neutral sub-badge */}
-            <div className="flex items-baseline gap-1.5">
-              <span
-                style={{
-                  fontSize: 32,
-                  fontWeight: 600,
-                  color: "#111827",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1,
-                }}
-              >
-                {m.value}
-              </span>
-              {m.change && (
-                <span
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 500,
-                    color: "#9ca3af",
-                  }}
-                >
-                  {m.change}
-                </span>
-              )}
-            </div>
-            {/* Micro-chart */}
-            <div className="mt-2.5" style={{ height: 26 }}>
-              <MetricChart metric={m} />
-            </div>
-          </div>
-        ))}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <StatCard label="Total calls, 7 days" value={stats.totalCalls} />
+        <StatCard label="Support resolution rate" value={stats.resolutionRate} />
+        <StatCard label="Escalations" value={stats.escalations} />
+        <StatCard label="Avg handle time" value={stats.avgHandleTime} />
       </div>
 
-      {/* Chart + Issue breakdown */}
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 border border-border rounded-lg p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[14px] font-semibold text-foreground">
-              Call volume
-            </h3>
-            <span className="text-[12px] text-muted-foreground">Last 7 days</span>
+      <Card className="mb-3">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-medium">Call volume, last 7 days</CardTitle>
+          <div className="flex gap-4 text-xs text-muted-foreground pt-1">
+            <span className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-sm" style={{ background: "#2a78d6" }} />
+              Inbound support
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-sm" style={{ background: "#eb6834" }} />
+              Outbound recovery
+            </span>
           </div>
-          <div className="h-[200px]">
+        </CardHeader>
+        <CardContent className="h-[220px]">
+          {isLoading ? (
+             <div className="w-full h-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
+          ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={callVolumeData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorCalls" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#a3a3a3" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#a3a3a3" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 11, fill: "#a3a3a3" }}
-                  dy={8}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fontSize: 11, fill: "#a3a3a3" }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: "6px",
-                    border: "1px solid #e5e5e5",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-                    fontSize: "12px",
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="calls"
-                  stroke="#525252"
-                  strokeWidth={1.5}
-                  fillOpacity={1}
-                  fill="url(#colorCalls)"
-                />
-              </AreaChart>
+              <BarChart data={callVolumeData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} />
+                <YAxis axisLine={false} tickLine={false} allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="inbound" stackId="a" fill="#2a78d6" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="outbound" stackId="a" fill="#eb6834" radius={[4, 4, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
-          </div>
-        </div>
+          )}
+        </CardContent>
+      </Card>
 
-        <div className="space-y-6">
-          <div className="border border-border rounded-lg p-5">
-            <h3 className="text-[14px] font-semibold text-foreground mb-4">
-              Issue breakdown
-            </h3>
-            <div className="space-y-4">
-              {issueBreakdown.length > 0 ? issueBreakdown.map((issue, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <span className="text-[13px] text-muted-foreground">
-                      {issue.label}
-                    </span>
-                    <span className="text-[13px] font-medium text-foreground">
-                      {issue.pct}%
-                    </span>
-                  </div>
-                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${issue.pct}%`,
-                        backgroundColor: issue.color,
-                      }}
-                    />
-                  </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">Issue breakdown</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+               <div className="h-[180px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
+            ) : issueBreakdownData.length === 0 ? (
+               <div className="h-[180px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
+            ) : (
+              <>
+                <div className="h-[180px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie data={issueBreakdownData} dataKey="value" innerRadius={55} outerRadius={80}>
+                        {issueBreakdownData.map((entry) => (
+                          <Cell key={entry.name} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-              )) : (
-                <div className="flex items-center justify-center h-[150px] text-[13px] text-muted-foreground">
-                  No issue data available yet.
+                <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3 text-xs text-muted-foreground">
+                  {issueBreakdownData.map((entry) => (
+                    <span key={entry.name} className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-sm" style={{ background: entry.color }} />
+                      {entry.name} {entry.value}
+                    </span>
+                  ))}
                 </div>
-              )}
-            </div>
-          </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
 
-          <div className="border border-border rounded-lg p-5 bg-muted/10">
-            <h3 className="text-[14px] font-semibold text-foreground mb-4 flex items-center justify-between">
-              Store Connection
-              {connectionHealth?.shopify_token_status === 'valid' && (
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-              )}
-              {connectionHealth?.shopify_token_status === 'expiring_soon' && (
-                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
-              )}
-              {(connectionHealth?.shopify_token_status === 'expired' || connectionHealth?.shopify_token_status === 'unknown') && (
-                <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
-              )}
-            </h3>
-            <div className="space-y-3">
-              <div>
-                <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">
-                  Shopify Token Status
-                </div>
-                <div className="text-[13px] font-medium text-foreground capitalize">
-                  {connectionHealth?.shopify_token_status ? connectionHealth.shopify_token_status.replace('_', ' ') : 'Loading...'}
-                </div>
-              </div>
-              <div>
-                <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">
-                  Last Webhook Received
-                </div>
-                <div className="text-[13px] text-muted-foreground">
-                  {connectionHealth?.shopify_webhook_last_received_at
-                    ? (() => {
-                        const date = new Date(connectionHealth.shopify_webhook_last_received_at);
-                        const diffMins = Math.round((new Date().getTime() - date.getTime()) / 60000);
-                        if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
-                        const diffHours = Math.round(diffMins / 60);
-                        if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
-                        const diffDays = Math.round(diffHours / 24);
-                        return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
-                      })()
-                    : 'Never'}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="flex flex-col gap-3">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Store connection</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderConnectionHealth()}
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Recovery snapshot</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderRecoverySnapshot()}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
