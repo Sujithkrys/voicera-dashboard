@@ -2,6 +2,9 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 from app.core.database import get_db
+from app.core.middleware import require_admin
+from app.services.shopify_service import shopify_service
+import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -90,3 +93,41 @@ async def call_outcome(request: Request, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Database error")
 
     return {"status": "ok"}
+
+@router.get("/connection-health")
+async def connection_health(
+    current_user: dict = Depends(require_admin),
+    db: AsyncSession = Depends(get_db)
+):
+    # Determine shopify_token_status
+    token_status = "unknown"
+    try:
+        # if we can get a token, it's valid. The service handles expiry internally.
+        if shopify_service._access_token:
+            import time
+            if time.time() > shopify_service._token_expires_at:
+                token_status = "expired"
+            elif (shopify_service._token_expires_at - time.time()) < 3600:
+                token_status = "expiring_soon"
+            else:
+                token_status = "valid"
+        else:
+            token_status = "expired"
+    except Exception:
+        token_status = "expired"
+        
+    # Get last webhook timestamp
+    last_received_at = None
+    try:
+        res = await db.execute(text("SELECT last_received_at FROM webhook_health ORDER BY last_received_at DESC LIMIT 1"))
+        row = res.fetchone()
+        if row and row.last_received_at:
+            last_received_at = row.last_received_at.isoformat()
+    except Exception:
+        pass
+
+    return {
+        "shopify_webhook_last_received_at": last_received_at,
+        "shopify_token_status": token_status,
+        "last_checked_at": datetime.datetime.utcnow().isoformat()
+    }

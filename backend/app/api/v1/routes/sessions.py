@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, BackgroundTasks
 from app.core.middleware import get_current_user, require_admin
+from app.core.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 from app.core.config import settings
 from supabase import create_client, Client
 from pydantic import BaseModel, EmailStr
@@ -125,7 +128,8 @@ async def get_session_detail(
 async def list_sessions(
     status: Optional[str] = None,
     limit: Optional[int] = 50,
-    current_user: dict = Depends(get_current_user)
+    current_user: dict = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
 ):
     supabase = get_supabase()
     
@@ -139,12 +143,60 @@ async def list_sessions(
         raise HTTPException(status_code=400, detail="Client ID not found")
     
     query = supabase.table("sessions").select("*").eq("client_id", client_id)
-    
     if status:
         query = query.eq("status", status)
     
     res = query.order("created_at", desc=True).limit(limit).execute()
-    return {"sessions": res.data}
+    legacy_sessions = res.data or []
+    
+    # Fetch call_outcomes
+    outcomes_query = text("""
+        SELECT c.call_id, c.agent_type, c.phone_number, c.outcome, c.transcript_summary, c.checkout_id, c.created_at,
+               p.customer_name, p.status as checkout_status
+        FROM call_outcomes c
+        LEFT JOIN pending_checkouts p ON c.checkout_id = p.checkout_id
+        ORDER BY c.created_at DESC
+        LIMIT :limit
+    """)
+    db_res = await db.execute(outcomes_query, {"limit": limit})
+    outcomes = db_res.fetchall()
+    
+    samvaad_sessions = []
+    for row in outcomes:
+        samvaad_sessions.append({
+            "id": row.call_id,
+            "customer": {
+                "name": row.customer_name or row.phone_number or "Unknown",
+                "email": "-"
+            },
+            "metadata": {
+                "issue_type": "Samvaad Call",
+                "duration": 0
+            },
+            "call_type": row.agent_type, # inbound or outbound
+            "call_disposition": row.outcome,
+            "converted": row.checkout_status == "converted",
+            "status": "completed",
+            "created_at": row.created_at.isoformat() if row.created_at else None,
+            "ticket_id": None
+        })
+        
+    # Merge and sort
+    all_sessions = legacy_sessions + samvaad_sessions
+    
+    def get_time(s):
+        dt_str = s.get("created_at")
+        if not dt_str:
+            return 0
+        if dt_str.endswith("Z"):
+            dt_str = dt_str[:-1] + "+00:00"
+        try:
+            return datetime.fromisoformat(dt_str).timestamp()
+        except:
+            return 0
+            
+    all_sessions.sort(key=get_time, reverse=True)
+    return {"sessions": all_sessions[:limit]}
 
 @router.patch("/{session_id}")
 async def update_session(

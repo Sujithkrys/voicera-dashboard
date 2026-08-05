@@ -61,6 +61,12 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
         await db.rollback()
         raise HTTPException(status_code=500, detail="Database error")
 
+    try:
+        await db.execute(text("INSERT INTO webhook_health (last_received_at) VALUES (NOW())"))
+        await db.commit()
+    except Exception:
+        pass
+
     return {"status": "ok"}
 
 @router.post("/orders-create")
@@ -93,5 +99,11 @@ async def order_create_webhook(request: Request, db: AsyncSession = Depends(get_
         logger.error(f"Error updating checkout status: {e}")
         await db.rollback()
         raise HTTPException(status_code=500, detail="Database error")
+
+    try:
+        await db.execute(text("INSERT INTO webhook_health (last_received_at) VALUES (NOW())"))
+        await db.commit()
+    except Exception:
+        pass
 
     return {"status": "ok"}

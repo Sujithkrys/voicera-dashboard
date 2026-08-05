@@ -75,7 +75,8 @@ async def debug_env(current_user: dict = Depends(require_admin)):
 from app.api.v1.routes import (
     auth_router, kb_router, config_router, chat_router, 
     sessions_router, tickets_router, waitlist_router, calendar_router, voice_llm_router,
-    availability_router
+    availability_router, recovery_router, shopify_webhooks_router, 
+    samvaad_hooks_router, agent_tools_router
 )
 
 fastapi_app.include_router(auth_router, prefix="/api/v1")
@@ -88,6 +89,10 @@ fastapi_app.include_router(waitlist_router, prefix="/api/v1")
 fastapi_app.include_router(calendar_router, prefix="/api/v1")
 fastapi_app.include_router(voice_llm_router, prefix="/api/v1")
 fastapi_app.include_router(availability_router, prefix="/api/v1")
+fastapi_app.include_router(recovery_router, prefix="/api/v1")
+fastapi_app.include_router(shopify_webhooks_router, prefix="/api/v1")
+fastapi_app.include_router(samvaad_hooks_router, prefix="/api/v1")
+fastapi_app.include_router(agent_tools_router, prefix="/api/v1")
 
 from app.api.v1.routes.bot_config import router as bot_config_router
 fastapi_app.include_router(bot_config_router, prefix="/api/v1")

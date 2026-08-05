@@ -8,3 +8,7 @@ from app.api.v1.routes.waitlist import router as waitlist_router
 from app.api.v1.routes.calendar import router as calendar_router
 from app.api.v1.routes.voice_llm import router as voice_llm_router
 from app.api.v1.routes.availability import router as availability_router
+from app.api.v1.routes.recovery import router as recovery_router
+from app.api.v1.routes.shopify_webhooks import router as shopify_webhooks_router
+from app.api.v1.routes.samvaad_hooks import router as samvaad_hooks_router
+from app.api.v1.routes.agent_tools import router as agent_tools_router
