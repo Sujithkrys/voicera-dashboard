@@ -106,7 +106,7 @@ export default function BotConfig() {
         content: m.content
       }));
       
-      const BACKEND_URL = 'https://voicera-dashboard-production.up.railway.app';
+      const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app';
       
       const res = await fetch(`${BACKEND_URL}/api/v1/chat/message`, {
         method: 'POST',

@@ -452,7 +452,8 @@ function IntegrationsPanel() {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch("https://voicera-dashboard-production.up.railway.app/api/v1/oauth/status", {
+      const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app';
+      const response = await fetch(`${BACKEND_URL}/api/v1/oauth/status`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -469,11 +470,13 @@ function IntegrationsPanel() {
   };
 
   const handleConnectGoogle = () => {
-    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/google/authorize?token=${token}`;
+    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app';
+    window.location.href = `${BACKEND_URL}/api/v1/oauth/google/authorize?token=${token}`;
   };
 
   const handleConnectNotion = () => {
-    window.location.href = `https://voicera-dashboard-production.up.railway.app/api/v1/oauth/notion/authorize?token=${token}`;
+    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app';
+    window.location.href = `${BACKEND_URL}/api/v1/oauth/notion/authorize?token=${token}`;
   };
 
   const googleConnected = status["gmail"] || status["google-calendar"] || status["google-drive"] || status["google-docs"];

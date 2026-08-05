@@ -1,4 +1,4 @@
-const BASE_URL = 'https://voicera-dashboard-production.up.railway.app/api/v1';
+const BASE_URL = (import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app') + '/api/v1';
 
 export async function apiClient(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('voicera_token');
