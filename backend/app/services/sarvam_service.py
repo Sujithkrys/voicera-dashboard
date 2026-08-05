@@ -8,6 +8,7 @@ class SarvamService:
         self.stt_url = "https://api.sarvam.ai/speech-to-text"
         self.tts_url = "https://api.sarvam.ai/text-to-speech"
 
+    # TODO: likely dead code post-Samvaad migration, confirm before removing
     async def speech_to_text(self, audio_bytes: bytes) -> str:
         try:
             headers = {
@@ -38,6 +39,7 @@ class SarvamService:
             print(f"Sarvam STT Exception: {e}")
             return ""
 
+    # TODO: likely dead code post-Samvaad migration, confirm before removing
     async def text_to_speech(self, text: str) -> bytes:
         if not self.api_key:
             print("SARVAM_API_KEY not configured")

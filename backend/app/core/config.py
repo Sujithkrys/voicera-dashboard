@@ -16,12 +16,26 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: Optional[str] = None
     SARVAM_API_KEY: Optional[str] = None
-    DEEPGRAM_API_KEY: Optional[str] = None
     RESEND_API_KEY: Optional[str] = None
     
     FRONTEND_URL: Optional[str] = None
     FIRECRAWL_API_KEY: Optional[str] = None
     GEMINI_API_KEY: Optional[str] = None
+    
+    SAMVAAD_API_KEY: Optional[str] = None
+    SAMVAAD_BASE_URL: str = "https://apps.sarvam.ai/api/app-authoring/v1"
+    SAMVAAD_ORG_ID: Optional[str] = None
+    SAMVAAD_WORKSPACE_ID: Optional[str] = None
+    SAMVAAD_OUTBOUND_AGENT_ID: Optional[str] = None
+    SAMVAAD_INBOUND_AGENT_ID: Optional[str] = None
+    SAMVAAD_CONNECTION_ID: Optional[str] = None
+    AGENT_TOOLS_API_KEY: Optional[str] = None
+
+    SHOPIFY_STORE_DOMAIN: Optional[str] = None
+    SHOPIFY_CLIENT_ID: Optional[str] = None
+    SHOPIFY_CLIENT_SECRET: Optional[str] = None
+    SHOPIFY_API_VERSION: str = "2026-07"
+    SHOPIFY_WEBHOOK_SECRET: Optional[str] = None
     
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""

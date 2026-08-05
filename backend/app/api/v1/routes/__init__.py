@@ -6,6 +6,5 @@ from app.api.v1.routes.sessions import router as sessions_router
 from app.api.v1.routes.tickets import router as tickets_router
 from app.api.v1.routes.waitlist import router as waitlist_router
 from app.api.v1.routes.calendar import router as calendar_router
-from app.api.v1.routes.voice import router as voice_router
 from app.api.v1.routes.voice_llm import router as voice_llm_router
 from app.api.v1.routes.availability import router as availability_router

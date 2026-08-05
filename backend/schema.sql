@@ -238,3 +238,32 @@ ALTER TABLE email_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE integrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
+
+-- 17. pending_checkouts
+CREATE TABLE pending_checkouts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    checkout_id TEXT NOT NULL,
+    checkout_token TEXT,
+    customer_phone TEXT,
+    customer_name TEXT,
+    cart_items JSONB,
+    cart_value NUMERIC,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    status TEXT CHECK (status IN ('pending', 'converted', 'called', 'skipped')) DEFAULT 'pending',
+    reason TEXT CHECK (reason IN ('abandoned', 'failed_payment', 'unknown')),
+    call_attempts INTEGER DEFAULT 0
+);
+
+-- 18. call_outcomes
+CREATE TABLE call_outcomes (
+    call_id TEXT PRIMARY KEY,
+    agent_type TEXT,
+    phone_number TEXT,
+    outcome TEXT,
+    transcript_summary TEXT,
+    checkout_id TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE pending_checkouts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE call_outcomes ENABLE ROW LEVEL SECURITY;

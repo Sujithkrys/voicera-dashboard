@@ -9,7 +9,7 @@ celery_app = Celery(
     "voicera",
     broker=CELERY_BROKER_URL,
     backend=CELERY_BROKER_URL,
-    include=["app.tasks.booking_tasks"]
+    include=["app.tasks.booking_tasks", "app.tasks.cart_recovery_tasks"]
 )
 
 celery_app.conf.update(
@@ -26,6 +26,10 @@ celery_app.conf.update(
         "send_reminders": {
             "task": "app.tasks.booking_tasks.send_reminders",
             "schedule": crontab(minute="*/10"),
+        },
+        "cart_recovery": {
+            "task": "app.tasks.cart_recovery_tasks.run_cart_recovery",
+            "schedule": crontab(minute="*/5"),
         },
     }
 )
