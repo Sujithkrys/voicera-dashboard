@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AlertCircle, ArrowLeft, CheckCircle2, ChevronRight, Activity } from "lucide-react";
 import { Alert, AlertDescription } from "../components/ui/alert";
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production.up.railway.app';
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard.onrender.com';
 const SUPABASE_URL = 'https://zlqefahavxdqfhpejqyd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpscWVmYWhhdnhkcWZocGVqcXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNzE3NTYsImV4cCI6MjA5Nzc0Nzc1Nn0.IoR3jrcbt1QGSaxLzUt1tqePpQ6a1ORnUPFhZHnimyQ';
 export const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
