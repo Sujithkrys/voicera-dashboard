@@ -219,15 +219,15 @@ export default function Overview() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+    <div className="p-6 space-y-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard label="Total calls, 7 days" value={stats.totalCalls} />
         <StatCard label="Support resolution rate" value={stats.resolutionRate} />
         <StatCard label="Escalations" value={stats.escalations} />
         <StatCard label="Avg handle time" value={stats.avgHandleTime} />
       </div>
 
-      <Card className="mb-3">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-medium">Call volume, last 7 days</CardTitle>
           <div className="flex gap-4 text-xs text-muted-foreground pt-1">
@@ -241,7 +241,7 @@ export default function Overview() {
             </span>
           </div>
         </CardHeader>
-        <CardContent className="h-[220px]">
+        <CardContent className="h-[160px]">
           {isLoading ? (
              <div className="w-full h-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
           ) : (
@@ -266,12 +266,12 @@ export default function Overview() {
           </CardHeader>
           <CardContent>
             {isLoading ? (
-               <div className="h-[180px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
+               <div className="h-[140px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
             ) : issueBreakdownData.length === 0 ? (
-               <div className="h-[180px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
+               <div className="h-[140px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
             ) : (
               <>
-                <div className="h-[180px]">
+                <div className="h-[140px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie data={issueBreakdownData} dataKey="value" innerRadius={55} outerRadius={80}>
