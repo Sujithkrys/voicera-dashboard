@@ -13,12 +13,7 @@ python-dotenv>=1.0.0
 asyncpg>=0.28.0
 PyJWT>=2.8.0
 bcrypt>=4.0.0
-anthropic
-sentence-transformers>=2.0.0
-langchain>=0.1.0
-langchain-community>=0.0.10
-pypdf>=3.0.0
-python-docx>=1.1.0
+
 python-multipart>=0.0.6
 firecrawl-py
 anthropic>=0.18.0
