@@ -11,7 +11,7 @@ import { format, subDays, isSameDay } from "date-fns";
 function StatCard({ label, value, delta }: { label: string; value: string; delta?: string }) {
   return (
     <Card className="bg-muted/40 border-0">
-      <CardContent className="p-4">
+      <CardContent className="p-3">
         <p className="text-sm text-muted-foreground mb-1.5">{label}</p>
         <p className="text-2xl font-medium flex items-center">
           {value}
@@ -219,7 +219,7 @@ export default function Overview() {
   };
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-4 space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <StatCard label="Total calls, 7 days" value={stats.totalCalls} />
         <StatCard label="Support resolution rate" value={stats.resolutionRate} />
@@ -228,7 +228,7 @@ export default function Overview() {
       </div>
 
       <Card>
-        <CardHeader className="pb-2">
+        <CardHeader className="p-4 pb-1">
           <CardTitle className="text-base font-medium">Call volume, last 7 days</CardTitle>
           <div className="flex gap-4 text-xs text-muted-foreground pt-1">
             <span className="flex items-center gap-1">
@@ -241,7 +241,7 @@ export default function Overview() {
             </span>
           </div>
         </CardHeader>
-        <CardContent className="h-[160px]">
+        <CardContent className="h-[130px] p-4 pt-0 !pb-4">
           {isLoading ? (
              <div className="w-full h-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
           ) : (
@@ -261,17 +261,17 @@ export default function Overview() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <Card>
-          <CardHeader className="pb-2">
+          <CardHeader className="p-4 pb-1">
             <CardTitle className="text-base font-medium">Issue breakdown</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 pt-0 !pb-4">
             {isLoading ? (
-               <div className="h-[140px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
+               <div className="h-[110px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
             ) : issueBreakdownData.length === 0 ? (
-               <div className="h-[140px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
+               <div className="h-[110px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
             ) : (
               <>
-                <div className="h-[140px]">
+                <div className="h-[110px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie data={issueBreakdownData} dataKey="value" innerRadius={55} outerRadius={80}>
@@ -298,19 +298,19 @@ export default function Overview() {
 
         <div className="flex flex-col gap-3">
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="p-4 pb-1">
               <CardTitle className="text-base font-medium">Store connection</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0 !pb-4">
               {renderConnectionHealth()}
             </CardContent>
           </Card>
           
           <Card>
-            <CardHeader className="pb-2">
+            <CardHeader className="p-4 pb-1">
               <CardTitle className="text-base font-medium">Recovery snapshot</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 pt-0 !pb-4">
               {renderRecoverySnapshot()}
             </CardContent>
           </Card>
