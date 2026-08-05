@@ -7,6 +7,7 @@ import Overview from "./app/pages/Overview";
 import CallLogs from "./app/pages/CallLogs";
 import Tickets from "./app/pages/Tickets";
 import ScheduledCalls from "./app/pages/ScheduledCalls";
+import RecoveryStats from "./app/pages/RecoveryStats";
 import KnowledgeBase from "./app/pages/KnowledgeBase";
 import BotConfig from "./app/pages/BotConfig";
 import Team from "./app/pages/Team";
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/call-logs" element={<CallLogs />} />
             <Route path="/tickets" element={<Tickets />} />
             <Route path="/scheduled-calls" element={<ScheduledCalls />} />
+            <Route path="/recovery-stats" element={<RecoveryStats />} />
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/ai-chat/history" element={<AIChatHistory />} />
             <Route path="/knowledge-base" element={<KnowledgeBase />} />

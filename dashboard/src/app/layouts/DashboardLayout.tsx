@@ -116,7 +116,15 @@ export function AppSidebar() {
                 <SidebarMenuButton asChild isActive={isActive("/scheduled-calls")} className={navItem(isActive("/scheduled-calls"))}>
                   <Link to="/scheduled-calls">
                     <Calendar className="size-4" strokeWidth={1.8} />
-                    <span>Scheduled Calls</span>
+                    <span>Recovery</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive("/recovery-stats")} className={navItem(isActive("/recovery-stats"))}>
+                  <Link to="/recovery-stats">
+                    <BarChart3 className="size-4" strokeWidth={1.8} />
+                    <span>Recovery Stats</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

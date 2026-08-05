@@ -112,6 +112,7 @@ export default function Overview() {
   const [metrics, setMetrics] = useState<Metric[]>(defaultMetrics);
   const [callVolumeData, setCallVolumeData] = useState<{name: string, calls: number}[]>([]);
   const [issueBreakdown, setIssueBreakdown] = useState<{label: string, pct: number, color: string}[]>([]);
+  const [connectionHealth, setConnectionHealth] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -192,6 +193,13 @@ export default function Overview() {
           }
           setCallVolumeData(emptyVolume);
           setIssueBreakdown([]);
+        }
+
+        try {
+          const healthRes = await apiClient("/samvaad/connection-health");
+          setConnectionHealth(healthRes);
+        } catch (e) {
+          console.error("Failed to load connection health", e);
         }
       } catch (err) {
         console.error("Failed to load overview data", err);
@@ -304,36 +312,81 @@ export default function Overview() {
           </div>
         </div>
 
-        <div className="border border-border rounded-lg p-5">
-          <h3 className="text-[14px] font-semibold text-foreground mb-4">
-            Issue breakdown
-          </h3>
-          <div className="space-y-4">
-            {issueBreakdown.length > 0 ? issueBreakdown.map((issue, i) => (
-              <div key={i}>
-                <div className="flex justify-between items-center mb-1.5">
-                  <span className="text-[13px] text-muted-foreground">
-                    {issue.label}
-                  </span>
-                  <span className="text-[13px] font-medium text-foreground">
-                    {issue.pct}%
-                  </span>
+        <div className="space-y-6">
+          <div className="border border-border rounded-lg p-5">
+            <h3 className="text-[14px] font-semibold text-foreground mb-4">
+              Issue breakdown
+            </h3>
+            <div className="space-y-4">
+              {issueBreakdown.length > 0 ? issueBreakdown.map((issue, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <span className="text-[13px] text-muted-foreground">
+                      {issue.label}
+                    </span>
+                    <span className="text-[13px] font-medium text-foreground">
+                      {issue.pct}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${issue.pct}%`,
+                        backgroundColor: issue.color,
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${issue.pct}%`,
-                      backgroundColor: issue.color,
-                    }}
-                  />
+              )) : (
+                <div className="flex items-center justify-center h-[150px] text-[13px] text-muted-foreground">
+                  No issue data available yet.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="border border-border rounded-lg p-5 bg-muted/10">
+            <h3 className="text-[14px] font-semibold text-foreground mb-4 flex items-center justify-between">
+              Store Connection
+              {connectionHealth?.shopify_token_status === 'valid' && (
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+              )}
+              {connectionHealth?.shopify_token_status === 'expiring_soon' && (
+                <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+              )}
+              {(connectionHealth?.shopify_token_status === 'expired' || connectionHealth?.shopify_token_status === 'unknown') && (
+                <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></span>
+              )}
+            </h3>
+            <div className="space-y-3">
+              <div>
+                <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">
+                  Shopify Token Status
+                </div>
+                <div className="text-[13px] font-medium text-foreground capitalize">
+                  {connectionHealth?.shopify_token_status ? connectionHealth.shopify_token_status.replace('_', ' ') : 'Loading...'}
                 </div>
               </div>
-            )) : (
-              <div className="flex items-center justify-center h-[150px] text-[13px] text-muted-foreground">
-                No issue data available yet.
+              <div>
+                <div className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">
+                  Last Webhook Received
+                </div>
+                <div className="text-[13px] text-muted-foreground">
+                  {connectionHealth?.shopify_webhook_last_received_at
+                    ? (() => {
+                        const date = new Date(connectionHealth.shopify_webhook_last_received_at);
+                        const diffMins = Math.round((new Date().getTime() - date.getTime()) / 60000);
+                        if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+                        const diffHours = Math.round(diffMins / 60);
+                        if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+                        const diffDays = Math.round(diffHours / 24);
+                        return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+                      })()
+                    : 'Never'}
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
