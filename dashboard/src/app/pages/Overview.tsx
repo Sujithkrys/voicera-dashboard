@@ -249,7 +249,7 @@ export default function Overview() {
               <BarChart data={callVolumeData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="day" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} allowDecimals={false} />
+                <YAxis axisLine={false} tickLine={false} allowDecimals={false} ticks={[0, 4, 8]} />
                 <Tooltip />
                 <Bar dataKey="inbound" stackId="a" fill="#2a78d6" radius={[0, 0, 0, 0]} />
                 <Bar dataKey="outbound" stackId="a" fill="#eb6834" radius={[4, 4, 0, 0]} />
