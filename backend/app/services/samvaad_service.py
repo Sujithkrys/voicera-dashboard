@@ -159,7 +159,11 @@ class SamvaadService:
                 items = data.get("items", [])
 
                 if len(items) == 1:
-                    return items[0].get("agent_variables")
+                    item = items[0]
+                    return {
+                        "agent_variables": item.get("agent_variables", {}),
+                        "duration_seconds": int(item.get("duration_in_seconds", 0))
+                    }
                 elif len(items) == 0:
                     logger.warning(f"Zero interactions found around {created_at}.")
                     return None

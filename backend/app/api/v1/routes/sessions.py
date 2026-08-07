@@ -151,7 +151,7 @@ async def list_sessions(
     
     # Fetch call_outcomes
     outcomes_query = text("""
-        SELECT c.call_id, c.agent_type, c.phone_number, c.outcome, c.transcript_summary, c.checkout_id, c.created_at,
+        SELECT c.call_id, c.agent_type, c.phone_number, c.outcome, c.transcript_summary, c.checkout_id, c.created_at, c.duration_seconds,
                p.customer_name, p.status as checkout_status
         FROM call_outcomes c
         LEFT JOIN pending_checkouts p ON c.checkout_id = p.checkout_id
@@ -171,7 +171,7 @@ async def list_sessions(
             },
             "metadata": {
                 "issue_type": "Samvaad Call",
-                "duration": 0
+                "duration": row.duration_seconds or 0
             },
             "call_type": row.agent_type, # inbound or outbound
             "call_disposition": row.outcome,

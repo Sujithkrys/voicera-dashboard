@@ -30,15 +30,18 @@ async def process_call_outcome(call_id: str):
             logger.error(f"Could not fetch analytics data for call {call_id} around {row['created_at']}")
             return
         
-        outcome = data.get("call_disposition") or "unknown"
-        transcript_summary = data.get("call_summary") or ""
+        agent_vars = data.get("agent_variables", {})
+        duration = data.get("duration_seconds", 0)
+        
+        outcome = agent_vars.get("call_disposition") or "unknown"
+        transcript_summary = agent_vars.get("call_summary") or ""
         
         query = """
             UPDATE call_outcomes
-            SET outcome = $1, transcript_summary = $2
-            WHERE call_id = $3
+            SET outcome = $1, transcript_summary = $2, duration_seconds = $3
+            WHERE call_id = $4
         """
-        await conn.execute(query, outcome, transcript_summary, call_id)
+        await conn.execute(query, outcome, transcript_summary, duration, call_id)
         logger.info(f"Updated call outcome for {call_id}: {outcome}")
 
     except Exception as e:
