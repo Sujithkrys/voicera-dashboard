@@ -189,6 +189,7 @@ async def list_sessions(
             "call_disposition": row.outcome,
             "converted": row.checkout_status == "converted",
             "status": status,
+            "summary": row.transcript_summary,
             "created_at": row.created_at.isoformat() if row.created_at else None,
             "ticket_id": None
         })

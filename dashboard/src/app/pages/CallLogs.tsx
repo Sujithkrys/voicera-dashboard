@@ -39,15 +39,14 @@ export default function CallLogs() {
             : "—",
           status: s.status || "completed",
           raw_date: s.created_at,
+          summary: s.summary || s.metadata?.summary,
           date: new Date(s.created_at).toLocaleString("en-US", {
             month: "short",
             day: "numeric",
             hour: "numeric",
             minute: "numeric",
           }),
-          ticket:
-            s.ticket_id ||
-            `TKT-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+          ticket: s.ticket_id || null,
         }));
         setCalls(formattedCalls);
       } catch (err) {
@@ -274,56 +273,34 @@ export default function CallLogs() {
                   { label: "Type", value: selectedCall.call_type },
                   { label: "Disposition", value: selectedCall.call_disposition?.replace(/_/g, ' ') },
                   { label: "Duration", value: selectedCall.duration },
-                  { label: "Ticket", value: selectedCall.ticket },
                 ].map((item, i) => (
                   <div key={i} className="border border-border rounded-md p-3">
                     <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">{item.label}</div>
                     <div className="text-[13px] font-medium text-foreground capitalize">{item.value}</div>
                   </div>
                 ))}
+                
+                {selectedCall.ticket && (
+                  <div className="border border-border rounded-md p-3">
+                    <div className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Ticket</div>
+                    <div className="text-[13px] font-medium text-foreground capitalize">{selectedCall.ticket}</div>
+                  </div>
+                )}
               </div>
 
-              <h4 className="text-[13px] font-semibold text-foreground mb-3">Transcript</h4>
+              <h4 className="text-[13px] font-semibold text-foreground mb-3">Call Summary</h4>
               <div className="space-y-3">
-                {selectedCall.call_type === 'outbound' ? (
-                  <>
-                    <div>
-                      <div className="text-[11px] text-muted-foreground mb-1">Agent</div>
-                      <div className="bg-muted text-[13px] text-foreground p-3 rounded-md leading-relaxed">
-                        Hi {selectedCall.name.split(' ')[0]}, this is Voicera calling about your recent cart on our store. I noticed you left some items behind. Can I help answer any questions?
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[11px] text-muted-foreground mb-1 text-right">User</div>
-                      <div className="bg-primary text-primary-foreground text-[13px] p-3 rounded-md leading-relaxed ml-6">
-                        Oh hi, yes, I was just wondering about the return policy before buying.
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <div className="text-[11px] text-muted-foreground mb-1">Agent</div>
-                      <div className="bg-muted text-[13px] text-foreground p-3 rounded-md leading-relaxed">
-                        Hi! Thank you for calling Voicera support. How can I help you today?
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[11px] text-muted-foreground mb-1 text-right">User</div>
-                      <div className="bg-primary text-primary-foreground text-[13px] p-3 rounded-md leading-relaxed ml-6">
-                        Hi, I'm having trouble logging into my dashboard.
-                      </div>
-                    </div>
-                  </>
-                )}
+                <div className="bg-muted text-[13px] text-foreground p-3 rounded-md leading-relaxed">
+                  {selectedCall.summary || "No summary captured for this call."}
+                </div>
               </div>
             </div>
 
             <div className="p-4 border-t border-border flex gap-2">
-              <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md">
+              <Button disabled className="flex-1 bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md opacity-50 cursor-not-allowed">
                 View Audio
               </Button>
-              <Button variant="outline" className="flex-1 h-8 text-[13px] font-medium border-border text-foreground rounded-md">
+              <Button disabled variant="outline" className="flex-1 h-8 text-[13px] font-medium border-border text-foreground rounded-md opacity-50 cursor-not-allowed">
                 View Ticket
               </Button>
             </div>
