@@ -59,6 +59,7 @@ async def call_outcome(request: Request, db: AsyncSession = Depends(get_db)):
     """
     try:
         data = await request.json()
+        logger.info(f"Received call-outcome payload: {data}")
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
