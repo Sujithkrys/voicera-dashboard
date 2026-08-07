@@ -266,12 +266,12 @@ export default function Overview() {
           </CardHeader>
           <CardContent className="p-4 pt-0 !pb-4">
             {isLoading ? (
-               <div className="h-[110px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
+               <div className="h-[160px] w-full flex items-center justify-center text-sm text-muted-foreground">Loading...</div>
             ) : issueBreakdownData.length === 0 ? (
-               <div className="h-[110px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
+               <div className="h-[160px] w-full flex items-center justify-center text-sm text-muted-foreground">No data for the last 7 days.</div>
             ) : (
               <>
-                <div className="h-[110px]">
+                <div className="h-[160px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie data={issueBreakdownData} dataKey="value" innerRadius={55} outerRadius={80}>
