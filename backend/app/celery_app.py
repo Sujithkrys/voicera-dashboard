@@ -9,7 +9,7 @@ celery_app = Celery(
     "voicera",
     broker=CELERY_BROKER_URL,
     backend=CELERY_BROKER_URL,
-    include=["app.tasks.booking_tasks", "app.tasks.cart_recovery_tasks"]
+    include=["app.tasks.booking_tasks", "app.tasks.cart_recovery_tasks", "app.tasks.samvaad_tasks"]
 )
 
 celery_app.conf.update(

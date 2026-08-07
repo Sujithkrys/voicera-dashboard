@@ -4,6 +4,8 @@ from sqlalchemy import text
 from app.core.database import get_db
 from app.core.middleware import require_admin
 from app.services.shopify_service import shopify_service
+from app.tasks.samvaad_tasks import process_call_outcome
+from app.api.v1.routes.agent_tools import verify_tool_key
 import datetime
 import logging
 
@@ -63,8 +65,8 @@ async def call_outcome(request: Request, db: AsyncSession = Depends(get_db)):
     call_id = data.get("call_id")
     agent_type = data.get("agent_type", "unknown")
     phone_number = data.get("phone_number")
-    outcome = data.get("outcome", "unknown")
-    transcript_summary = data.get("transcript_summary", "")
+    outcome = "pending_fetch"
+    transcript_summary = ""
     metadata = data.get("metadata", {})
     checkout_id = metadata.get("checkout_id")
 
@@ -87,6 +89,9 @@ async def call_outcome(request: Request, db: AsyncSession = Depends(get_db)):
             "checkout_id": checkout_id
         })
         await db.commit()
+        
+
+
     except Exception as e:
         logger.error(f"Error logging call outcome: {e}")
         await db.rollback()
@@ -131,3 +136,32 @@ async def connection_health(
         "shopify_token_status": token_status,
         "last_checked_at": datetime.datetime.utcnow().isoformat()
     }
+
+@router.get("/reconcile-pending-outcomes")
+async def reconcile_pending_outcomes(
+    request: Request, 
+    verified: bool = Depends(verify_tool_key), 
+    db: AsyncSession = Depends(get_db)
+):
+    query = text("""
+        SELECT call_id FROM call_outcomes
+        WHERE outcome = 'pending_fetch' 
+          AND created_at < NOW() - INTERVAL '2 minutes'
+    """)
+    try:
+        res = await db.execute(query)
+        rows = res.fetchall()
+        
+        count = 0
+        for row in rows:
+            call_id = row.call_id
+            try:
+                await process_call_outcome(call_id)
+                count += 1
+            except Exception as e:
+                logger.error(f"Failed to reconcile call {call_id}: {e}")
+                
+        return {"status": "ok", "reconciled_count": count}
+    except Exception as e:
+        logger.error(f"Database error in reconcile_pending_outcomes: {e}")
+        raise HTTPException(status_code=500, detail="Database error")
