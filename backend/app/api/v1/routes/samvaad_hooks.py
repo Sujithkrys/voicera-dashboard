@@ -152,16 +152,16 @@ async def reconcile_pending_outcomes(
         res = await db.execute(query)
         rows = res.fetchall()
         
-        count = 0
+        processed_ids = []
         for row in rows:
             call_id = row.call_id
             try:
                 await process_call_outcome(call_id)
-                count += 1
+                processed_ids.append(call_id)
             except Exception as e:
                 logger.error(f"Failed to reconcile call {call_id}: {e}")
                 
-        return {"status": "ok", "reconciled_count": count}
+        return {"status": "ok", "processed": len(processed_ids), "call_ids": processed_ids}
     except Exception as e:
         logger.error(f"Database error in reconcile_pending_outcomes: {e}")
         raise HTTPException(status_code=500, detail="Database error")
