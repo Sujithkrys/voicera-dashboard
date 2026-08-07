@@ -63,7 +63,9 @@ export default function CallLogs() {
     switch (status?.toLowerCase()) {
       case "resolved": 
       case "completed": return "bg-emerald-50 text-emerald-700";
-      case "escalated": return "bg-red-50 text-red-600";
+      case "escalated": 
+      case "failed": return "bg-red-50 text-red-600";
+      case "dropped": return "bg-amber-50 text-amber-700";
       case "active": return "bg-amber-50 text-amber-700";
       default: return "bg-secondary text-muted-foreground";
     }
@@ -144,8 +146,10 @@ export default function CallLogs() {
           >
             <option value="all">All Statuses</option>
             <option value="completed">Completed</option>
-            <option value="active">Active</option>
+            <option value="resolved">Resolved</option>
+            <option value="dropped">Dropped</option>
             <option value="escalated">Escalated</option>
+            <option value="failed">Failed</option>
           </select>
           <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
         </div>

@@ -32,16 +32,17 @@ async def process_call_outcome(call_id: str):
         
         agent_vars = data.get("agent_variables", {})
         duration = data.get("duration_seconds", 0)
+        failure_reason = data.get("failure_reason", "NO_FAILURE_REASON")
         
         outcome = agent_vars.get("call_disposition") or "unknown"
         transcript_summary = agent_vars.get("call_summary") or ""
         
         query = """
             UPDATE call_outcomes
-            SET outcome = $1, transcript_summary = $2, duration_seconds = $3
-            WHERE call_id = $4
+            SET outcome = $1, transcript_summary = $2, duration_seconds = $3, failure_reason = $4
+            WHERE call_id = $5
         """
-        await conn.execute(query, outcome, transcript_summary, duration, call_id)
+        await conn.execute(query, outcome, transcript_summary, duration, failure_reason, call_id)
         logger.info(f"Updated call outcome for {call_id}: {outcome}")
 
     except Exception as e:

@@ -458,6 +458,7 @@ CREATE TABLE call_outcomes (
     transcript_summary TEXT,
     checkout_id TEXT,
     duration_seconds INTEGER DEFAULT 0,
+    failure_reason TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -151,7 +151,7 @@ async def list_sessions(
     
     # Fetch call_outcomes
     outcomes_query = text("""
-        SELECT c.call_id, c.agent_type, c.phone_number, c.outcome, c.transcript_summary, c.checkout_id, c.created_at, c.duration_seconds,
+        SELECT c.call_id, c.agent_type, c.phone_number, c.outcome, c.transcript_summary, c.checkout_id, c.created_at, c.duration_seconds, c.failure_reason,
                p.customer_name, p.status as checkout_status
         FROM call_outcomes c
         LEFT JOIN pending_checkouts p ON c.checkout_id = p.checkout_id
@@ -163,6 +163,18 @@ async def list_sessions(
     
     samvaad_sessions = []
     for row in outcomes:
+        status = "completed"
+        outcome_str = (row.outcome or "").lower()
+        
+        if row.failure_reason and row.failure_reason != "NO_FAILURE_REASON":
+            status = "failed"
+        elif "escalated" in outcome_str:
+            status = "escalated"
+        elif "dropped" in outcome_str or "voicemail" in outcome_str or "abandoned" in outcome_str:
+            status = "dropped"
+        elif "resolved" in outcome_str:
+            status = "resolved"
+            
         samvaad_sessions.append({
             "id": row.call_id,
             "customer": {
@@ -176,7 +188,7 @@ async def list_sessions(
             "call_type": row.agent_type, # inbound or outbound
             "call_disposition": row.outcome,
             "converted": row.checkout_status == "converted",
-            "status": "completed",
+            "status": status,
             "created_at": row.created_at.isoformat() if row.created_at else None,
             "ticket_id": None
         })
