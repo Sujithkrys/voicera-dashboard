@@ -21,6 +21,7 @@ async def call_start_context(request: Request, db: AsyncSession = Depends(get_db
     """
     try:
         data = await request.json()
+        logger.info(f"Received call-start-context payload: {data}")
     except Exception:
         return {"agent_variables": {}}
 
