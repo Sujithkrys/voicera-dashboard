@@ -32,7 +32,10 @@ import traceback
 import logging
 from fastapi.responses import JSONResponse
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+logger.info("STARTUP LOG TEST - VOICERA BACKEND STARTING")
 
 @fastapi_app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
