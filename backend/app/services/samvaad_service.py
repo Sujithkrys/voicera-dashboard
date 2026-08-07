@@ -160,9 +160,10 @@ class SamvaadService:
 
                 if len(items) == 1:
                     item = items[0]
+                    dur = item.get("duration_in_seconds")
                     return {
                         "agent_variables": item.get("agent_variables", {}),
-                        "duration_seconds": int(item.get("duration_in_seconds", 0)),
+                        "duration_seconds": int(dur) if dur is not None else None,
                         "failure_reason": item.get("failure_reason", "NO_FAILURE_REASON")
                     }
                 elif len(items) == 0:

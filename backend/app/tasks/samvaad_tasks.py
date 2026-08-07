@@ -31,7 +31,7 @@ async def process_call_outcome(call_id: str):
             return
         
         agent_vars = data.get("agent_variables", {})
-        duration = data.get("duration_seconds", 0)
+        duration = data.get("duration_seconds")
         failure_reason = data.get("failure_reason", "NO_FAILURE_REASON")
         
         outcome = agent_vars.get("call_disposition") or "unknown"
@@ -39,7 +39,7 @@ async def process_call_outcome(call_id: str):
         
         query = """
             UPDATE call_outcomes
-            SET outcome = $1, transcript_summary = $2, duration_seconds = $3, failure_reason = $4
+            SET outcome = $1, transcript_summary = $2, duration_seconds = COALESCE($3, duration_seconds), failure_reason = $4
             WHERE call_id = $5
         """
         await conn.execute(query, outcome, transcript_summary, duration, failure_reason, call_id)
