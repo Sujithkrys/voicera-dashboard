@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { apiClient } from "../../api/client";
+import { DropdownSelect } from "../components/ui/dropdown-select";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
@@ -125,44 +126,36 @@ export default function CallLogs() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="relative">
-          <select 
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
-          >
-            <option value="all">All Types</option>
-            <option value="inbound">Inbound</option>
-            <option value="outbound">Outbound</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-        </div>
-        <div className="relative">
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
-          >
-            <option value="all">All Statuses</option>
-            <option value="completed">Completed</option>
-            <option value="resolved">Resolved</option>
-            <option value="dropped">Dropped</option>
-            <option value="escalated">Escalated</option>
-            <option value="failed">Failed</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-        </div>
-        <div className="relative ml-auto">
-          <select 
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
-          >
-            <option value="all">All Time</option>
-            <option value="7days">Last 7 days</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-        </div>
+        <DropdownSelect
+          value={typeFilter}
+          onValueChange={setTypeFilter}
+          options={[
+            { label: "All Types", value: "all" },
+            { label: "Inbound", value: "inbound" },
+            { label: "Outbound", value: "outbound" },
+          ]}
+        />
+        <DropdownSelect
+          value={statusFilter}
+          onValueChange={setStatusFilter}
+          options={[
+            { label: "All Statuses", value: "all" },
+            { label: "Completed", value: "completed" },
+            { label: "Resolved", value: "resolved" },
+            { label: "Dropped", value: "dropped" },
+            { label: "Escalated", value: "escalated" },
+            { label: "Failed", value: "failed" },
+          ]}
+        />
+        <DropdownSelect
+          value={dateFilter}
+          onValueChange={setDateFilter}
+          className="ml-auto"
+          options={[
+            { label: "All Time", value: "all" },
+            { label: "Last 7 days", value: "7days" },
+          ]}
+        />
       </div>
 
       {/* Table */}

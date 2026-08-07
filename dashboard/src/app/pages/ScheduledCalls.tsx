@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../api/client';
+import { DropdownSelect } from '../components/ui/dropdown-select';
 import { ChevronDown } from 'lucide-react';
 
 export default function ScheduledCalls() {
@@ -45,20 +46,17 @@ export default function ScheduledCalls() {
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="relative">
-          <select 
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
-          >
-            <option value="all">All Statuses</option>
-            <option value="pending">Pending</option>
-            <option value="converted">Converted</option>
-            <option value="called">Called</option>
-            <option value="skipped">Skipped</option>
-          </select>
-          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-        </div>
+        <DropdownSelect
+          value={statusFilter}
+          onValueChange={setStatusFilter}
+          options={[
+            { label: "All Statuses", value: "all" },
+            { label: "Pending", value: "pending" },
+            { label: "Converted", value: "converted" },
+            { label: "Called", value: "called" },
+            { label: "Skipped", value: "skipped" },
+          ]}
+        />
       </div>
 
       <div className="border border-border rounded-lg overflow-auto flex-1">

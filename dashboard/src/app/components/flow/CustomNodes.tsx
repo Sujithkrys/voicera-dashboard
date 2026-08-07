@@ -1,6 +1,7 @@
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
 import { MessageSquare, Settings2, Cpu, FileOutput, Mail, Table, FileText, Calendar, BookOpen } from "lucide-react";
+import { DropdownSelect } from "../ui/dropdown-select";
 
 const NodeWrapper = ({ children, title, icon: Icon, color }: any) => (
   <div className="bg-background rounded-xl shadow-sm border border-border overflow-hidden w-[260px] font-sans">
@@ -48,11 +49,16 @@ export const LLMNode = ({ data }: any) => {
       <NodeWrapper title="Groq LLM" icon={Cpu} color="bg-green-50">
         <div>
           <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Model Name</label>
-          <select className="w-full text-[12px] p-1.5 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-green-500">
-            <option>llama-3.1-8b-instant</option>
-            <option>llama3-70b-8192</option>
-            <option>mixtral-8x7b-32768</option>
-          </select>
+          <DropdownSelect
+            value="llama-3.1-8b-instant"
+            onValueChange={() => {}}
+            options={[
+              { label: "llama-3.1-8b-instant", value: "llama-3.1-8b-instant" },
+              { label: "llama3-70b-8192", value: "llama3-70b-8192" },
+              { label: "mixtral-8x7b-32768", value: "mixtral-8x7b-32768" },
+            ]}
+            className="w-full h-[28px] focus:ring-green-500"
+          />
         </div>
         <div>
           <label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Groq API Key</label>
