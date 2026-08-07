@@ -55,22 +55,7 @@ import os
 from fastapi import Depends, HTTPException
 from app.core.middleware import require_admin
 
-@fastapi_app.get("/debug-env")
-async def debug_env(current_user: dict = Depends(require_admin)):
-    if os.getenv("ENVIRONMENT") == "production":
-        raise HTTPException(status_code=403, detail="Not available in production")
-    db_url = os.getenv("DATABASE_URL") or ""
-    masked_db = db_url
-    if "@" in db_url:
-        parts = db_url.split("@")
-        masked_db = "postgresql://***:***@" + parts[-1]
-    return {
-        "DATABASE_URL": masked_db,
-        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
-        "JWT_SECRET_SET": bool(os.getenv("JWT_SECRET")),
-        "BREVO_API_KEY_SET": bool(os.getenv("BREVO_API_KEY")),
-        "SUPABASE_SERVICE_KEY_SET": bool(os.getenv("SUPABASE_SERVICE_KEY")),
-    }
+
 
 from app.api.v1.routes import (
     auth_router, kb_router, config_router, chat_router, 
