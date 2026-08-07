@@ -34,9 +34,9 @@ export default function CallLogs() {
           call_type: s.call_type || "inbound",
           call_disposition: s.call_disposition || "resolved",
           converted: !!s.converted,
-          duration: s.metadata?.duration
+          duration: s.metadata?.duration != null
             ? `${Math.floor(s.metadata.duration / 60)}m ${s.metadata.duration % 60}s`
-            : "3m 12s",
+            : "—",
           status: s.status || "completed",
           raw_date: s.created_at,
           date: new Date(s.created_at).toLocaleString("en-US", {

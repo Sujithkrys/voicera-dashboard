@@ -183,7 +183,7 @@ async def list_sessions(
             },
             "metadata": {
                 "issue_type": "Samvaad Call",
-                "duration": row.duration_seconds or 0
+                "duration": row.duration_seconds
             },
             "call_type": row.agent_type, # inbound or outbound
             "call_disposition": row.outcome,
