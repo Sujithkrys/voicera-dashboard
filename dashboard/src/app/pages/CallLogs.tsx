@@ -17,6 +17,9 @@ export default function CallLogs() {
   const [calls, setCalls] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
   const [selectedCall, setSelectedCall] = useState<any | null>(null);
 
   useEffect(() => {
@@ -35,6 +38,7 @@ export default function CallLogs() {
             ? `${Math.floor(s.metadata.duration / 60)}m ${s.metadata.duration % 60}s`
             : "3m 12s",
           status: s.status || "completed",
+          raw_date: s.created_at,
           date: new Date(s.created_at).toLocaleString("en-US", {
             month: "short",
             day: "numeric",
@@ -73,6 +77,25 @@ export default function CallLogs() {
     return "bg-secondary text-muted-foreground border-border";
   };
 
+  const filteredCalls = calls.filter((call) => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const nameMatch = call.name?.toLowerCase().includes(q);
+      const emailMatch = call.email?.toLowerCase().includes(q);
+      const dispMatch = call.call_disposition?.toLowerCase().includes(q);
+      if (!nameMatch && !emailMatch && !dispMatch) return false;
+    }
+    if (typeFilter !== "all" && call.call_type?.toLowerCase() !== typeFilter) return false;
+    if (statusFilter !== "all" && call.status?.toLowerCase() !== statusFilter) return false;
+    if (dateFilter === "7days" && call.raw_date) {
+      const callDate = new Date(call.raw_date);
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      if (callDate < sevenDaysAgo) return false;
+    }
+    return true;
+  });
+
   return (
     <div className="p-6 space-y-5 h-full flex flex-col relative overflow-hidden">
       {/* Header */}
@@ -101,15 +124,42 @@ export default function CallLogs() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5">
-          Type <ChevronDown className="h-3 w-3" />
-        </button>
-        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5">
-          Status <ChevronDown className="h-3 w-3" />
-        </button>
-        <button className="h-8 px-3 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted flex items-center gap-1.5 ml-auto">
-          Last 7 days <ChevronDown className="h-3 w-3" />
-        </button>
+        <div className="relative">
+          <select 
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
+          >
+            <option value="all">All Types</option>
+            <option value="inbound">Inbound</option>
+            <option value="outbound">Outbound</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+        </div>
+        <div className="relative">
+          <select 
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
+          >
+            <option value="all">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="active">Active</option>
+            <option value="escalated">Escalated</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+        </div>
+        <div className="relative ml-auto">
+          <select 
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="appearance-none h-8 pl-3 pr-8 text-[13px] font-medium text-muted-foreground border border-border rounded-md hover:bg-muted bg-transparent outline-none focus:ring-1 focus:ring-border cursor-pointer"
+          >
+            <option value="all">All Time</option>
+            <option value="7days">Last 7 days</option>
+          </select>
+          <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+        </div>
       </div>
 
       {/* Table */}
@@ -130,12 +180,12 @@ export default function CallLogs() {
               <tr>
                 <td colSpan={6} className="text-center py-10 text-[13px] text-muted-foreground">Loading...</td>
               </tr>
-            ) : calls.length === 0 ? (
+            ) : filteredCalls.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-10 text-[13px] text-muted-foreground">No call logs found.</td>
               </tr>
             ) : (
-              calls.map((call) => (
+              filteredCalls.map((call) => (
                 <tr
                   key={call.id}
                   className="border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors cursor-pointer group"
