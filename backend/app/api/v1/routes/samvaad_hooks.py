@@ -8,6 +8,7 @@ from app.tasks.samvaad_tasks import process_call_outcome
 from app.api.v1.routes.agent_tools import verify_tool_key
 import datetime
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +65,8 @@ async def call_outcome(request: Request, db: AsyncSession = Depends(get_db)):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    call_id = data.get("call_id")
+    # Generate a unique ID server-side so every webhook successfully inserts a new row.
+    call_id = str(uuid.uuid4())
     agent_type = data.get("agent_type", "unknown")
     phone_number = data.get("phone_number")
     outcome = "pending_fetch"

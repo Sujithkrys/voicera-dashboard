@@ -20,14 +20,18 @@ async def process_call_outcome(call_id: str):
         return
 
     try:
-        data = await samvaad_service.fetch_call_outcome(call_id)
+        row = await conn.fetchrow("SELECT created_at FROM call_outcomes WHERE call_id = $1", call_id)
+        if not row:
+            logger.error(f"Could not find row for call {call_id}")
+            return
+
+        data = await samvaad_service.fetch_call_outcome_by_time(row['created_at'])
         if not data:
-            logger.error(f"Could not fetch data for call {call_id}")
+            logger.error(f"Could not fetch analytics data for call {call_id} around {row['created_at']}")
             return
         
-        # Robustly extract outcome and summary
-        outcome = data.get("disposition") or data.get("call_disposition") or data.get("status") or "unknown"
-        transcript_summary = data.get("summary") or data.get("call_summary") or data.get("transcript_summary") or ""
+        outcome = data.get("call_disposition") or "unknown"
+        transcript_summary = data.get("call_summary") or ""
         
         query = """
             UPDATE call_outcomes

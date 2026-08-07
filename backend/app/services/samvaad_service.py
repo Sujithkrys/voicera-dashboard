@@ -1,6 +1,7 @@
 import httpx
 import logging
 from typing import Dict, Any, Optional
+from datetime import datetime, timedelta
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -109,6 +110,69 @@ class SamvaadService:
                     return None
         except Exception as e:
             logger.error(f"Error fetching call outcome {call_id}: {e}")
+            return None
+
+    async def fetch_call_outcome_by_time(
+        self, created_at: datetime
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Fetches call outcomes from Sarvam's analytics API using a narrow time window.
+        """
+        if not self.api_key:
+            return None
+
+        org_id = settings.SAMVAAD_ORG_ID
+        workspace_id = settings.SAMVAAD_WORKSPACE_ID
+        app_id = settings.SAMVAAD_INBOUND_AGENT_ID
+
+        if not org_id or not workspace_id or not app_id:
+            logger.warning("Missing org_id, workspace_id, or app_id configuration.")
+            return None
+
+        # Time window: created_at - 3 mins to created_at + 5 mins
+        start_dt = created_at - timedelta(minutes=3)
+        end_dt = created_at + timedelta(minutes=5)
+        
+        start_str = start_dt.isoformat()
+        end_str = end_dt.isoformat()
+
+        url = f"https://apps.sarvam.ai/api/analytics/v1/{org_id}/{workspace_id}/{app_id}/interactions"
+        params = {
+            "start_datetime": start_str,
+            "end_datetime": end_str
+        }
+
+        # Sarvam Analytics explicitly requires X-API-Key
+        headers = {
+            "X-API-Key": self.api_key,
+            "Content-Type": "application/json"
+        }
+
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(url, headers=headers, params=params)
+                if response.status_code != 200:
+                    logger.warning(f"Failed to fetch analytics interactions: {response.status_code}")
+                    return None
+                
+                data = response.json()
+                items = data.get("items", [])
+
+                if len(items) == 1:
+                    return items[0].get("agent_variables")
+                elif len(items) == 0:
+                    logger.warning(f"Zero interactions found around {created_at}.")
+                    return None
+                else:
+                    start_times = [item.get("start_datetime") for item in items]
+                    logger.warning(
+                        f"Found {len(items)} interactions around {created_at} "
+                        f"({start_times}). Returning None to avoid guessing."
+                    )
+                    return None
+
+        except Exception as e:
+            logger.error(f"Error fetching call outcome by time: {e}")
             return None
 
 samvaad_service = SamvaadService()
