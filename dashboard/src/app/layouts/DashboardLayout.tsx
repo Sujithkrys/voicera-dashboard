@@ -120,14 +120,7 @@ export function AppSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/recovery-stats")} className={navItem(isActive("/recovery-stats"))}>
-                  <Link to="/recovery-stats">
-                    <BarChart3 className="size-4" strokeWidth={1.8} />
-                    <span>Recovery Stats</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   onClick={() => setIsAiChatOpen(!isAiChatOpen)}
