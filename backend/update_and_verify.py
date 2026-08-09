@@ -1,0 +1,59 @@
+import asyncio
+import asyncpg
+import httpx
+import os
+import sys
+from dotenv import load_dotenv
+
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+from app.core.security import create_access_token
+
+load_dotenv()
+
+async def update_and_verify():
+    db_url = os.getenv('DATABASE_URL')
+    conn = await asyncpg.connect(db_url)
+    
+    # 1. Update the row
+    call_id = 'eb0cc17a-52ef-494d-9b8a-d649357d6409'
+    update_query = f"UPDATE call_outcomes SET duration_seconds = 63 WHERE call_id = '{call_id}'"
+    await conn.execute(update_query)
+    print("Database UPDATE executed successfully.")
+    
+    # 2. Re-query the row
+    query = f"SELECT call_id, duration_seconds FROM call_outcomes WHERE call_id = '{call_id}'"
+    row = await conn.fetchrow(query)
+    
+    print("\n=== Database Row After Update ===")
+    if row:
+        print(f"call_id: {row['call_id']}")
+        print(f"duration_seconds: {row['duration_seconds']}")
+    else:
+        print("Row not found.")
+        
+    await conn.close()
+    
+    # 3. Hit the API
+    print("\n=== API Response ===")
+    admin_token = create_access_token(subject="admin", extra_data={"client_id": "test_client_id_1"})
+    headers = {"Authorization": f"Bearer {admin_token}"}
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.get("http://127.0.0.1:8000/api/v1/sessions", headers=headers)
+            print(f"Status Code: {resp.status_code}")
+            if resp.status_code == 200:
+                data = resp.json()
+                sessions = data.get("sessions", [])
+                for s in sessions:
+                    if s.get("id") == call_id:
+                        print(f"Match found in API!")
+                        print(f"metadata: {s.get('metadata')}")
+                        return
+                print("Session not found in API response.")
+            else:
+                print(f"Error: {resp.text}")
+        except Exception as e:
+            print(f"API request failed: {e}")
+
+asyncio.run(update_and_verify())

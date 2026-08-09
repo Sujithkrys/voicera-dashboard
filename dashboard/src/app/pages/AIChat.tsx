@@ -9,7 +9,7 @@ const suggestionCards = [
   { icon: "🎯", title: "Resolution rate insights", desc: "Understand your team's performance" },
 ];
 
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard.onrender.com';
+const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
 
 export default function AIChat() {
   const { threads, activeThreadId, createThread, addMessage } = useChat();

@@ -1,14 +1,13 @@
 import asyncio
-from app.core.database import get_db
-from sqlalchemy import text
+import asyncpg
+import os
 
-async def check():
-    async for db in get_db():
-        res = await db.execute(text("SELECT id, file_name, file_type, file_url FROM kb_documents;"))
-        rows = res.fetchall()
-        for r in rows:
-            print(f"Name: {r.file_name}, Type: {r.file_type}, URL: {r.file_url}")
-        break
+async def check_db():
+    db_url = os.getenv('DATABASE_URL')
+    conn = await asyncpg.connect(db_url)
+    rows = await conn.fetch("SELECT call_id, phone_number, created_at FROM call_outcomes ORDER BY created_at DESC LIMIT 3")
+    for r in rows:
+        print(f"Row: ID='{r['call_id']}', Phone='{r['phone_number']}'")
+    await conn.close()
 
-if __name__ == "__main__":
-    asyncio.run(check())
+asyncio.run(check_db())

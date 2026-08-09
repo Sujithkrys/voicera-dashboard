@@ -452,7 +452,7 @@ function IntegrationsPanel() {
 
   const fetchStatus = async () => {
     try {
-      const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard.onrender.com';
+      const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
       const response = await fetch(`${BACKEND_URL}/api/v1/oauth/status`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -470,12 +470,12 @@ function IntegrationsPanel() {
   };
 
   const handleConnectGoogle = () => {
-    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard.onrender.com';
+    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
     window.location.href = `${BACKEND_URL}/api/v1/oauth/google/authorize?token=${token}`;
   };
 
   const handleConnectNotion = () => {
-    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard.onrender.com';
+    const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
     window.location.href = `${BACKEND_URL}/api/v1/oauth/notion/authorize?token=${token}`;
   };
 
