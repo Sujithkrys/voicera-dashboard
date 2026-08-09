@@ -58,7 +58,7 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
 
     query = text("""
         INSERT INTO pending_checkouts (checkout_id, checkout_token, customer_phone, customer_name, cart_items, cart_value, status)
-        VALUES (:checkout_id, :checkout_token, :customer_phone, :customer_name, :cart_items::jsonb, :cart_value, 'pending')
+        VALUES (:checkout_id, :checkout_token, :customer_phone, :customer_name, CAST(:cart_items AS jsonb), :cart_value, 'pending')
     """)
     
     try:
