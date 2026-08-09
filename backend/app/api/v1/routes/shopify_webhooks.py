@@ -23,8 +23,8 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    checkout_id = str(data.get("id", ""))
     token = data.get("token")
+    checkout_id = str(token) if token else ""
 
     customer = data.get("customer")
     phone = None
@@ -48,10 +48,8 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     cart_items_json = json.dumps(line_items)
     cart_value = float(data.get("total_price", 0.0))
     
-    logger.info(f"Checkout webhook check: checkout_id={data.get('id')!r}, token={data.get('token')!r}, full_keys={list(data.keys())}")
-
-    if not checkout_id or not token:
-        return {"status": "ignored", "reason": "Missing checkout ID or token"}
+    if not token:
+        return {"status": "ignored", "reason": "Missing token"}
 
     check_query = text("SELECT id FROM pending_checkouts WHERE checkout_id = :checkout_id LIMIT 1")
     result = await db.execute(check_query, {"checkout_id": checkout_id})
