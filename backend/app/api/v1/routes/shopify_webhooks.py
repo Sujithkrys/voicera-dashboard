@@ -23,6 +23,10 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
+    logger.info(f"Shopify webhook payload types: customer={type(data.get('customer'))}, shipping_address={type(data.get('shipping_address'))}")
+    logger.info(f"Raw customer data: {data.get('customer')}")
+    logger.info(f"Raw shipping_address data: {data.get('shipping_address')}")
+
     checkout_id = str(data.get("id", ""))
     token = data.get("token")
     customer = data.get("customer", {})
