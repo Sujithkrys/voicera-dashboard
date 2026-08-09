@@ -23,6 +23,8 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
+    logger.info(f"Top-level webhook fields: email={data.get('email')!r}, phone={data.get('phone')!r}")
+
     token = data.get("token")
     checkout_id = str(token) if token else ""
 
