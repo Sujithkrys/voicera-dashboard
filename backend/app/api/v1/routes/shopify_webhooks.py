@@ -23,15 +23,26 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    logger.info(f"Shopify webhook payload types: customer={type(data.get('customer'))}, shipping_address={type(data.get('shipping_address'))}")
-    logger.info(f"Raw customer data: {data.get('customer')}")
-    logger.info(f"Raw shipping_address data: {data.get('shipping_address')}")
-
     checkout_id = str(data.get("id", ""))
     token = data.get("token")
-    customer = data.get("customer", {})
-    phone = customer.get("phone") or data.get("phone") or data.get("shipping_address", {}).get("phone")
-    name = f"{customer.get('first_name', '')} {customer.get('last_name', '')}".strip()
+
+    customer = data.get("customer")
+    phone = None
+    name = ""
+
+    if isinstance(customer, dict):
+        phone = customer.get("phone")
+        name = f"{customer.get('first_name', '')} {customer.get('last_name', '')}".strip()
+
+    if not phone:
+        shipping = data.get("shipping_address")
+        if isinstance(shipping, list) and len(shipping) > 0 and isinstance(shipping[0], dict):
+            phone = shipping[0].get("phone")
+        elif isinstance(shipping, dict):
+            phone = shipping.get("phone")
+            
+    if not phone:
+        phone = data.get("phone")
     
     line_items = data.get("line_items", [])
     cart_items_json = json.dumps(line_items)
