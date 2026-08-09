@@ -48,6 +48,8 @@ async def checkout_create_webhook(request: Request, db: AsyncSession = Depends(g
     cart_items_json = json.dumps(line_items)
     cart_value = float(data.get("total_price", 0.0))
     
+    logger.info(f"Checkout webhook check: checkout_id={data.get('id')!r}, token={data.get('token')!r}, full_keys={list(data.keys())}")
+
     if not checkout_id or not token:
         return {"status": "ignored", "reason": "Missing checkout ID or token"}
 
