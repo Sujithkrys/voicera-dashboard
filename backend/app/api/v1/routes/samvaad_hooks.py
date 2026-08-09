@@ -108,22 +108,24 @@ async def connection_health(
     current_user: dict = Depends(require_admin),
     db: AsyncSession = Depends(get_db)
 ):
-    # Determine shopify_token_status
+    # Determine shopify_token_status actively
     token_status = "unknown"
+    token_error = None
     try:
-        # if we can get a token, it's valid. The service handles expiry internally.
-        if shopify_service._access_token:
-            import time
-            if time.time() > shopify_service._token_expires_at:
-                token_status = "expired"
-            elif (shopify_service._token_expires_at - time.time()) < 3600:
-                token_status = "expiring_soon"
-            else:
-                token_status = "valid"
-        else:
+        await shopify_service.get_access_token()
+        import time
+        if time.time() > shopify_service._token_expires_at:
             token_status = "expired"
-    except Exception:
+        elif (shopify_service._token_expires_at - time.time()) < 3600:
+            token_status = "expiring_soon"
+        else:
+            token_status = "valid"
+    except ValueError as e:
         token_status = "expired"
+        token_error = "Credentials not configured"
+    except Exception as e:
+        token_status = "expired"
+        token_error = f"Credentials rejected by Shopify or network error ({str(e)})"
         
     # Get last webhook timestamp
     last_received_at = None
@@ -138,6 +140,7 @@ async def connection_health(
     return {
         "shopify_webhook_last_received_at": last_received_at,
         "shopify_token_status": token_status,
+        "shopify_token_error": token_error,
         "last_checked_at": datetime.datetime.utcnow().isoformat()
     }
 
