@@ -3,7 +3,7 @@ import { Bot, PhoneIncoming, PhoneOutgoing, ExternalLink, Settings2, Sparkles, B
 import { Button } from "../components/ui/button";
 
 export default function BotConfig() {
-  const SAMVAAD_CONSOLE_URL = "https://console.samvaad.ai"; // Placeholder URL for Samvaad console
+  const SARVAM_URL = "https://www.sarvam.ai/";
 
   return (
     <div className="p-6 space-y-6 max-w-5xl mx-auto h-full">
@@ -12,16 +12,16 @@ export default function BotConfig() {
           <h1 className="text-[18px] font-semibold text-foreground">Agents</h1>
           <p className="text-[13px] text-muted-foreground mt-1 flex items-center gap-1.5">
             <span className="inline-block px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-semibold uppercase tracking-wider">View Only</span>
-            This page is informational. Actual configuration happens in Samvaad's console.
+            This page is informational. Actual configuration happens in Sarvam's console.
           </p>
         </div>
         <Button 
           variant="outline"
-          onClick={() => window.open(SAMVAAD_CONSOLE_URL, '_blank')}
+          onClick={() => window.open(SARVAM_URL, '_blank')}
           className="h-9 text-[13px] font-medium border-border text-foreground rounded-md shadow-sm"
         >
           <Settings2 className="mr-1.5 h-4 w-4" />
-          Manage in Samvaad
+          Manage in Sarvam AI
         </Button>
       </div>
 
@@ -62,7 +62,7 @@ export default function BotConfig() {
 
           <Button 
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-9 text-[13px] font-medium rounded-md shadow-sm relative z-10"
-            onClick={() => window.open(`${SAMVAAD_CONSOLE_URL}/agents/inbound`, '_blank')}
+            onClick={() => window.open(SARVAM_URL, '_blank')}
           >
             Configure Inbound Agent <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
           </Button>
@@ -104,7 +104,7 @@ export default function BotConfig() {
 
           <Button 
             className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-9 text-[13px] font-medium rounded-md shadow-sm relative z-10"
-            onClick={() => window.open(`${SAMVAAD_CONSOLE_URL}/agents/outbound`, '_blank')}
+            onClick={() => window.open(SARVAM_URL, '_blank')}
           >
             Configure Outbound Agent <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
           </Button>

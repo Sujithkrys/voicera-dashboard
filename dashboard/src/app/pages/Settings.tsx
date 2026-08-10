@@ -14,7 +14,7 @@ interface SettingsProps {
 }
 
 export default function Settings({ open, onOpenChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<"profile" | "integrations" | "security" | "usage">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "integrations" | "security" | "usage" | "shopify">("profile");
 
   // Profile State
   const [initialEmail, setInitialEmail] = useState("");
@@ -126,6 +126,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           </button>
           <button onClick={() => setActiveTab("usage")} className={navItem("usage")}>
             <Zap className="h-4 w-4" strokeWidth={1.8} /> Usage
+          </button>
+          <button onClick={() => setActiveTab("shopify")} className={navItem("shopify")}>
+            <Globe className="h-4 w-4" strokeWidth={1.8} /> Shopify Demo
           </button>
           <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
             <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
@@ -246,6 +249,26 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           {activeTab === "integrations" && (
             <div className="space-y-5">
               <IntegrationsPanel />
+            </div>
+          )}
+
+          {/* ───── Shopify Demo ───── */}
+          {activeTab === "shopify" && (
+            <div className="space-y-5">
+              <div className="border border-border rounded-lg p-6 space-y-4">
+                <h2 className="text-[14px] font-semibold text-foreground flex items-center gap-2">
+                  <Globe className="h-4 w-4" /> Demo Website Integration
+                </h2>
+                <div className="text-[13px] text-muted-foreground">
+                  Your Voicera account is connected to our demo Shopify store. Customers calling from the demo store will automatically have their information fetched by Voicera agents.
+                </div>
+                <div className="bg-secondary/50 rounded-md p-4 mt-2">
+                  <div className="text-[12px] font-medium text-muted-foreground mb-1">Demo Store URL</div>
+                  <a href="https://voicera-recovery-dev.myshopify.com/" target="_blank" rel="noopener noreferrer" className="text-[14px] text-primary hover:underline font-medium">
+                    https://voicera-recovery-dev.myshopify.com/
+                  </a>
+                </div>
+              </div>
             </div>
           )}
 
