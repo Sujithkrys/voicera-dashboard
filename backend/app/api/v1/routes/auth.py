@@ -134,6 +134,9 @@ async def login(request: LoginRequest, db: AsyncSession = Depends(get_db)):
         # 2. Verify existence and password
         valid_password = False
         if row:
+            if row.hashed_password is None:
+                raise HTTPException(status_code=400, detail="This account uses Google Sign-In. Please log in with Google.")
+                
             try:
                 if row.hashed_password and verify_password(request.password, row.hashed_password):
                     valid_password = True
@@ -314,16 +317,13 @@ async def supabase_login(request: Request, db: AsyncSession = Depends(get_db)):
             new_client_id = client_res.data[0]["id"]
             
             # Create user record
-            hashed_pw = get_password_hash("oauth_managed")
-            
             await db.execute(
                 text("""INSERT INTO users (client_id, email, full_name, hashed_password, role, is_active)
-                        VALUES (:client_id, :email, :full_name, :password, 'admin', true)"""),
+                        VALUES (:client_id, :email, :full_name, NULL, 'admin', true)"""),
                 {
                     "client_id": new_client_id,
                     "email": email,
-                    "full_name": full_name,
-                    "password": hashed_pw
+                    "full_name": full_name
                 }
             )
             await db.commit()
@@ -990,15 +990,19 @@ async def update_profile(
     
     # Verify password if email is being changed
     if request.email and request.email != current_email:
-        if not request.current_password:
-            raise HTTPException(status_code=400, detail="Current password is required to change email address")
-            
         pw_query = text("SELECT hashed_password FROM users WHERE id = :id")
         pw_result = await db.execute(pw_query, {"id": user_id})
         pw_row = pw_result.fetchone()
         
-        if not pw_row or not pw_row.hashed_password or not verify_password(request.current_password, pw_row.hashed_password):
-            raise HTTPException(status_code=400, detail="Incorrect current password")
+        # If hashed_password is NULL, this is an OAuth user.
+        # TODO: Known gap: OAuth users currently bypass email-change verification.
+        # Should be revisited later with a proper Google re-auth prompt.
+        if pw_row and pw_row.hashed_password is not None:
+            if not request.current_password:
+                raise HTTPException(status_code=400, detail="Current password is required to change email address")
+                
+            if not verify_password(request.current_password, pw_row.hashed_password):
+                raise HTTPException(status_code=400, detail="Incorrect current password")
             
     query = text("""
         UPDATE users 
