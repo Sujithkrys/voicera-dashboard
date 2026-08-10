@@ -5,7 +5,7 @@ import secrets
 import hashlib
 from app.core.database import get_db
 from app.core.security import get_password_hash, verify_password, create_access_token
-from app.schemas.auth import SignupRequest, LoginRequest, AuthResponse, UserResponse, ClientResponse
+from app.schemas.auth import SignupRequest, LoginRequest, AuthResponse, UserResponse, ClientResponse, UpdateProfileRequest, UpdatePasswordRequest
 from app.core.middleware import get_current_user
 from app.services.email_service import email_service
 

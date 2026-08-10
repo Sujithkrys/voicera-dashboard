@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle } from "../components/ui/dialog";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut, Mail, Calendar, FileText, Database, BookOpen, Monitor, Moon, Sun, Palette } from "lucide-react";
+import { User, Key, CreditCard, Puzzle, Eye, Copy, CheckCircle2, ChevronRight, Zap, Bell, Shield, Globe, Trash2, LogOut, Mail, Calendar, FileText, Database, BookOpen, Monitor, Moon, Sun, Palette, Loader2 } from "lucide-react";
 import { Switch } from "../components/ui/switch";
 import { useTheme } from "../context/ThemeContext";
+import { apiClient } from "../../api/client";
 
 interface SettingsProps {
   open: boolean;
@@ -13,7 +14,79 @@ interface SettingsProps {
 }
 
 export default function Settings({ open, onOpenChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "api" | "billing" | "integrations" | "notifications" | "security" | "usage">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "integrations" | "security" | "usage">("profile");
+
+  // Profile State
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
+  
+  // Security State
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      apiClient("/auth/me")
+        .then((res: any) => {
+          if (res.user) {
+            setFullName(res.user.full_name || "");
+            setEmail(res.user.email || "");
+          }
+        })
+        .catch(console.error);
+    }
+  }, [open]);
+
+  const handleProfileSave = async () => {
+    try {
+      setIsSavingProfile(true);
+      await apiClient("/auth/profile", {
+        method: "PATCH",
+        body: JSON.stringify({ full_name: fullName, email }),
+      });
+      alert("Profile updated successfully!");
+    } catch (err: any) {
+      alert(err.message || "Failed to update profile");
+    } finally {
+      setIsSavingProfile(false);
+    }
+  };
+
+  const handlePasswordSave = async () => {
+    if (newPassword !== confirmPassword) {
+      alert("New passwords do not match!");
+      return;
+    }
+    try {
+      setIsSavingPassword(true);
+      await apiClient("/auth/password", {
+        method: "PATCH",
+        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+      });
+      alert("Password updated successfully!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      alert(err.message || "Failed to update password");
+    } finally {
+      setIsSavingPassword(false);
+    }
+  };
+
+  const handleSignOutAll = async () => {
+    if (!window.confirm("Are you sure you want to sign out from all devices?")) return;
+    try {
+      await apiClient("/auth/logout", { method: "POST" });
+      localStorage.removeItem("voicera_token");
+      window.location.href = "/login";
+    } catch (err: any) {
+      alert(err.message || "Failed to sign out");
+    }
+  };
 
   const navItem = (tab: string) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-medium transition-colors ${
@@ -37,20 +110,14 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <button onClick={() => setActiveTab("appearance")} className={navItem("appearance")}>
             <Palette className="h-4 w-4" strokeWidth={1.8} /> Appearance
           </button>
-          <button onClick={() => setActiveTab("notifications")} className={navItem("notifications")}>
-            <Bell className="h-4 w-4" strokeWidth={1.8} /> Notifications
-          </button>
           <button onClick={() => setActiveTab("security")} className={navItem("security")}>
             <Shield className="h-4 w-4" strokeWidth={1.8} /> Security
           </button>
-          <button onClick={() => setActiveTab("api")} className={navItem("api")}>
-            <Key className="h-4 w-4" strokeWidth={1.8} /> API Keys
-          </button>
-          <button onClick={() => setActiveTab("billing")} className={navItem("billing")}>
-            <CreditCard className="h-4 w-4" strokeWidth={1.8} /> Billing
-          </button>
           <button onClick={() => setActiveTab("usage")} className={navItem("usage")}>
             <Zap className="h-4 w-4" strokeWidth={1.8} /> Usage
+          </button>
+          <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
+            <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
           </button>
           <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
             <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
@@ -79,7 +146,9 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
               <div className="border border-border rounded-lg p-6 space-y-6">
                 <h2 className="text-[14px] font-semibold text-foreground">Profile Settings</h2>
                 <div className="flex items-center gap-5 pb-5 border-b border-border">
-                  <div className="h-16 w-16 rounded-full bg-neutral-200 flex items-center justify-center text-[20px] font-semibold text-muted-foreground">AS</div>
+                  <div className="h-16 w-16 rounded-full bg-neutral-200 flex items-center justify-center text-[20px] font-semibold text-muted-foreground">
+                    {fullName.charAt(0) || "U"}
+                  </div>
                   <div>
                     <Button variant="outline" size="sm" className="h-8 text-[13px] rounded-md border-border mb-1">Change Avatar</Button>
                     <p className="text-[11px] text-muted-foreground">JPG, GIF or PNG. Max 800K</p>
@@ -87,143 +156,24 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">First Name</label>
-                    <Input defaultValue="Alex" className="h-9 text-[13px] border-border rounded-md" />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Last Name</label>
-                    <Input defaultValue="Smith" className="h-9 text-[13px] border-border rounded-md" />
+                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Full Name</label>
+                    <Input value={fullName} onChange={e => setFullName(e.target.value)} className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
                     <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Email</label>
-                    <Input defaultValue="alex@acmecorp.com" className="h-9 text-[13px] border-border rounded-md" type="email" />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Phone</label>
-                    <Input defaultValue="+1 (555) 012-3456" className="h-9 text-[13px] border-border rounded-md" type="tel" />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Role</label>
-                    <Select defaultValue="admin">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="admin" className="text-[13px]">Administrator</SelectItem>
-                        <SelectItem value="specialist" className="text-[13px]">Specialist</SelectItem>
-                        <SelectItem value="viewer" className="text-[13px]">Viewer</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Department</label>
-                    <Select defaultValue="all">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="all" className="text-[13px]">All Departments</SelectItem>
-                        <SelectItem value="technical" className="text-[13px]">Technical</SelectItem>
-                        <SelectItem value="billing" className="text-[13px]">Billing</SelectItem>
-                        <SelectItem value="sales" className="text-[13px]">Sales</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input value={email} onChange={e => setEmail(e.target.value)} className="h-9 text-[13px] border-border rounded-md" type="email" />
                   </div>
                 </div>
                 <div className="flex justify-end pt-2">
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">Save Changes</Button>
-                </div>
-              </div>
-
-              {/* Preferences */}
-              <div className="border border-border rounded-lg p-6 space-y-5">
-                <h2 className="text-[14px] font-semibold text-foreground">Preferences</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Language</label>
-                    <Select defaultValue="en">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="en" className="text-[13px]">English</SelectItem>
-                        <SelectItem value="es" className="text-[13px]">Español</SelectItem>
-                        <SelectItem value="fr" className="text-[13px]">Français</SelectItem>
-                        <SelectItem value="de" className="text-[13px]">Deutsch</SelectItem>
-                        <SelectItem value="hi" className="text-[13px]">हिन्दी</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Timezone</label>
-                    <Select defaultValue="ist">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="ist" className="text-[13px]">IST (UTC+5:30)</SelectItem>
-                        <SelectItem value="est" className="text-[13px]">EST (UTC-5)</SelectItem>
-                        <SelectItem value="pst" className="text-[13px]">PST (UTC-8)</SelectItem>
-                        <SelectItem value="utc" className="text-[13px]">UTC</SelectItem>
-                        <SelectItem value="gmt" className="text-[13px]">GMT (UTC+0)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Date Format</label>
-                    <Select defaultValue="dmy">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="dmy" className="text-[13px]">DD/MM/YYYY</SelectItem>
-                        <SelectItem value="mdy" className="text-[13px]">MM/DD/YYYY</SelectItem>
-                        <SelectItem value="ymd" className="text-[13px]">YYYY-MM-DD</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Theme</label>
-                    <Select defaultValue="light">
-                      <SelectTrigger className="h-9 text-[13px] border-border rounded-md"><SelectValue /></SelectTrigger>
-                      <SelectContent className="rounded-md">
-                        <SelectItem value="light" className="text-[13px]">Light</SelectItem>
-                        <SelectItem value="dark" className="text-[13px]">Dark</SelectItem>
-                        <SelectItem value="system" className="text-[13px]">System</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Button onClick={handleProfileSave} disabled={isSavingProfile} className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">
+                    {isSavingProfile ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Save Changes"}
+                  </Button>
                 </div>
               </div>
             </>
           )}
 
-          {/* ───── Notifications ───── */}
-          {activeTab === "notifications" && (
-            <div className="border border-border rounded-lg overflow-hidden">
-              <div className="p-5 border-b border-border">
-                <h2 className="text-[14px] font-semibold text-foreground">Notification Preferences</h2>
-                <p className="text-[12px] text-muted-foreground mt-0.5">Choose how and when you get notified.</p>
-              </div>
-              {[
-                { label: "New call received", desc: "Get notified when a new customer call comes in.", email: true, push: true },
-                { label: "Call escalated", desc: "Alert when a call is escalated to a human agent.", email: true, push: true },
-                { label: "Ticket created", desc: "Notification when a new support ticket is generated.", email: true, push: false },
-                { label: "Knowledge gap detected", desc: "AI found a question it couldn't answer.", email: true, push: false },
-                { label: "Weekly summary", desc: "Digest of call volume, resolutions, and trends.", email: true, push: false },
-                { label: "Team member joined", desc: "Someone accepts your team invitation.", email: false, push: true },
-                { label: "Usage limit warning", desc: "Alert when you reach 80% of plan limits.", email: true, push: true },
-                { label: "System maintenance", desc: "Scheduled downtime and update notices.", email: true, push: false },
-              ].map((item, i) => (
-                <div key={i} className="px-5 py-4 border-b border-neutral-50 last:border-0 flex items-center justify-between hover:bg-muted transition-colors">
-                  <div className="flex-1 mr-8">
-                    <div className="text-[13px] font-medium text-foreground">{item.label}</div>
-                    <div className="text-[12px] text-muted-foreground mt-0.5">{item.desc}</div>
-                  </div>
-                  <div className="flex items-center gap-6 shrink-0">
-                    <div className="flex flex-col items-center gap-1">
-                      {i === 0 && <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Email</span>}
-                      <Switch defaultChecked={item.email} />
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      {i === 0 && <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Push</span>}
-                      <Switch defaultChecked={item.push} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+
 
           {/* ───── Security ───── */}
           {activeTab === "security" && (
@@ -233,55 +183,20 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 <div className="space-y-4 max-w-md">
                   <div>
                     <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Current Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
+                    <Input type="password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
                     <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">New Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
+                    <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
                   <div>
                     <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Confirm New Password</label>
-                    <Input type="password" placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
+                    <Input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••" className="h-9 text-[13px] border-border rounded-md" />
                   </div>
-                  <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">Update Password</Button>
+                  <Button onClick={handlePasswordSave} disabled={isSavingPassword || !currentPassword || !newPassword || !confirmPassword} className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">
+                    {isSavingPassword ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : "Update Password"}
+                  </Button>
                 </div>
-              </div>
-
-              <div className="border border-border rounded-lg p-6 space-y-4">
-                <h2 className="text-[14px] font-semibold text-foreground">Two-Factor Authentication</h2>
-                <p className="text-[13px] text-muted-foreground">Add an extra layer of security to your account by requiring a verification code on login.</p>
-                <div className="flex items-center justify-between bg-muted border border-border rounded-md p-4">
-                  <div>
-                    <div className="text-[13px] font-medium text-foreground">2FA is currently disabled</div>
-                    <div className="text-[12px] text-muted-foreground mt-0.5">Recommended for all admin accounts</div>
-                  </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">Enable 2FA</Button>
-                </div>
-              </div>
-
-              <div className="border border-border rounded-lg p-6 space-y-4">
-                <h2 className="text-[14px] font-semibold text-foreground">Active Sessions</h2>
-                {[
-                  { device: "Chrome on Windows", location: "Mumbai, India", current: true, time: "Now" },
-                  { device: "Safari on iPhone", location: "Mumbai, India", current: false, time: "2 hours ago" },
-                  { device: "Firefox on macOS", location: "New York, US", current: false, time: "3 days ago" },
-                ].map((session, i) => (
-                  <div key={i} className="flex items-center justify-between py-2.5 border-b border-neutral-50 last:border-0">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${session.current ? "bg-emerald-500" : "bg-neutral-300"}`} />
-                      <div>
-                        <div className="text-[13px] font-medium text-foreground">
-                          {session.device}
-                          {session.current && <span className="ml-2 text-[10px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">Current</span>}
-                        </div>
-                        <div className="text-[12px] text-muted-foreground">{session.location} · {session.time}</div>
-                      </div>
-                    </div>
-                    {!session.current && (
-                      <button className="text-[12px] font-medium text-red-500 hover:text-red-600">Revoke</button>
-                    )}
-                  </div>
-                ))}
               </div>
 
               {/* Danger Zone */}
@@ -289,26 +204,10 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                 <h2 className="text-[14px] font-semibold text-red-600">Danger Zone</h2>
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-[13px] font-medium text-foreground">Delete Account</div>
-                    <div className="text-[12px] text-muted-foreground">Permanently delete your account and all data. This action cannot be undone.</div>
-                  </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-red-300 text-red-600 hover:bg-red-50 rounded-md">
-                    <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Delete
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-[13px] font-medium text-foreground">Export Data</div>
-                    <div className="text-[12px] text-muted-foreground">Download all your data as a JSON file.</div>
-                  </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">Export</Button>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
                     <div className="text-[13px] font-medium text-foreground">Sign out everywhere</div>
                     <div className="text-[12px] text-muted-foreground">Log out from all devices and sessions.</div>
                   </div>
-                  <Button variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">
+                  <Button onClick={handleSignOutAll} variant="outline" className="h-8 text-[13px] font-medium border-border rounded-md">
                     <LogOut className="h-3.5 w-3.5 mr-1.5" /> Sign Out All
                   </Button>
                 </div>
@@ -316,62 +215,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
             </>
           )}
 
-          {/* ───── API Keys ───── */}
-          {activeTab === "api" && (
-            <div className="border border-border rounded-lg overflow-hidden">
-              <div className="p-5 border-b border-border flex items-center justify-between">
-                <h2 className="text-[14px] font-semibold text-foreground">API Keys</h2>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md">Generate Key</Button>
-              </div>
-              {[
-                { name: "Voicera Widget Key", tag: "Frontend Auth", value: "vwk_live_84kx9f2m4nv93nx1••••••••" },
-              ].map((key, i) => (
-                <div key={i} className="p-5 border-b border-neutral-50 last:border-0 hover:bg-muted transition-colors">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[13px] font-medium text-foreground">{key.name}</span>
-                    <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{key.tag}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="font-mono text-[12px] bg-muted px-3 py-2 rounded-md border border-border flex-1 text-muted-foreground">{key.value}</div>
-                    <button className="p-2 rounded-md border border-border hover:bg-muted text-muted-foreground"><Eye className="h-3.5 w-3.5" /></button>
-                    <button className="p-2 rounded-md border border-border hover:bg-muted text-muted-foreground"><Copy className="h-3.5 w-3.5" /></button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
-          {/* ───── Billing ───── */}
-          {activeTab === "billing" && (
-            <div className="space-y-5">
-              <div className="grid grid-cols-2 gap-5">
-                <div className="bg-primary text-primary-foreground rounded-lg p-5 relative overflow-hidden">
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-primary-foreground/70 mb-1">Current Plan</div>
-                  <div className="text-[32px] font-semibold tracking-tight mb-0.5">Beta Access</div>
-                  <p className="text-[13px] text-primary-foreground/80 mb-5">Free during early access period</p>
-                  <Button disabled className="w-full bg-background/20 text-primary-foreground h-8 text-[13px] font-medium rounded-md cursor-not-allowed">Active</Button>
-                </div>
-                <div className="border border-border rounded-lg p-5 flex flex-col">
-                  <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-3">Payment Method</div>
-                  <div className="flex-1 flex items-center justify-center text-center p-4">
-                    <div>
-                      <p className="text-[13px] font-medium text-foreground">No payment required</p>
-                      <p className="text-[12px] text-muted-foreground mt-1">You won't be charged during the beta phase.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="border border-border rounded-lg p-5">
-                <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[14px] font-semibold text-foreground">Usage Overview</h2>
-                </div>
-                <div className="text-[13px] text-muted-foreground bg-muted p-4 rounded-md">
-                  <p className="mb-2 text-foreground font-medium">Unmetered Usage</p>
-                  <p>Your account currently has unmetered access to core features. Check the <strong>Usage</strong> tab for detailed AI token metrics.</p>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* ───── Usage ───── */}
           {activeTab === "usage" && (

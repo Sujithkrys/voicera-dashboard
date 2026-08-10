@@ -14,6 +14,14 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str
 
+class UpdateProfileRequest(BaseModel):
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+
+class UpdatePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
 # Responses
 class ClientResponse(BaseModel):
     id: UUID
