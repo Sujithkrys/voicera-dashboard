@@ -270,41 +270,21 @@ export default function Login() {
             <ArrowLeft className="mr-2 h-3 w-3" />
             Back home
           </Button>
-          
-          <div className="flex items-center gap-2.5">
-            <img src="/logo.png" alt="Voicera Logo" className="w-8 h-8 object-contain" />
-            <span className="font-semibold text-lg tracking-tight">Voicera</span>
-          </div>
         </div>
 
         <div className="z-10 max-w-sm mt-auto mb-16">
           <div className="inline-flex items-center px-3 py-1 rounded bg-white/5 border border-white/10 text-white text-[11px] font-medium tracking-wide mb-6">
-            Start free, no card
+            No credit card required
           </div>
           <h1 className="text-3xl font-medium tracking-tight leading-snug mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_10px_rgb(0_0_0_/_80%),_0_1px_2px_rgb(0_0_0_/_100%)]">
-            500 free minutes.<br />
+            AI voice agents for your business.<br />
             <span className="text-zinc-200">
-              Live in under an hour.
+              Answer calls and recover carts, automatically.
             </span>
           </h1>
           <p className="text-sm text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_3px_rgb(0_0_0_/_80%)]">
-            Trusted by support teams at fintechs, marketplaces, and SaaS leaders. No credit card required to start.
+            Built for e-commerce teams who want AI handling support calls and abandoned checkouts — without hiring a call center.
           </p>
-          
-          <div className="flex gap-10 border-t border-white/20 pt-6">
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-medium text-zinc-300 uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Setup time</span>
-              <span className="text-xl font-semibold text-white flex items-baseline gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_4px_rgb(0_0_0_/_80%)]">
-                ~12 <span className="text-xs font-normal text-zinc-300">min</span>
-              </span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-medium text-zinc-300 uppercase tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Free credits</span>
-              <span className="text-xl font-semibold text-white flex items-baseline gap-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_4px_rgb(0_0_0_/_80%)]">
-                500 <span className="text-xs font-normal text-zinc-300">min</span>
-              </span>
-            </div>
-          </div>
         </div>
         
         <div className="z-10 text-[11px] text-zinc-500 flex justify-between items-center w-full">
@@ -320,6 +300,12 @@ export default function Login() {
       {/* Right Form Pane */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 overflow-y-auto">
         <div className="w-full max-w-sm">
+          {/* Brand Logo moved here for contrast */}
+          <div className="flex items-center gap-2.5 mb-8">
+            <img src="/logo.png" alt="Voicera Logo" className="w-8 h-8 object-contain" />
+            <span className="font-semibold text-xl tracking-tight text-foreground">Voicera</span>
+          </div>
+
           <div className="mb-6">
             <h2 className="text-2xl font-semibold tracking-tight mb-1.5">
               {activeTab === 'signUp' ? 'Create an account' : 
@@ -466,3 +452,4 @@ export default function Login() {
     </div>
   );
 }
+
