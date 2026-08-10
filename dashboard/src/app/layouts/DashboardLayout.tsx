@@ -74,9 +74,6 @@ export function AppSidebar() {
           <span className="font-semibold text-[18px] text-foreground group-data-[collapsible=icon]:hidden tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Voicera
           </span>
-          <svg className="ml-1 w-3 h-3 text-muted-foreground group-data-[collapsible=icon]:hidden" viewBox="0 0 12 12" fill="none">
-            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
         </div>
         <div className="group-data-[collapsible=icon]:hidden">
           <SidebarTrigger />
