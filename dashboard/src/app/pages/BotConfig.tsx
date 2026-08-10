@@ -9,9 +9,10 @@ export default function BotConfig() {
     <div className="p-6 space-y-6 max-w-5xl mx-auto h-full">
       <div className="flex items-center justify-between border-b border-border pb-6">
         <div>
-          <h1 className="text-[18px] font-semibold text-foreground">Agent Configuration</h1>
-          <p className="text-[13px] text-muted-foreground mt-1">
-            Your agents are now powered by Samvaad AI. All voice settings, prompt instructions, and tool configurations have been migrated.
+          <h1 className="text-[18px] font-semibold text-foreground">Agents</h1>
+          <p className="text-[13px] text-muted-foreground mt-1 flex items-center gap-1.5">
+            <span className="inline-block px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-semibold uppercase tracking-wider">View Only</span>
+            This page is informational. Actual configuration happens in Samvaad's console.
           </p>
         </div>
         <Button 
@@ -36,7 +37,7 @@ export default function BotConfig() {
               <PhoneIncoming className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="text-[15px] font-semibold text-foreground">Inbound Support Agent</h2>
+              <h2 className="text-[15px] font-semibold text-foreground">Inbound Support Agent "Aanya"</h2>
               <div className="flex items-center gap-1.5 text-[12px] font-medium text-emerald-600 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 Active & Routing Calls

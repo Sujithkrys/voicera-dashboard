@@ -160,26 +160,10 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="gap-0.5">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/knowledge-base")} className={navItem(isActive("/knowledge-base"))}>
-                  <Link to="/knowledge-base">
-                    <BookOpen className="size-4" strokeWidth={1.8} />
-                    <span>Knowledge Base</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={isActive("/bot-config")} className={navItem(isActive("/bot-config"))}>
                   <Link to="/bot-config">
                     <Bot className="size-4" strokeWidth={1.8} />
-                    <span>Bot Config</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive("/team")} className={navItem(isActive("/team"))}>
-                  <Link to="/team">
-                    <Users className="size-4" strokeWidth={1.8} />
-                    <span>Team</span>
+                    <span>Agents</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
