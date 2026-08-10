@@ -17,6 +17,7 @@ class LoginRequest(BaseModel):
 class UpdateProfileRequest(BaseModel):
     full_name: Optional[str] = None
     email: Optional[EmailStr] = None
+    current_password: Optional[str] = None
 
 class UpdatePasswordRequest(BaseModel):
     current_password: str

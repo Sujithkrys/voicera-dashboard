@@ -17,8 +17,10 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
   const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "integrations" | "security" | "usage">("profile");
 
   // Profile State
+  const [initialEmail, setInitialEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [profilePassword, setProfilePassword] = useState("");
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   
   // Security State
@@ -34,6 +36,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           if (res.user) {
             setFullName(res.user.full_name || "");
             setEmail(res.user.email || "");
+            setInitialEmail(res.user.email || "");
           }
         })
         .catch(console.error);
@@ -41,13 +44,24 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
   }, [open]);
 
   const handleProfileSave = async () => {
+    if (email !== initialEmail && !profilePassword) {
+      alert("Please enter your current password to change your email.");
+      return;
+    }
+    
     try {
       setIsSavingProfile(true);
       await apiClient("/auth/profile", {
         method: "PATCH",
-        body: JSON.stringify({ full_name: fullName, email }),
+        body: JSON.stringify({ 
+          full_name: fullName, 
+          email,
+          current_password: profilePassword
+        }),
       });
       alert("Profile updated successfully!");
+      setInitialEmail(email);
+      setProfilePassword("");
     } catch (err: any) {
       alert(err.message || "Failed to update profile");
     } finally {
@@ -119,9 +133,6 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
             <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
           </button>
-          <button onClick={() => setActiveTab("integrations")} className={navItem("integrations")}>
-            <Puzzle className="h-4 w-4" strokeWidth={1.8} /> Integrations
-          </button>
             </div>
           </div>
 
@@ -163,6 +174,20 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">Email</label>
                     <Input value={email} onChange={e => setEmail(e.target.value)} className="h-9 text-[13px] border-border rounded-md" type="email" />
                   </div>
+                  {email !== initialEmail && (
+                    <div className="col-span-2 mt-2 p-4 bg-orange-50 border border-orange-200 rounded-md">
+                      <label className="text-[12px] font-medium text-orange-800 uppercase tracking-wider mb-1.5 block">
+                        Current Password (Required to change email)
+                      </label>
+                      <Input 
+                        type="password" 
+                        value={profilePassword} 
+                        onChange={e => setProfilePassword(e.target.value)} 
+                        placeholder="••••••••" 
+                        className="h-9 text-[13px] border-orange-300 rounded-md bg-white max-w-sm" 
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-end pt-2">
                   <Button onClick={handleProfileSave} disabled={isSavingProfile} className="bg-primary text-primary-foreground hover:bg-primary h-8 text-[13px] font-medium rounded-md px-5">
