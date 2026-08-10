@@ -44,67 +44,71 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                 "notion_token": token_row.data[0].get("access_token"),
             }
 
-            server = await mcp_manager.get_or_create_session(str(user_id), tool_name, tokens)
-
-            for tool in server.tools:
-                original_name = tool["name"]
-                
-                # ONLY allow these 3 tools, regardless of provider, to prevent Groq TPM limit from exploding
-                if original_name not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
-                    continue
+            try:
+                server = await mcp_manager.get_or_create_session(str(user_id), tool_name, tokens)
+    
+                for tool in server.tools:
+                    original_name = tool["name"]
                     
-                tool_mapping = {
-                    "API-post-search": "notion_search",
-                    "API-post-page": "notion_create_page",
-                    "API-patch-block-children": "notion_append_blocks"
-                }
-                new_name = tool_mapping[original_name]
-                
-                # Simplify massive schemas to avoid Groq TPM limits
-                if original_name == "API-post-search":
-                    tool["inputSchema"] = {
-                        "type": "object",
-                        "properties": {
-                            "query": {"type": "string"}
-                        },
-                        "required": ["query"]
+                    # ONLY allow these 3 tools, regardless of provider, to prevent Groq TPM limit from exploding
+                    if original_name not in ["API-post-search", "API-post-page", "API-patch-block-children"]:
+                        continue
+                        
+                    tool_mapping = {
+                        "API-post-search": "notion_search",
+                        "API-post-page": "notion_create_page",
+                        "API-patch-block-children": "notion_append_blocks"
                     }
-                elif original_name == "API-post-page":
-                    tool["inputSchema"] = {
-                        "type": "object",
-                        "properties": {
-                            "parent": {
-                                "type": "object",
-                                "description": "e.g. {\"page_id\": \"uuid\"}"
-                            },
+                    new_name = tool_mapping[original_name]
+                    
+                    # Simplify massive schemas to avoid Groq TPM limits
+                    if original_name == "API-post-search":
+                        tool["inputSchema"] = {
+                            "type": "object",
                             "properties": {
-                                "type": "object",
-                                "description": "Page properties, e.g. {\"title\": {\"title\": [{\"text\": {\"content\": \"My Title\"}}]}}"
+                                "query": {"type": "string"}
                             },
-                            "children": {
-                                "type": "array",
-                                "description": "Array of block objects, e.g. [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": \"Text\"}}]}}]"
-                            }
-                        },
-                        "required": ["parent", "properties"]
-                    }
-                elif original_name == "API-patch-block-children":
-                    tool["inputSchema"] = {
-                        "type": "object",
-                        "properties": {
-                            "block_id": {"type": "string"},
-                            "children": {
-                                "type": "array",
-                                "description": "Array of block objects to append"
-                            }
-                        },
-                        "required": ["block_id", "children"]
-                    }
+                            "required": ["query"]
+                        }
+                    elif original_name == "API-post-page":
+                        tool["inputSchema"] = {
+                            "type": "object",
+                            "properties": {
+                                "parent": {
+                                    "type": "object",
+                                    "description": "e.g. {\"page_id\": \"uuid\"}"
+                                },
+                                "properties": {
+                                    "type": "object",
+                                    "description": "Page properties, e.g. {\"title\": {\"title\": [{\"text\": {\"content\": \"My Title\"}}]}}"
+                                },
+                                "children": {
+                                    "type": "array",
+                                    "description": "Array of block objects, e.g. [{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"text\": {\"content\": \"Text\"}}]}}]"
+                                }
+                            },
+                            "required": ["parent", "properties"]
+                        }
+                    elif original_name == "API-patch-block-children":
+                        tool["inputSchema"] = {
+                            "type": "object",
+                            "properties": {
+                                "block_id": {"type": "string"},
+                                "children": {
+                                    "type": "array",
+                                    "description": "Array of block objects to append"
+                                }
+                            },
+                            "required": ["block_id", "children"]
+                        }
 
-                # Rename the tool to snake_case so Llama 3 understands it better
-                tool["name"] = new_name
-                all_mcp_tools.append(tool)
-                tool_server_map[new_name] = server
+                    # Rename the tool to snake_case so Llama 3 understands it better
+                    tool["name"] = new_name
+                    all_mcp_tools.append(tool)
+                    tool_server_map[new_name] = server
+            except Exception as e:
+                print(f"Failed to initialize MCP tool {tool_name}: {e}")
+                continue
 
         INTERNAL_TOOLS = [
             {
