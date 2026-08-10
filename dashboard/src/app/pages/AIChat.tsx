@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, User, MoreHorizontal } from "lucide-react";
+import { Send, Sparkles, User, MoreHorizontal, AlertCircle } from "lucide-react";
 import { useChat, Message } from "../context/ChatContext";
 
 const suggestionCards = [
@@ -197,7 +197,14 @@ export default function AIChat() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <p className="text-[13px] font-semibold text-foreground mb-1">
-                      {msg.role === "assistant" ? "Voicera AI" : "You"}
+                      <span className="flex items-center gap-2">
+                        {msg.role === "assistant" ? "Voicera AI" : "You"}
+                        {msg.syncStatus === "error" && (
+                          <span className="flex items-center text-[11px] text-destructive font-medium gap-1">
+                            <AlertCircle className="size-3" /> Failed to save
+                          </span>
+                        )}
+                      </span>
                     </p>
                     <div className="text-[14px] text-foreground leading-relaxed whitespace-pre-wrap">
                       {msg.content.split(/(\*\*.*?\*\*)/).map((part, i) => {

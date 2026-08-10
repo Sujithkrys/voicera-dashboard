@@ -106,9 +106,96 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                 all_mcp_tools.append(tool)
                 tool_server_map[new_name] = server
 
-        grok_tools = format_mcp_tools_for_grok(all_mcp_tools)
+        INTERNAL_TOOLS = [
+            {
+                "type": "function",
+                "function": {
+                    "name": "query_recovery_stats",
+                    "description": "Returns real aggregate data from pending_checkouts (total, pending, converted, skipped counts, revenue recovered).",
+                    "parameters": {"type": "object", "properties": {}}
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "query_pending_checkouts",
+                    "description": "Returns a list of current abandoned checkouts with optional filters.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "status": {"type": "string", "description": "Optional status filter (e.g., 'pending', 'converted', 'skipped')."},
+                            "limit": {"type": "integer", "description": "Maximum number of checkouts to return (default 10)."}
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "query_recent_calls",
+                    "description": "Returns recent call sessions data (disposition, duration, summary, date).",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "limit": {"type": "integer", "description": "Number of calls to return (default 10)."}
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "query_tickets",
+                    "description": "Returns current ticket data from the tickets table.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "status": {"type": "string", "description": "Optional status filter (e.g., 'open', 'resolved')."},
+                            "limit": {"type": "integer", "description": "Number of tickets to return (default 10)."}
+                        }
+                    }
+                }
+            }
+        ]
+        
+        grok_tools = format_mcp_tools_for_grok(all_mcp_tools) + INTERNAL_TOOLS
 
         async def tool_executor(t_name: str, arguments: dict):
+            # Handle internal tools first
+            if t_name == "query_recovery_stats":
+                res = supabase.table("pending_checkouts").select("cart_value, status").execute()
+                if not res.data:
+                    return {"total": 0, "converted": 0, "pending": 0, "revenue_recovered": 0}
+                total = len(res.data)
+                converted = sum(1 for r in res.data if r.get("status") == "converted")
+                pending = sum(1 for r in res.data if r.get("status") == "pending")
+                revenue = sum(float(r.get("cart_value") or 0) for r in res.data if r.get("status") == "converted")
+                return {"total": total, "converted": converted, "pending": pending, "revenue_recovered": revenue}
+                
+            elif t_name == "query_pending_checkouts":
+                status_filter = arguments.get("status")
+                limit = arguments.get("limit", 10)
+                query = supabase.table("pending_checkouts").select("checkout_id, customer_name, cart_value, status, created_at")
+                if status_filter:
+                    query = query.eq("status", status_filter)
+                res = query.order("created_at", desc=True).limit(limit).execute()
+                return res.data or []
+                
+            elif t_name == "query_recent_calls":
+                limit = arguments.get("limit", 10)
+                res = supabase.table("sessions").select("id, status, duration_seconds, transcript, created_at").eq("client_id", str(client_id)).order("created_at", desc=True).limit(limit).execute()
+                return res.data or []
+                
+            elif t_name == "query_tickets":
+                status_filter = arguments.get("status")
+                limit = arguments.get("limit", 10)
+                query = supabase.table("tickets").select("id, status, reason, requested_item, ticket_type, created_at")
+                if status_filter:
+                    query = query.eq("status", status_filter)
+                res = query.order("created_at", desc=True).limit(limit).execute()
+                return res.data or []
+
+            # Handle MCP tools
             if t_name not in tool_server_map:
                 raise ValueError(f"Unknown tool: {t_name}")
             server = tool_server_map[t_name]
@@ -123,45 +210,11 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             result = await server.call_tool(original_t_name, arguments)
             return result
 
-        # Fetch dashboard data context
-        try:
-            today_iso = (datetime.utcnow() - timedelta(days=1)).isoformat()
-            
-            # Recent sessions
-            sessions = []
-            tickets = []
-            if client_id:
-                sessions_res = supabase.table("sessions").select("id, status, created_at").eq("client_id", str(client_id)).gte("created_at", today_iso).execute()
-                sessions = sessions_res.data or []
-                
-                # Recent tickets
-                tickets_res = supabase.table("tickets").select("id, status, issue_summary").eq("client_id", str(client_id)).gte("created_at", today_iso).execute()
-                tickets = tickets_res.data or []
-                
-            resolved_sessions = [s for s in sessions if s.get("status") == "resolved"]
-            active_sessions = [s for s in sessions if s.get("status") == "active"]
-            
-            open_tickets = [t for t in tickets if t.get("status") == "open"]
-            resolved_tickets = [t for t in tickets if t.get("status") == "resolved"]
-
-            dashboard_context = (
-                f"\n\n--- TODAY'S DASHBOARD SUMMARY ---\n"
-                f"Total Sessions (last 24h): {len(sessions)} ({len(resolved_sessions)} resolved, {len(active_sessions)} active)\n"
-                f"Total Tickets (last 24h): {len(tickets)} ({len(open_tickets)} open, {len(resolved_tickets)} resolved)\n"
-                "Recent Ticket Summaries:\n" + "\n".join([f"- {t.get('issue_summary')} ({t.get('status')})" for t in tickets[:5]]) +
-                "\n---------------------------------\n"
-                "Use this data if the user asks for 'today's analysis', 'what happened today', 'call resolutions', etc."
-            )
-            if len(dashboard_context) > 2000:
-                dashboard_context = dashboard_context[:2000] + "... [TRUNCATED]"
-        except Exception as e:
-            print(f"Error fetching dashboard context: {e}")
-            dashboard_context = ""
-
         system_prompt = (
-            "You are Voicera AI, a powerful assistant. "
-            "You have access to MCP tools to interact with external services. "
-            f"Currently, the user has enabled the following tools: {request.enabled_tools}. "
+            "You are Voicera AI, a powerful Voice-Call and Recovery data assistant. "
+            "You have access to internal tools to query recovery stats, checkouts, calls, and tickets, as well as MCP tools to interact with external services. "
+            "When asked about abandoned carts, checkouts, metrics, calls, or tickets, you MUST use the provided tools (`query_recovery_stats`, `query_pending_checkouts`, etc.) to get real-time data from the database. Do not hallucinate data.\n\n"
+            f"Currently, the user has enabled the following MCP tools: {request.enabled_tools}. "
             "If the user asks you to perform an action using a service (like Notion, Gmail, Calendar, Docs, or Drive) "
             "but the corresponding tool is NOT in the enabled list, you MUST politely inform them that they "
             "need to connect that service first by navigating to 'Settings > Integrations' in the dashboard.\n"
@@ -174,7 +227,6 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
             "- Use `notion_create_page` to create pages. Format `parent` as `{\"page_id\": \"id\"}`.\n"
             "- CRITICAL: When creating a page inside another page (not a database), the ONLY property you can set is 'title'! Do NOT set 'Status' or any other properties! Use this exact format for properties: `{\"title\": {\"title\": [{\"text\": {\"content\": \"Your Title\"}}]}}`.\n"
             "- To add content or text to an existing page, you MUST use `notion_append_blocks`. Use the page ID as `block_id`. Example children: `[{\"object\": \"block\", \"type\": \"paragraph\", \"paragraph\": {\"rich_text\": [{\"type\": \"text\", \"text\": {\"content\": \"Your text here\"}}]}}]`\n"
-            f"{dashboard_context}"
         )
         # Truncate chat history to last 10 messages to prevent TPM limit errors
         recent_messages = request.messages[-10:] if len(request.messages) > 10 else request.messages

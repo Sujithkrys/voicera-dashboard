@@ -65,13 +65,14 @@ from app.api.v1.routes import (
     auth_router, kb_router, config_router, chat_router, 
     sessions_router, tickets_router, waitlist_router, calendar_router, voice_llm_router,
     availability_router, recovery_router, shopify_webhooks_router, 
-    samvaad_hooks_router, agent_tools_router
+    samvaad_hooks_router, agent_tools_router, chat_history_router
 )
 
 fastapi_app.include_router(auth_router, prefix="/api/v1")
 fastapi_app.include_router(kb_router, prefix="/api/v1")
 fastapi_app.include_router(config_router, prefix="/api/v1")
 fastapi_app.include_router(chat_router, prefix="/api/v1")
+fastapi_app.include_router(chat_history_router, prefix="/api/v1")
 fastapi_app.include_router(sessions_router, prefix="/api/v1")
 fastapi_app.include_router(tickets_router, prefix="/api/v1")
 fastapi_app.include_router(waitlist_router, prefix="/api/v1")
