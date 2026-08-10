@@ -197,7 +197,7 @@ export default function Login() {
     setSuccessMsg("");
     const email = (new FormData(e.currentTarget)).get("email") as string;
     if (!email) {
-      setErrorMsg('Please enter your work email.');
+      setErrorMsg('Please enter your email address.');
       setIsLoading(false);
       return;
     }
@@ -316,7 +316,7 @@ export default function Login() {
         </div>
         
         <div className="z-10 text-[11px] text-zinc-500 flex justify-between items-center w-full">
-          <span>Â© {new Date().getFullYear()} Voicera Inc.</span>
+          <span>© {new Date().getFullYear()} Voicera Inc.</span>
           <div className="flex gap-4">
             <span className="hover:text-zinc-300 cursor-pointer transition-colors">Privacy</span>
             <span className="hover:text-zinc-300 cursor-pointer transition-colors">Terms</span>
@@ -364,7 +364,7 @@ export default function Login() {
           {activeTab === 'reset' ? (
              <form onSubmit={handleReset} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="reset-email">Work email</Label>
+                <Label htmlFor="reset-email">Email address</Label>
                 <Input id="reset-email" name="email" type="email" placeholder="name@company.com" required />
               </div>
               <Button type="submit" className="w-full" disabled={isLoading}>
@@ -418,7 +418,7 @@ export default function Login() {
                     <Input id="signup-name" name="fullName" placeholder="Jane Doe" required />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Work email</Label>
+                    <Label htmlFor="signup-email">Email address</Label>
                     <Input id="signup-email" name="email" type="email" placeholder="jane@company.com" required />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -455,7 +455,7 @@ export default function Login() {
                 </div>
                 <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Work email</Label>
+                    <Label htmlFor="signin-email">Email address</Label>
                     <Input id="signin-email" name="email" type="email" placeholder="jane@company.com" required />
                   </div>
                   <div className="space-y-2">
@@ -477,7 +477,7 @@ export default function Login() {
           )}
           
           <div className="mt-8 text-center">
-            <Button onClick={handleSkipLogin} className="text-sm font-medium h-auto py-2.5 px-6 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-colors shadow-md w-full">
+            <Button onClick={handleSkipLogin} className="text-sm font-medium h-auto py-2.5 px-6 rounded-lg bg-orange-400 hover:bg-orange-500 text-white transition-colors shadow-md w-full">
               Skip login and view dashboard
             </Button>
           </div>
