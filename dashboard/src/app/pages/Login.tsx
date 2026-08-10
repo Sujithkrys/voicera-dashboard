@@ -254,7 +254,7 @@ export default function Login() {
     setErrorMsg("");
     setSuccessMsg("");
     try {
-      const response = await fetch(`${BACKEND_URL}/auth/guest`, {
+      const response = await fetch(`${BACKEND_URL}/api/v1/auth/guest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
