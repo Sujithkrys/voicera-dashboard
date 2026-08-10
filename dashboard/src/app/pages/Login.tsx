@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { Button } from "../components/ui/button";
@@ -39,7 +39,7 @@ export default function Login() {
     if (isRecovery) {
       setActiveTab('newPassword');
     } else if (urlParams.get('activated') === 'true') {
-      setSuccessMsg('âœ“ Account activated successfully! You can now sign in below.');
+      setSuccessMsg('Account activated successfully! You can now sign in below.');
       setActiveTab('signIn');
     } else if (urlParams.get('error') === 'activation_failed') {
       setErrorMsg('The activation link is invalid, expired, or has already been used.');
@@ -70,7 +70,7 @@ export default function Login() {
           localStorage.setItem('voicera_company', data.client_id);
           localStorage.setItem('voicera_role', data.role);
 
-          setSuccessMsg('âœ“ Signed in with Google! Redirecting...');
+          setSuccessMsg('Signed in with Google! Redirecting...');
           setTimeout(() => navigate('/'), 800);
         } catch (err: any) {
           setErrorMsg(err.message);
@@ -139,7 +139,7 @@ export default function Login() {
         return;
       }
 
-      setSuccessMsg('âœ“ Account created! Please check your email to activate your account.');
+      setSuccessMsg('Account created! Please check your email to activate your account.');
       (e.target as HTMLFormElement).reset();
     } catch (err) {
       setErrorMsg('Unable to connect to authentication server. Please try again.');
@@ -179,7 +179,7 @@ export default function Login() {
       localStorage.setItem('voicera_company', data.client.company_name);
       localStorage.setItem('voicera_role', data.user.role);
 
-      setSuccessMsg('âœ“ Signed in successfully! Redirecting...');
+      setSuccessMsg('Signed in successfully! Redirecting...');
       setTimeout(() => {
         navigate('/');
       }, 800);
@@ -239,7 +239,7 @@ export default function Login() {
         setErrorMsg(error.message);
         return;
       }
-      setSuccessMsg('âœ“ Password updated successfully! You can now sign in.');
+      setSuccessMsg('Password updated successfully! You can now sign in.');
       navigate('/login', { replace: true });
       setActiveTab('signIn');
     } catch (err) {
@@ -320,9 +320,9 @@ export default function Login() {
           )}
 
           {successMsg && (
-            <Alert className="mb-6 border-green-500/20 bg-green-500/10 text-green-600">
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
-              <AlertDescription>{successMsg}</AlertDescription>
+            <Alert className="mb-6 border-emerald-500/20 bg-emerald-500/10 text-emerald-600 flex items-start gap-3 py-3 px-4 rounded-xl shadow-sm">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-[1px]" />
+              <AlertDescription className="font-medium text-[13px] leading-relaxed">{successMsg}</AlertDescription>
             </Alert>
           )}
 
@@ -445,6 +445,7 @@ export default function Login() {
     </div>
   );
 }
+
 
 
 
