@@ -18,6 +18,7 @@ class UpdateProfileRequest(BaseModel):
     full_name: Optional[str] = None
     email: Optional[EmailStr] = None
     current_password: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 class UpdatePasswordRequest(BaseModel):
     current_password: str

@@ -21,7 +21,10 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [profilePassword, setProfilePassword] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isSavingProfile, setIsSavingProfile] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   
   // Security State
   const [currentPassword, setCurrentPassword] = useState("");
@@ -37,6 +40,12 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
             setFullName(res.user.full_name || "");
             setEmail(res.user.email || "");
             setInitialEmail(res.user.email || "");
+            setAvatarUrl(res.user.avatar_url || null);
+            const guestCheck = res.user.role === "guest" || (res.user.email && res.user.email.includes("guest"));
+            setIsGuest(guestCheck);
+            if (guestCheck && activeTab === "profile") {
+              setActiveTab("shopify");
+            }
           }
         })
         .catch(console.error);
@@ -56,16 +65,35 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
         body: JSON.stringify({ 
           full_name: fullName, 
           email,
-          current_password: profilePassword
+          current_password: profilePassword,
+          avatar_url: avatarUrl
         }),
       });
       alert("Profile updated successfully!");
+      if (avatarUrl) localStorage.setItem('voicera_avatar', avatarUrl);
+      localStorage.setItem('voicera_name', fullName);
+      window.dispatchEvent(new Event('storage')); // trigger update for App.tsx if needed
       setInitialEmail(email);
       setProfilePassword("");
     } catch (err: any) {
       alert(err.message || "Failed to update profile");
     } finally {
       setIsSavingProfile(false);
+    }
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 800 * 1024) {
+        alert("File size exceeds 800KB. Please choose a smaller image.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -118,9 +146,11 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <div className="w-[240px] shrink-0 border-r border-border bg-muted/30 p-6 space-y-6 flex flex-col">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase ml-1">Settings</div>
             <div className="space-y-1 flex-1">
-          <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
-            <User className="h-4 w-4" strokeWidth={1.8} /> Profile
-          </button>
+          {!isGuest && (
+            <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
+              <User className="h-4 w-4" strokeWidth={1.8} /> Profile
+            </button>
+          )}
           <button onClick={() => setActiveTab("security")} className={navItem("security")}>
             <Shield className="h-4 w-4" strokeWidth={1.8} /> Security
           </button>
@@ -143,16 +173,21 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
 
 
           {/* ───── Profile ───── */}
-          {activeTab === "profile" && (
+          {activeTab === "profile" && !isGuest && (
             <>
               <div className="border border-border rounded-lg p-6 space-y-6">
                 <h2 className="text-[14px] font-semibold text-foreground">Profile Settings</h2>
                 <div className="flex items-center gap-5 pb-5 border-b border-border">
-                  <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-[20px] font-semibold text-muted-foreground">
-                    {fullName.charAt(0) || "U"}
+                  <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-[20px] font-semibold text-muted-foreground overflow-hidden">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    ) : (
+                      fullName.charAt(0) || "U"
+                    )}
                   </div>
                   <div>
-                    <Button variant="outline" size="sm" className="h-8 text-[13px] rounded-md border-border mb-1">Change Avatar</Button>
+                    <input type="file" accept="image/jpeg, image/png, image/gif" ref={fileInputRef} onChange={handleAvatarChange} className="hidden" />
+                    <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()} className="h-8 text-[13px] rounded-md border-border mb-1">Change Avatar</Button>
                     <p className="text-[11px] text-muted-foreground">JPG, GIF or PNG. Max 800K</p>
                   </div>
                 </div>

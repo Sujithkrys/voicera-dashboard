@@ -67,6 +67,7 @@ export default function Login() {
           localStorage.setItem('voicera_backend_token', data.access_token);
           localStorage.setItem('voicera_email', session.user.email || '');
           localStorage.setItem('voicera_name', session.user.user_metadata?.full_name || '');
+          if (session.user.user_metadata?.avatar_url) localStorage.setItem('voicera_avatar', session.user.user_metadata.avatar_url);
           localStorage.setItem('voicera_client_id', data.client_id);
           localStorage.setItem('voicera_company', data.client_id);
           localStorage.setItem('voicera_role', data.role);
@@ -176,6 +177,7 @@ export default function Login() {
       localStorage.setItem('voicera_backend_token', data.access_token);
       localStorage.setItem('voicera_email', data.user.email);
       localStorage.setItem('voicera_name', data.user.full_name);
+      if (data.user.avatar_url) localStorage.setItem('voicera_avatar', data.user.avatar_url);
       localStorage.setItem('voicera_client_id', data.client.id);
       localStorage.setItem('voicera_company', data.client.company_name);
       localStorage.setItem('voicera_role', data.user.role);

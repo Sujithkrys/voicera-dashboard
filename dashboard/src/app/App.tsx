@@ -255,9 +255,13 @@ function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
-        <div className="flex items-center gap-3">
-          <div className="size-8 rounded-lg bg-indigo-600 text-primary-foreground flex items-center justify-center font-bold text-xs">
-            {localStorage.getItem('voicera_name')?.[0]?.toUpperCase() || 'U'}
+        <div className="flex items-center gap-3 w-full">
+          <div className="size-8 rounded-lg bg-indigo-600 text-primary-foreground flex items-center justify-center font-bold text-xs overflow-hidden">
+            {localStorage.getItem('voicera_avatar') ? (
+              <img src={localStorage.getItem('voicera_avatar')!} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              localStorage.getItem('voicera_name')?.[0]?.toUpperCase() || 'U'
+            )}
           </div>
           <div className="flex-1 overflow-hidden">
             <div className="font-medium text-sm truncate">{localStorage.getItem('voicera_name') || 'User'}</div>

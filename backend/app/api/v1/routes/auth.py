@@ -870,7 +870,7 @@ async def get_profile(db: AsyncSession = Depends(get_db), current_user: dict = D
 
         # Fetch user and client details
         query = text("""
-            SELECT u.id, u.email, u.full_name, u.role, u.department, u.onboarding_completed, u.display_preference,
+            SELECT u.id, u.email, u.full_name, u.role, u.department, u.onboarding_completed, u.display_preference, u.avatar_url,
                    c.company_name, c.company_email, c.domain, c.plan, c.team_size, c.industry
             FROM users u
             JOIN clients c ON u.client_id = c.id
@@ -891,7 +891,8 @@ async def get_profile(db: AsyncSession = Depends(get_db), current_user: dict = D
                 "role": row.role,
                 "department": row.department,
                 "onboarding_completed": row.onboarding_completed,
-                "display_preference": row.display_preference
+                "display_preference": row.display_preference,
+                "avatar_url": row.avatar_url
             },
             "client": {
                 "id": str(client_id),
@@ -1050,13 +1051,15 @@ async def update_profile(
     query = text("""
         UPDATE users 
         SET full_name = COALESCE(:full_name, full_name),
-            email = COALESCE(:email, email)
+            email = COALESCE(:email, email),
+            avatar_url = COALESCE(:avatar_url, avatar_url)
         WHERE id = :id
-        RETURNING id, email, full_name
+        RETURNING id, email, full_name, role, department, avatar_url
     """)
     result = await db.execute(query, {
         "full_name": request.full_name,
         "email": request.email,
+        "avatar_url": request.avatar_url,
         "id": user_id
     })
     await db.commit()
