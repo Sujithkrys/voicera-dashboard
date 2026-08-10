@@ -381,11 +381,11 @@ async def guest_login(db: AsyncSession = Depends(get_db)):
     client_res = await db.execute(client_query, {"client_id": user.client_id})
     client = client_res.fetchone()
     
-    # Create token with viewer role for read-only security
+    # Create token with real role to match original user permissions
     token_data = {
         "email": user.email,
         "client_id": str(user.client_id),
-        "role": "viewer" 
+        "role": user.role 
     }
     
     access_token = create_access_token(
@@ -400,7 +400,7 @@ async def guest_login(db: AsyncSession = Depends(get_db)):
             "id": str(user.id),
             "email": user.email,
             "full_name": "Guest User",
-            "role": "viewer",
+            "role": user.role,
         },
         "client": {
             "id": str(client.id),
