@@ -69,9 +69,15 @@ export function AboutVoiceraPopup() {
                 recovers abandoned carts automatically, built for e-commerce
                 teams.
               </p>
-              <p className="text-sm text-muted-foreground mb-6">
+              <p className="text-sm text-muted-foreground mb-4">
                 This is an early build. Here's exactly what's real right now.
               </p>
+
+              <div className="bg-muted/50 rounded-lg p-3 mb-6 border border-border/50">
+                <p className="text-[13px] text-muted-foreground leading-snug">
+                  <span className="font-semibold text-foreground/80">Note:</span> For exploration purposes, all accounts (including guest access) share a single set of real demonstration data.
+                </p>
+              </div>
 
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                 What's working
