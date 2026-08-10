@@ -69,9 +69,9 @@ export function AppSidebar() {
         className="px-4 py-4 border-b border-border flex-row items-center justify-between group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 cursor-pointer"
         onClick={() => state === "collapsed" && toggleSidebar()}
       >
-        <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="Voicera Logo" className="w-7 h-7 object-contain shrink-0" />
-          <span className="font-semibold text-[15px] text-foreground group-data-[collapsible=icon]:hidden">
+        <div className="flex items-center gap-[10px]">
+          <img src="/logo.png" alt="Voicera Logo" className="w-8 h-8 object-contain shrink-0" />
+          <span className="font-semibold text-[18px] text-foreground group-data-[collapsible=icon]:hidden tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Voicera
           </span>
           <svg className="ml-1 w-3 h-3 text-muted-foreground group-data-[collapsible=icon]:hidden" viewBox="0 0 12 12" fill="none">

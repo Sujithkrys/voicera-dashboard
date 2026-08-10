@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, User, MoreHorizontal, AlertCircle } from "lucide-react";
+import { Send, Sparkles, User, MoreHorizontal, AlertCircle, MessageSquare, BarChart, FileText, ShoppingCart } from "lucide-react";
 import { useChat, Message } from "../context/ChatContext";
 
 const suggestionCards = [
-  { icon: "📊", title: "Summarize today's calls", desc: "Get an overview of call volume and outcomes" },
-  { icon: "📈", title: "Analyze escalation trends", desc: "See patterns in escalated issues" },
-  { icon: "🤖", title: "Help configure the bot", desc: "Set up auto-responses and triggers" },
-  { icon: "🎯", title: "Resolution rate insights", desc: "Understand your team's performance" },
+  { icon: <MessageSquare className="w-4 h-4" />, title: "Summarize today's calls", desc: "Get an overview of call volume and outcomes" },
+  { icon: <FileText className="w-4 h-4" />, title: "Show recent ticket reasons", desc: "See patterns in customer issues" },
+  { icon: <ShoppingCart className="w-4 h-4" />, title: "How many pending checkouts?", desc: "Check abandoned cart metrics" },
+  { icon: <BarChart className="w-4 h-4" />, title: "Recovery stats overview", desc: "Understand your recovery performance" },
 ];
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
@@ -148,27 +148,26 @@ export default function AIChat() {
       <div className="flex-1 overflow-y-auto w-full">
         {!hasMessages ? (
           /* ─── Empty / Welcome state ─── */
-          <div className="flex flex-col items-center justify-center h-full px-6">
-            <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-5">
-              <Sparkles className="size-7 text-primary-foreground" strokeWidth={1.6} />
-            </div>
-            <h2 className="text-[22px] font-semibold text-foreground mb-2">
-              How can I help you today?
+          <div className="flex flex-col items-start justify-center h-full px-8 max-w-4xl mx-auto">
+            <h2 className="text-[26px] font-semibold text-foreground mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              Ask Voicera AI
             </h2>
-            <p className="text-[14px] text-muted-foreground mb-8 text-center max-w-md">
-              Ask me about your calls, metrics, team performance, or get help with bot configuration.
+            <p className="text-[14px] text-muted-foreground mb-10 max-w-md">
+              Ask me about your calls, metrics, team performance, or recent tickets.
             </p>
-            <div className="grid grid-cols-2 gap-3 max-w-lg w-full">
+            <div className="grid grid-cols-2 gap-4 max-w-2xl w-full">
               {suggestionCards.map((card, i) => (
                 <button
                   key={i}
                   onClick={() => sendMessage(card.title)}
-                  className="text-left p-4 border border-border rounded-xl hover:bg-muted hover:border-border transition-all group"
+                  className="text-left p-4 border border-border rounded-lg hover:bg-muted/50 hover:border-border/80 transition-all group flex flex-col gap-2"
                 >
-                  <span className="text-[18px] mb-2 block">{card.icon}</span>
-                  <span className="text-[13px] font-medium text-foreground block mb-0.5 group-hover:text-foreground">
-                    {card.title}
-                  </span>
+                  <div className="flex items-center gap-2.5 text-foreground/80 group-hover:text-foreground">
+                    {card.icon}
+                    <span className="text-[14px] font-medium">
+                      {card.title}
+                    </span>
+                  </div>
                   <span className="text-[12px] text-muted-foreground">{card.desc}</span>
                 </button>
               ))}
@@ -243,9 +242,9 @@ export default function AIChat() {
       </div>
 
       {/* ─── Input area (Centered floating) ─── */}
-      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-white via-white to-transparent pt-6 pb-6 px-4 z-20">
+      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background via-background to-transparent pt-6 pb-6 px-4 z-20">
         <div className="max-w-3xl mx-auto w-full">
-          <div className="flex items-end gap-3 bg-[#f4f4f4] rounded-2xl px-5 py-3.5 focus-within:bg-background focus-within:shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-transparent focus-within:border-[#e5e5e5] transition-all">
+          <div className="flex items-end gap-2 bg-background rounded-md px-3 py-2 border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all shadow-sm">
             <textarea
               ref={inputRef}
               value={input}
@@ -253,19 +252,19 @@ export default function AIChat() {
               onKeyDown={handleKeyDown}
               placeholder="Message Voicera AI..."
               rows={1}
-              className="flex-1 bg-transparent text-[15px] text-foreground placeholder:text-muted-foreground outline-none resize-none leading-relaxed min-h-[24px] max-h-[150px]"
+              className="flex-1 bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground outline-none resize-none leading-relaxed py-1 min-h-[24px] max-h-[150px]"
               style={{ scrollbarWidth: "none" }}
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
+              className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 mb-0.5 transition-all ${
                 input.trim() && !isTyping
-                  ? "bg-primary text-primary-foreground hover:bg-primary cursor-pointer"
-                  : "bg-neutral-200 text-muted-foreground cursor-not-allowed"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
+                  : "bg-muted text-muted-foreground cursor-not-allowed"
               }`}
             >
-              <Send className="size-4" strokeWidth={2} />
+              <Send className="w-4 h-4" strokeWidth={2} />
             </button>
           </div>
           <p className="text-[12px] text-muted-foreground mt-3 text-center">
