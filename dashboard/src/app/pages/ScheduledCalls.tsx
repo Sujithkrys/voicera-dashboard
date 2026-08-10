@@ -35,7 +35,7 @@ export default function ScheduledCalls() {
       case "converted": return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "pending": return "bg-amber-50 text-amber-700 border-amber-200";
       case "called": return "bg-blue-50 text-blue-700 border-blue-200";
-      case "skipped": return "bg-neutral-100 text-neutral-600 border-neutral-200";
+      case "skipped": return "bg-neutral-100 dark:bg-neutral-900/30 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-neutral-800";
       default: return "bg-secondary text-muted-foreground border-border";
     }
   };
@@ -183,3 +183,4 @@ export default function ScheduledCalls() {
     </div>
   );
 }
+

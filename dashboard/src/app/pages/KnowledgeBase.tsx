@@ -191,7 +191,7 @@ export default function KnowledgeBase() {
                     <td className="py-2.5 px-4">
                       <button 
                         onClick={() => handleDeleteDocument(doc.id, doc.name)}
-                        className="p-1 rounded hover:bg-red-50 text-neutral-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                        className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-neutral-300 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -218,7 +218,7 @@ export default function KnowledgeBase() {
               multiple
               onChange={handleFileChange}
             />
-            <UploadCloud className="h-8 w-8 text-neutral-300 group-hover:text-muted-foreground mb-3 transition-colors" />
+            <UploadCloud className="h-8 w-8 text-muted-foreground/30 group-hover:text-muted-foreground mb-3 transition-colors" />
             <h3 className="text-[14px] font-semibold text-foreground mb-1">Upload Files</h3>
             <p className="text-[12px] text-muted-foreground max-w-[240px]">
               Upload PDF, DOCX, or TXT files to add to your agent's knowledge.
@@ -294,3 +294,4 @@ export default function KnowledgeBase() {
     </div>
   );
 }
+

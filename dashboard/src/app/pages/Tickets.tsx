@@ -35,7 +35,7 @@ export default function Tickets() {
   const statusStyle = (status: string) => {
     switch (status) {
       case "resolved": return "bg-emerald-50 text-emerald-700";
-      case "open": return "bg-red-50 text-red-600";
+      case "open": return "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400";
       case "in-progress": return "bg-amber-50 text-amber-700";
       default: return "bg-secondary text-muted-foreground";
     }
@@ -181,3 +181,4 @@ export default function Tickets() {
     </div>
   );
 }
+

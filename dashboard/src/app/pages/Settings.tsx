@@ -115,7 +115,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
         <DialogTitle className="sr-only">Settings</DialogTitle>
         <div className="flex h-full w-full">
           {/* Nav Sidebar */}
-          <div className="w-[240px] shrink-0 border-r border-border bg-[#FDFCFB] p-6 space-y-6 flex flex-col">
+          <div className="w-[240px] shrink-0 border-r border-border bg-muted/30 p-6 space-y-6 flex flex-col">
             <div className="text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase ml-1">Settings</div>
             <div className="space-y-1 flex-1">
           <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
@@ -157,7 +157,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
               <div className="border border-border rounded-lg p-6 space-y-6">
                 <h2 className="text-[14px] font-semibold text-foreground">Profile Settings</h2>
                 <div className="flex items-center gap-5 pb-5 border-b border-border">
-                  <div className="h-16 w-16 rounded-full bg-neutral-200 flex items-center justify-center text-[20px] font-semibold text-muted-foreground">
+                  <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center text-[20px] font-semibold text-muted-foreground">
                     {fullName.charAt(0) || "U"}
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                     <Input value={email} onChange={e => setEmail(e.target.value)} className="h-9 text-[13px] border-border rounded-md" type="email" />
                   </div>
                   {email !== initialEmail && (
-                    <div className="col-span-2 mt-2 p-4 bg-orange-50 border border-orange-200 rounded-md">
+                    <div className="col-span-2 mt-2 p-4 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-900/30 rounded-md">
                       <label className="text-[12px] font-medium text-orange-800 uppercase tracking-wider mb-1.5 block">
                         Current Password (Required to change email)
                       </label>
@@ -184,7 +184,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
                         value={profilePassword} 
                         onChange={e => setProfilePassword(e.target.value)} 
                         placeholder="••••••••" 
-                        className="h-9 text-[13px] border-orange-300 rounded-md bg-white max-w-sm" 
+                        className="h-9 text-[13px] border-orange-300 dark:border-orange-500/50 rounded-md bg-background max-w-sm" 
                       />
                     </div>
                   )}
@@ -225,8 +225,8 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
               </div>
 
               {/* Danger Zone */}
-              <div className="border border-red-200 rounded-lg p-6 space-y-4 bg-red-50/30">
-                <h2 className="text-[14px] font-semibold text-red-600">Danger Zone</h2>
+              <div className="border border-destructive/20 rounded-lg p-6 space-y-4 bg-destructive/5 dark:bg-destructive/10">
+                <h2 className="text-[14px] font-semibold text-destructive">Danger Zone</h2>
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-[13px] font-medium text-foreground">Sign out everywhere</div>
@@ -360,7 +360,7 @@ function IntegrationsPanel() {
             <p className="text-[12px] text-muted-foreground mt-0.5">Connect once to enable Mail, Calendar, Drive, and Docs.</p>
           </div>
           {googleConnected ? (
-            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
+            <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-200 dark:border-green-500/20">
               <CheckCircle2 className="w-3.5 h-3.5" /> Connected
             </div>
           ) : (
@@ -384,7 +384,7 @@ function IntegrationsPanel() {
             <p className="text-[12px] text-muted-foreground mt-0.5">Connect to your workspace to sync databases and pages.</p>
           </div>
           {notionConnected ? (
-            <div className="flex items-center gap-2 text-green-600 bg-green-50 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-100">
+            <div className="flex items-center gap-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-3 py-1.5 rounded-full text-[12px] font-medium border border-green-200 dark:border-green-500/20">
               <CheckCircle2 className="w-3.5 h-3.5" /> Connected
             </div>
           ) : (
@@ -435,9 +435,7 @@ function AppearancePanel() {
         <button
           onClick={() => setTheme("light")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "light"
-              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
-              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
+            theme === "light" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
           }`}
         >
           <div className="h-8 w-8 rounded-full bg-background border shadow-sm flex items-center justify-center mb-4">
@@ -455,9 +453,7 @@ function AppearancePanel() {
         <button
           onClick={() => setTheme("dark")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "dark"
-              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
-              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
+            theme === "dark" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
           }`}
         >
           <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center mb-4">
@@ -475,9 +471,7 @@ function AppearancePanel() {
         <button
           onClick={() => setTheme("system")}
           className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "system"
-              ? "border-neutral-900 bg-muted dark:border-white dark:bg-primary"
-              : "border-border hover:border-border hover:bg-muted dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-primary"
+            theme === "system" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
           }`}
         >
           <div className="h-8 w-8 rounded-full bg-secondary dark:bg-primary border flex items-center justify-center mb-4">
@@ -495,3 +489,4 @@ function AppearancePanel() {
     </div>
   );
 }
+

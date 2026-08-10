@@ -64,7 +64,7 @@ export default function CallLogs() {
       case "resolved": 
       case "completed": return "bg-emerald-50 text-emerald-700";
       case "escalated": 
-      case "failed": return "bg-red-50 text-red-600";
+      case "failed": return "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400";
       case "dropped": return "bg-amber-50 text-amber-700";
       case "active": return "bg-amber-50 text-amber-700";
       default: return "bg-secondary text-muted-foreground";
@@ -74,7 +74,7 @@ export default function CallLogs() {
   const dispositionBadge = (disp: string) => {
     const d = disp?.toLowerCase() || '';
     if (d.includes('resolved') || d.includes('answered')) return "bg-emerald-50 text-emerald-700 border-emerald-200";
-    if (d.includes('escalated')) return "bg-red-50 text-red-700 border-red-200";
+    if (d.includes('escalated')) return "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/30";
     if (d.includes('dropped') || d.includes('voicemail')) return "bg-amber-50 text-amber-700 border-amber-200";
     return "bg-secondary text-muted-foreground border-border";
   };
@@ -302,8 +302,9 @@ export default function CallLogs() {
       </div>
 
       {selectedCall && (
-        <div className="absolute inset-0 bg-black/5 z-40" onClick={() => setSelectedCall(null)} />
+        <div className="absolute inset-0 bg-foreground/5 z-40" onClick={() => setSelectedCall(null)} />
       )}
     </div>
   );
 }
+

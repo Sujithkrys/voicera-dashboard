@@ -79,7 +79,7 @@ export default function AIChatHistory() {
   };
 
   return (
-    <div className="flex-1 bg-[#fafafa] min-h-full p-8 md:p-12">
+    <div className="flex-1 bg-muted/30 min-h-full p-8 md:p-12">
       <div className="max-w-[900px] mx-auto">
         
         {/* Header */}
@@ -90,7 +90,7 @@ export default function AIChatHistory() {
             {isSelecting && selectedIds.size > 0 && (
               <button 
                 onClick={handleDeleteSelected}
-                className="h-9 px-4 flex items-center gap-2 border border-red-200 bg-red-50 text-red-600 rounded-md text-[13px] font-medium hover:bg-red-100 transition-colors"
+                className="h-9 px-4 flex items-center gap-2 border border-destructive/20 bg-destructive/10 text-destructive dark:text-red-400 rounded-md text-[13px] font-medium hover:bg-destructive/20 transition-colors"
               >
                 <Trash2 className="size-4" />
                 Delete ({selectedIds.size})
@@ -117,7 +117,7 @@ export default function AIChatHistory() {
                   setActiveThreadId(null);
                   navigate("/ai-chat");
                 }}
-                className="h-9 px-4 bg-black text-primary-foreground text-[13px] font-medium rounded-md hover:bg-primary transition-colors shadow-sm"
+                className="h-9 px-4 bg-foreground text-background hover:bg-foreground/90 text-[13px] font-medium rounded-md hover:bg-primary transition-colors shadow-sm"
               >
                 New chat
               </button>
@@ -151,7 +151,7 @@ export default function AIChatHistory() {
                   setActiveThreadId(null);
                   navigate("/ai-chat");
                 }}
-                className="h-9 px-4 bg-black text-primary-foreground text-[13px] font-medium rounded-md hover:bg-primary transition-colors inline-flex items-center gap-2"
+                className="h-9 px-4 bg-foreground text-background hover:bg-foreground/90 text-[13px] font-medium rounded-md hover:bg-primary transition-colors inline-flex items-center gap-2"
               >
                 New chat
                 <ArrowRight className="size-3.5" />
@@ -163,7 +163,7 @@ export default function AIChatHistory() {
                 <div 
                   key={thread.id}
                   onClick={() => handleOpenThread(thread.id)}
-                  className="group relative flex items-center justify-between py-4 border-b border-border last:border-0 hover:bg-black/[0.02] cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
+                  className="group relative flex items-center justify-between py-4 border-b border-border last:border-0 hover:bg-foreground/[0.03] cursor-pointer transition-colors px-2 -mx-2 rounded-lg"
                 >
                   <div className="flex items-center gap-3 pr-4 truncate">
                     {isSelecting && (
@@ -190,7 +190,7 @@ export default function AIChatHistory() {
                         e.stopPropagation();
                         setOpenDropdownId(openDropdownId === thread.id ? null : thread.id);
                       }}
-                      className="p-1 text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 rounded-md transition-colors opacity-0 group-hover:opacity-100"
+                      className="p-1 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors opacity-0 group-hover:opacity-100"
                     >
                       <MoreHorizontal className="size-4" />
                     </button>
@@ -214,7 +214,7 @@ export default function AIChatHistory() {
                             deleteThread(thread.id);
                             setOpenDropdownId(null);
                           }}
-                          className="w-full text-left px-4 py-2 text-[13px] text-red-600 hover:bg-red-50 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-[13px] text-destructive dark:text-red-400 hover:bg-destructive/10 flex items-center gap-2"
                         >
                           <Trash2 className="size-3.5" />
                           Delete chat
@@ -232,3 +232,4 @@ export default function AIChatHistory() {
     </div>
   );
 }
+

@@ -184,7 +184,7 @@ export default function AIChat() {
                     className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
                       msg.role === "assistant"
                         ? "bg-primary text-primary-foreground"
-                        : "bg-neutral-200 text-muted-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     {msg.role === "assistant" ? (
@@ -228,9 +228,9 @@ export default function AIChat() {
                   <div className="flex-1">
                     <p className="text-[13px] font-semibold text-foreground mb-2">Voicera AI</p>
                     <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                      <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 </div>
@@ -275,3 +275,4 @@ export default function AIChat() {
     </div>
   );
 }
+

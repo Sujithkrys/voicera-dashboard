@@ -47,7 +47,7 @@ export default function Team() {
                           <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-[12px] font-medium text-muted-foreground">
                             {member.name[0]}
                           </div>
-                          <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${
+                          <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${
                             member.status === "active" ? "bg-emerald-500" : member.status === "offline" ? "bg-neutral-300" : "bg-amber-400"
                           }`} />
                         </div>
@@ -67,7 +67,7 @@ export default function Team() {
                     </td>
                     <td className="py-3 px-4">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${
-                        member.status === "active" ? "bg-emerald-50 text-emerald-700" : member.status === "offline" ? "bg-secondary text-muted-foreground" : "bg-amber-50 text-amber-700"
+                        member.status === "active" ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400" : member.status === "offline" ? "bg-secondary text-muted-foreground" : "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400"
                       }`}>
                         {member.status.charAt(0).toUpperCase() + member.status.slice(1)}
                       </span>
@@ -128,7 +128,7 @@ export default function Team() {
                   </div>
                   <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-neutral-400 rounded-full"
+                      className="h-full bg-muted-foreground rounded-full"
                       style={{ width: `${Math.min((agent.tickets / 50) * 100, 100)}%` }}
                     />
                   </div>
@@ -141,3 +141,4 @@ export default function Team() {
     </div>
   );
 }
+
