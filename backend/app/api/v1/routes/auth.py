@@ -40,10 +40,10 @@ async def signup(request: SignupRequest, req: Request, db: AsyncSession = Depend
         })
         client_row = client_res.fetchone()
 
-        # 5. Insert User (Admin) - is_active is initially true
+        # 5. Insert User (Admin) - is_active is initially false, with activation token
         user_query = text("""
             INSERT INTO users (client_id, email, hashed_password, full_name, role, is_active, activation_token)
-            VALUES (:client_id, :email, :hashed_password, :full_name, 'admin', true, :activation_token)
+            VALUES (:client_id, :email, :hashed_password, :full_name, 'admin', false, :activation_token)
             RETURNING id, client_id, email, full_name, role, department, is_active, created_at
         """)
         user_res = await db.execute(user_query, {
@@ -72,7 +72,7 @@ async def signup(request: SignupRequest, req: Request, db: AsyncSession = Depend
         
         return {
             "success": True, 
-            "message": "Account created successfully! You can now log in."
+            "message": "Account created! Please check your email to activate your account."
         }
 
     except Exception as e:
