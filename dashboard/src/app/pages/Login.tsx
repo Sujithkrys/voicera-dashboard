@@ -477,7 +477,7 @@ export default function Login() {
           )}
           
           <div className="mt-8 text-center">
-            <Button onClick={handleSkipLogin} className="text-sm font-medium h-auto py-2.5 px-6 rounded-lg bg-orange-400 hover:bg-orange-500 text-white transition-colors shadow-md w-full">
+            <Button onClick={handleSkipLogin} className="text-sm font-medium h-auto py-2.5 px-6 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-600 transition-colors w-full">
               Skip login and view dashboard
             </Button>
           </div>
