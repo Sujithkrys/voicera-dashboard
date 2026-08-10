@@ -182,9 +182,7 @@ function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="border-b px-4 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-primary-foreground shadow-lg shadow-indigo-500/20">
-            <Activity className="size-4" />
-          </div>
+          <img src="/logo.png" alt="Voicera Logo" className="w-8 h-8 object-contain" />
           <span className="font-semibold text-base">Voicera</span>
           <span className="ml-2 text-[10px] font-semibold bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">BETA</span>
         </div>

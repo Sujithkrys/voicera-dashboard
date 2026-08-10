@@ -272,9 +272,7 @@ export default function Login() {
           </Button>
           
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600 text-white">
-              <Activity className="w-4.5 h-4.5" />
-            </div>
+            <img src="/logo.png" alt="Voicera Logo" className="w-8 h-8 object-contain" />
             <span className="font-semibold text-lg tracking-tight">Voicera</span>
           </div>
         </div>

@@ -70,9 +70,7 @@ export function AppSidebar() {
         onClick={() => state === "collapsed" && toggleSidebar()}
       >
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary text-primary-foreground shrink-0">
-            <Activity className="size-3.5" strokeWidth={2} />
-          </div>
+          <img src="/logo.png" alt="Voicera Logo" className="w-7 h-7 object-contain shrink-0" />
           <span className="font-semibold text-[15px] text-foreground group-data-[collapsible=icon]:hidden">
             Voicera
           </span>
