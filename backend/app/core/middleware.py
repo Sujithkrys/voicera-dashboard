@@ -43,11 +43,9 @@ async def get_current_user(request: Request):
         if user_role not in ["admin", "super_admin"]:
             raise HTTPException(status_code=403, detail="Admin access required")
     
-    # Enforce read-only for viewers
+    # Enforce read-only for viewers globally
     if user_role == "viewer" and request_method in ["POST", "PUT", "PATCH", "DELETE"]:
-        # Allow viewer to read but not write
-        if any(request_path.startswith(path) for path in READ_ONLY_PATHS):
-            raise HTTPException(status_code=403, detail="Viewers have read-only access")
+        raise HTTPException(status_code=403, detail="Guest/viewer accounts have read-only access")
     
     return payload
 

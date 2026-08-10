@@ -249,19 +249,38 @@ export default function Login() {
     }
   };
 
-  const handleSkipLogin = () => {
-    localStorage.setItem('voicera_token', 'guest_token');
-    localStorage.setItem('voicera_backend_token', 'guest_token');
-    localStorage.setItem('voicera_email', 'guest@voicera.ai');
-    localStorage.setItem('voicera_name', 'Guest User');
-    localStorage.setItem('voicera_client_id', 'guest_client_id');
-    localStorage.setItem('voicera_company', 'Guest Company');
-    localStorage.setItem('voicera_role', 'guest');
-    
-    setSuccessMsg('Continuing as guest! Redirecting...');
-    setTimeout(() => {
-      navigate('/');
-    }, 800);
+  const handleSkipLogin = async () => {
+    setIsLoading(true);
+    setErrorMsg("");
+    setSuccessMsg("");
+    try {
+      const response = await fetch(`${BACKEND_URL}/auth/guest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      if (!response.ok) {
+        throw new Error('Could not initialize guest session.');
+      }
+      
+      const data = await response.json();
+      
+      localStorage.setItem('voicera_token', data.access_token);
+      localStorage.setItem('voicera_backend_token', data.access_token);
+      localStorage.setItem('voicera_email', data.user.email);
+      localStorage.setItem('voicera_name', data.user.full_name);
+      localStorage.setItem('voicera_client_id', data.client.id);
+      localStorage.setItem('voicera_company', data.client.company_name);
+      localStorage.setItem('voicera_role', data.user.role);
+      
+      setSuccessMsg('Continuing as guest! Redirecting...');
+      setTimeout(() => {
+        navigate('/');
+      }, 800);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'An error occurred while logging in as guest.');
+      setIsLoading(false);
+    }
   };
 
   return (

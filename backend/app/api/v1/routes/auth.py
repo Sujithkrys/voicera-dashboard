@@ -366,6 +366,48 @@ async def logout():
     # We just return success.
     return {"message": "success"}
 
+@router.post("/guest")
+async def guest_login(db: AsyncSession = Depends(get_db)):
+    TARGET_EMAIL = "thalathotysujith@gmail.com"
+    
+    query = text("SELECT id, client_id, email, full_name, role FROM users WHERE email = :email LIMIT 1")
+    result = await db.execute(query, {"email": TARGET_EMAIL})
+    user = result.fetchone()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="Guest workspace not found")
+        
+    client_query = text("SELECT id, company_name FROM clients WHERE id = :client_id LIMIT 1")
+    client_res = await db.execute(client_query, {"client_id": user.client_id})
+    client = client_res.fetchone()
+    
+    # Create token with viewer role for read-only security
+    token_data = {
+        "email": user.email,
+        "client_id": str(user.client_id),
+        "role": "viewer" 
+    }
+    
+    access_token = create_access_token(
+        subject=str(user.id),
+        extra_data=token_data
+    )
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": str(user.id),
+            "email": user.email,
+            "full_name": "Guest User",
+            "role": "viewer",
+        },
+        "client": {
+            "id": str(client.id),
+            "company_name": client.company_name
+        }
+    }
+
 @router.get("/me")
 async def get_me(current_user: dict = Depends(get_current_user)):
     # Handle both old format {"user": {}, "client": {}} and new JWT payload format
