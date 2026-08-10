@@ -41,7 +41,7 @@ export default function AIChat() {
 
     let targetId = activeThreadId;
     if (!targetId) {
-      targetId = createThread(trimmed);
+      targetId = await createThread(trimmed);
     }
 
     const currentThread = threads.find((t) => t.id === targetId) || (targetId === activeThreadId ? activeThread : null);

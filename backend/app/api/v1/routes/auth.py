@@ -385,7 +385,8 @@ async def guest_login(db: AsyncSession = Depends(get_db)):
     token_data = {
         "email": user.email,
         "client_id": str(user.client_id),
-        "role": user.role 
+        "role": user.role,
+        "user_id": str(user.id)
     }
     
     access_token = create_access_token(
@@ -1106,3 +1107,4 @@ async def update_password(
         print(f"Failed to sync password to Supabase Auth: {e}")
         
     return {"success": True, "message": "Password updated successfully"}
+

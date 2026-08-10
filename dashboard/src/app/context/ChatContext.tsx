@@ -20,7 +20,7 @@ interface ChatContextType {
   threads: ChatThread[];
   activeThreadId: string | null;
   setActiveThreadId: (id: string | null) => void;
-  createThread: (firstMessage?: string) => string;
+  createThread: (firstMessage?: string) => Promise<string>;
   addMessage: (threadId: string, message: Message) => void;
   deleteThread: (id: string) => void;
   deleteThreads: (ids: string[]) => void;
@@ -93,7 +93,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     fetchHistory();
   }, []);
 
-  const createThread = (firstMessage?: string) => {
+  const createThread = async (firstMessage?: string) => {
     const id = Date.now().toString();
     const title = firstMessage
         ? firstMessage.slice(0, 40) + (firstMessage.length > 40 ? "..." : "")
@@ -111,14 +111,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     // Sync to backend asynchronously
     const token = localStorage.getItem('voicera_token');
     if (token) {
-      fetch(`${BACKEND_URL}/api/v1/chat-history/thread`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ id, title, isPinned: false })
-      }).catch(err => console.error("Failed to create thread on backend", err));
+      try {
+        await fetch(`${BACKEND_URL}/api/v1/chat-history/thread`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ id, title, isPinned: false })
+        });
+      } catch(err) {
+        console.error("Failed to create thread on backend", err);
+      }
     }
     
     return id;
