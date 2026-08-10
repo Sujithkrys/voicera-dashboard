@@ -249,6 +249,21 @@ export default function Login() {
     }
   };
 
+  const handleSkipLogin = () => {
+    localStorage.setItem('voicera_token', 'guest_token');
+    localStorage.setItem('voicera_backend_token', 'guest_token');
+    localStorage.setItem('voicera_email', 'guest@voicera.ai');
+    localStorage.setItem('voicera_name', 'Guest User');
+    localStorage.setItem('voicera_client_id', 'guest_client_id');
+    localStorage.setItem('voicera_company', 'Guest Company');
+    localStorage.setItem('voicera_role', 'guest');
+    
+    setSuccessMsg('Continuing as guest! Redirecting...');
+    setTimeout(() => {
+      navigate('/');
+    }, 800);
+  };
+
   return (
     <div className="h-screen w-full flex bg-background overflow-hidden">
       {/* Left Brand Pane */}
@@ -440,6 +455,12 @@ export default function Login() {
               </TabsContent>
             </Tabs>
           )}
+          
+          <div className="mt-8 text-center">
+            <Button variant="ghost" onClick={handleSkipLogin} className="text-xs text-muted-foreground hover:text-foreground h-auto py-2 px-4 rounded-full bg-muted/30 hover:bg-muted/60 transition-colors">
+              Skip login and view dashboard
+            </Button>
+          </div>
         </div>
       </div>
     </div>
