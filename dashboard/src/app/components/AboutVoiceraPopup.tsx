@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Info, X, Check, Clock } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -55,12 +55,7 @@ export function AboutVoiceraPopup() {
               </button>
 
               <div className="flex items-center gap-2.5 mb-4">
-                <div
-                  className="flex h-8 w-8 items-center justify-center rounded-lg shadow-sm"
-                  style={{ background: "#0c2d6b" }}
-                >
-                  <img src="/logo.png" alt="Voicera Logo" className="h-5 w-5 object-contain brightness-0 invert" />
-                </div>
+                <img src="/logo.png" alt="Voicera Logo" className="h-8 w-8 object-contain" />
                 <span
                   className="text-[1.35rem] font-semibold text-foreground tracking-tight"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
