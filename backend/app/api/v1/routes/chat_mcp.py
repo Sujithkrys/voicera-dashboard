@@ -187,8 +187,13 @@ async def chat(request: ChatRequest, user=Depends(get_current_user)):
                 
             elif t_name == "query_recent_calls":
                 limit = arguments.get("limit", 10)
-                res = supabase.table("sessions").select("id, status, duration_seconds, transcript, created_at").eq("client_id", str(client_id)).order("created_at", desc=True).limit(limit).execute()
-                return res.data or []
+                res_sessions = supabase.table("sessions").select("id, status, duration_seconds, transcript, created_at").eq("client_id", str(client_id)).order("created_at", desc=True).limit(limit).execute()
+                sessions_data = res_sessions.data or []
+                
+                res_outcomes = supabase.table("call_outcomes").select("call_id, agent_type, phone_number, outcome, transcript_summary, created_at, duration_seconds").order("created_at", desc=True).limit(limit).execute()
+                outcomes_data = res_outcomes.data or []
+                
+                return {"sessions": sessions_data, "call_outcomes": outcomes_data}
                 
             elif t_name == "query_tickets":
                 status_filter = arguments.get("status")
