@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createClient } from "@supabase/supabase-js";
 import { Button } from "../components/ui/button";
@@ -39,7 +39,7 @@ export default function Login() {
     if (isRecovery) {
       setActiveTab('newPassword');
     } else if (urlParams.get('activated') === 'true') {
-      setSuccessMsg('✓ Account activated successfully! You can now sign in below.');
+      setSuccessMsg('âœ“ Account activated successfully! You can now sign in below.');
       setActiveTab('signIn');
     } else if (urlParams.get('error') === 'activation_failed') {
       setErrorMsg('The activation link is invalid, expired, or has already been used.');
@@ -70,7 +70,7 @@ export default function Login() {
           localStorage.setItem('voicera_company', data.client_id);
           localStorage.setItem('voicera_role', data.role);
 
-          setSuccessMsg('✓ Signed in with Google! Redirecting...');
+          setSuccessMsg('âœ“ Signed in with Google! Redirecting...');
           setTimeout(() => navigate('/'), 800);
         } catch (err: any) {
           setErrorMsg(err.message);
@@ -139,7 +139,7 @@ export default function Login() {
         return;
       }
 
-      setSuccessMsg('✓ Account created! Please check your email to activate your account.');
+      setSuccessMsg('âœ“ Account created! Please check your email to activate your account.');
       (e.target as HTMLFormElement).reset();
     } catch (err) {
       setErrorMsg('Unable to connect to authentication server. Please try again.');
@@ -179,7 +179,7 @@ export default function Login() {
       localStorage.setItem('voicera_company', data.client.company_name);
       localStorage.setItem('voicera_role', data.user.role);
 
-      setSuccessMsg('✓ Signed in successfully! Redirecting...');
+      setSuccessMsg('âœ“ Signed in successfully! Redirecting...');
       setTimeout(() => {
         navigate('/');
       }, 800);
@@ -239,7 +239,7 @@ export default function Login() {
         setErrorMsg(error.message);
         return;
       }
-      setSuccessMsg('✓ Password updated successfully! You can now sign in.');
+      setSuccessMsg('âœ“ Password updated successfully! You can now sign in.');
       navigate('/login', { replace: true });
       setActiveTab('signIn');
     } catch (err) {
@@ -265,13 +265,6 @@ export default function Login() {
         {/* Subtle grid pattern background */}
         <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay z-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%2220%22 height=%2220%22 viewBox=%220 0 20 20%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%23fff%22 fill-opacity=%221%22 fill-rule=%22evenodd%22%3E%3Ccircle cx=%222%22 cy=%222%22 r=%221%22/%3E%3C/g%3E%3C/svg%3E")' }}></div>
 
-        <div className="z-10">
-          <Button variant="ghost" className="text-zinc-400 hover:text-white hover:bg-white/5 -ml-3 mb-6 h-8 px-3 text-xs" onClick={() => navigate('/')}>
-            <ArrowLeft className="mr-2 h-3 w-3" />
-            Back home
-          </Button>
-        </div>
-
         <div className="z-10 max-w-sm mt-auto mb-16">
           <div className="inline-flex items-center px-3 py-1 rounded bg-white/5 border border-white/10 text-white text-[11px] font-medium tracking-wide mb-6">
             No credit card required
@@ -283,12 +276,12 @@ export default function Login() {
             </span>
           </h1>
           <p className="text-sm text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_3px_rgb(0_0_0_/_80%)]">
-            Built for e-commerce teams who want AI handling support calls and abandoned checkouts — without hiring a call center.
+            Built for e-commerce teams who want AI handling support calls and abandoned checkouts â€” without hiring a call center.
           </p>
         </div>
         
         <div className="z-10 text-[11px] text-zinc-500 flex justify-between items-center w-full">
-          <span>© {new Date().getFullYear()} Voicera Inc.</span>
+          <span>Â© {new Date().getFullYear()} Voicera Inc.</span>
           <div className="flex gap-4">
             <span className="hover:text-zinc-300 cursor-pointer transition-colors">Privacy</span>
             <span className="hover:text-zinc-300 cursor-pointer transition-colors">Terms</span>
@@ -452,4 +445,5 @@ export default function Login() {
     </div>
   );
 }
+
 
