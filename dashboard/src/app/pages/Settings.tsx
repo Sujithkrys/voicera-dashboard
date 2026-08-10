@@ -14,7 +14,7 @@ interface SettingsProps {
 }
 
 export default function Settings({ open, onOpenChange }: SettingsProps) {
-  const [activeTab, setActiveTab] = useState<"profile" | "appearance" | "integrations" | "security" | "usage">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "integrations" | "security" | "usage">("profile");
 
   // Profile State
   const [initialEmail, setInitialEmail] = useState("");
@@ -121,9 +121,6 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <button onClick={() => setActiveTab("profile")} className={navItem("profile")}>
             <User className="h-4 w-4" strokeWidth={1.8} /> Profile
           </button>
-          <button onClick={() => setActiveTab("appearance")} className={navItem("appearance")}>
-            <Palette className="h-4 w-4" strokeWidth={1.8} /> Appearance
-          </button>
           <button onClick={() => setActiveTab("security")} className={navItem("security")}>
             <Shield className="h-4 w-4" strokeWidth={1.8} /> Security
           </button>
@@ -140,16 +137,7 @@ export default function Settings({ open, onOpenChange }: SettingsProps) {
           <div className="flex-1 overflow-y-auto p-10 bg-background">
             <div className="max-w-2xl space-y-8">
 
-          {/* ───── Appearance ───── */}
-          {activeTab === "appearance" && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-[15px] font-semibold text-foreground">Appearance</h2>
-                <p className="text-[13px] text-muted-foreground mt-1">Customize how Voicera looks on your device.</p>
-              </div>
-              <AppearancePanel />
-            </div>
-          )}
+
 
           {/* ───── Profile ───── */}
           {activeTab === "profile" && (
@@ -426,67 +414,5 @@ function IntegrationItem({ icon, title, description, active }: { icon: React.Rea
   );
 }
 
-function AppearancePanel() {
-  const { theme, setTheme } = useTheme();
 
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button
-          onClick={() => setTheme("light")}
-          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "light" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
-          }`}
-        >
-          <div className="h-8 w-8 rounded-full bg-background border shadow-sm flex items-center justify-center mb-4">
-            <Sun className="h-4 w-4 text-foreground" />
-          </div>
-          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">Light</span>
-          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Light theme for daytime.</span>
-          {theme === "light" && (
-            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-          )}
-        </button>
-
-        <button
-          onClick={() => setTheme("dark")}
-          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "dark" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
-          }`}
-        >
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center mb-4">
-            <Moon className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">Dark</span>
-          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Dark theme for night.</span>
-          {theme === "dark" && (
-            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-          )}
-        </button>
-
-        <button
-          onClick={() => setTheme("system")}
-          className={`relative flex flex-col items-start p-4 rounded-xl border text-left transition-all ${
-            theme === "system" ? "border-foreground bg-muted dark:border-foreground dark:bg-muted" : "border-border hover:bg-muted/50"
-          }`}
-        >
-          <div className="h-8 w-8 rounded-full bg-secondary dark:bg-primary border flex items-center justify-center mb-4">
-            <Monitor className="h-4 w-4 text-foreground dark:text-neutral-300" />
-          </div>
-          <span className="font-semibold text-[14px] text-foreground dark:text-primary-foreground">System</span>
-          <span className="text-[12px] text-muted-foreground dark:text-muted-foreground mt-1">Matches your device.</span>
-          {theme === "system" && (
-            <div className="absolute top-4 right-4 text-foreground dark:text-primary-foreground">
-              <CheckCircle2 className="h-5 w-5" />
-            </div>
-          )}
-        </button>
-      </div>
-    </div>
-  );
-}
 
