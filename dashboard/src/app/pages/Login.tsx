@@ -6,8 +6,9 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { AlertCircle, ArrowLeft, CheckCircle2, ChevronRight, Activity } from "lucide-react";
+import { ChevronRight, Activity } from "lucide-react";
 import { Alert, AlertDescription } from "../components/ui/alert";
+import { AboutVoiceraPopup } from "../components/AboutVoiceraPopup";
 
 const BACKEND_URL = import.meta.env.VITE_API_URL || 'https://voicera-dashboard-production-3c5b.up.railway.app';
 const SUPABASE_URL = 'https://zlqefahavxdqfhpejqyd.supabase.co';
@@ -482,6 +483,7 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <AboutVoiceraPopup />
     </div>
   );
 }

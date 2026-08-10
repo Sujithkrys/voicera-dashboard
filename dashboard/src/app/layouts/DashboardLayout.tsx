@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 import SettingsModal from "../pages/Settings";
+import { AboutVoiceraPopup } from "../components/AboutVoiceraPopup";
 import {
   Home,
   PhoneCall,
@@ -236,6 +237,7 @@ export default function DashboardLayout() {
       <div className="flex min-h-screen w-full bg-background relative">
         <AppSidebar />
         <MainContent />
+        <AboutVoiceraPopup />
       </div>
     </SidebarProvider>
   );
