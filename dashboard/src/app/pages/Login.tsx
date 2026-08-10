@@ -276,7 +276,7 @@ export default function Login() {
             </span>
           </h1>
           <p className="text-sm text-zinc-300 leading-relaxed mb-8 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] [text-shadow:_0_1px_3px_rgb(0_0_0_/_80%)]">
-            Built for e-commerce teams who want AI handling support calls and abandoned checkouts â€” without hiring a call center.
+            Built for e-commerce teams who want AI handling support calls and abandoned checkouts - without hiring a call center.
           </p>
         </div>
         
@@ -445,5 +445,6 @@ export default function Login() {
     </div>
   );
 }
+
 
 
